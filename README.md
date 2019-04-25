@@ -11,5 +11,5 @@ go get -u github.com/bobheadxi/gobenchdata
 Then pipe your benchmark into the tool:
 
 ```
-go test -bench . -benchmem ./... | gobenchdata -json bench.json
+go test -bench . -benchmem ./... | gobenchdata --json bench.json
 ```

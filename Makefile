@@ -1,3 +1,5 @@
+COMMIT=`git rev-parse HEAD`
 
 all:
-	go install
+	@echo Version $(COMMIT)
+	go install -ldflags "-X main.Version=$(COMMIT)"
