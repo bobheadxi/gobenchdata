@@ -9,8 +9,8 @@ import (
 
 type parser struct{}
 
-func (p *parser) Read(reader *bufio.Reader) ([]benchmarkSuite, error) {
-	suites := make([]benchmarkSuite, 0)
+func (p *parser) Read(reader *bufio.Reader) ([]BenchmarkSuite, error) {
+	suites := make([]BenchmarkSuite, 0)
 	for {
 		line, _, err := reader.ReadLine()
 		if err == io.EOF {
@@ -20,6 +20,7 @@ func (p *parser) Read(reader *bufio.Reader) ([]benchmarkSuite, error) {
 			return nil, err
 		}
 		if strings.HasPrefix(string(line), "goos:") {
+			// TODO: is it possible to set and rewind the reader?
 			suite, err := p.readBenchmarkSuite(string(line), reader)
 			if err != nil {
 				return nil, err
@@ -31,13 +32,13 @@ func (p *parser) Read(reader *bufio.Reader) ([]benchmarkSuite, error) {
 	return suites, nil
 }
 
-func (p *parser) readBenchmarkSuite(first string, reader *bufio.Reader) (*benchmarkSuite, error) {
+func (p *parser) readBenchmarkSuite(first string, reader *bufio.Reader) (*BenchmarkSuite, error) {
 	var (
-		suite = benchmarkSuite{benchmarks: make([]benchmark, 0)}
+		suite = BenchmarkSuite{Benchmarks: make([]Benchmark, 0)}
 		split []string
 	)
 	split = strings.Split(first, ": ")
-	suite.goos = split[1]
+	suite.Goos = split[1]
 	for {
 		l, _, err := reader.ReadLine()
 		if err != nil {
@@ -48,39 +49,39 @@ func (p *parser) readBenchmarkSuite(first string, reader *bufio.Reader) (*benchm
 			break
 		} else if strings.HasPrefix(line, "goarch:") {
 			split = strings.Split(line, ": ")
-			suite.goarch = split[1]
+			suite.Goarch = split[1]
 		} else if strings.HasPrefix(line, "pkg:") {
 			split = strings.Split(line, ": ")
-			suite.pkg = split[1]
+			suite.Pkg = split[1]
 		} else {
 			bench, err := p.readBenchmark(line)
 			if err != nil {
 				return nil, err
 			}
-			suite.benchmarks = append(suite.benchmarks, *bench)
+			suite.Benchmarks = append(suite.Benchmarks, *bench)
 		}
 	}
 
 	return &suite, nil
 }
 
-func (p *parser) readBenchmark(line string) (*benchmark, error) {
-	var bench benchmark
+func (p *parser) readBenchmark(line string) (*Benchmark, error) {
+	var bench Benchmark
 	var err error
 	split := strings.Split(line, "\t")
-	bench.name, split = popleft(split)
+	bench.Name, split = popleft(split)
 
 	// runs
 	var tmp string
 	tmp, split = popleft(split)
-	if bench.runs, err = strconv.Atoi(tmp); err != nil {
+	if bench.Runs, err = strconv.Atoi(tmp); err != nil {
 		return nil, err
 	}
 
 	// ns/op
 	tmp, split = popleft(split)
 	tmpSplit := strings.Split(tmp, " ")
-	if bench.nsPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
+	if bench.NsPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
 		return nil, err
 	}
 
@@ -88,14 +89,14 @@ func (p *parser) readBenchmark(line string) (*benchmark, error) {
 	if len(split) > 0 {
 		tmp, split = popleft(split)
 		tmpSplit = strings.Split(tmp, " ")
-		if bench.mem.bytesPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
+		if bench.Mem.BytesPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
 			return nil, err
 		}
 	}
 	if len(split) > 0 {
 		tmp, split = popleft(split)
 		tmpSplit = strings.Split(tmp, " ")
-		if bench.mem.allocPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
+		if bench.Mem.AllocsPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
 			return nil, err
 		}
 	}

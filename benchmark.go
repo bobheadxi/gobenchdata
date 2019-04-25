@@ -1,21 +1,24 @@
 package main
 
-type benchmarkSuite struct {
-	goos       string
-	goarch     string
-	pkg        string
-	benchmarks []benchmark
+// BenchmarkSuite is a suite of benchmark runs
+type BenchmarkSuite struct {
+	Goos       string
+	Goarch     string
+	Pkg        string
+	Benchmarks []Benchmark
 }
 
-type benchmark struct {
-	name string
-	runs int
+// Benchmark is an individual run
+type Benchmark struct {
+	Name string
+	Runs int
 
-	nsPerOp int
-	mem     mem
+	NsPerOp int
+	Mem     Mem
 }
 
-type mem struct {
-	bytesPerOp int
-	allocPerOp int
+// Mem is memory allocation information about a run
+type Mem struct {
+	BytesPerOp  int
+	AllocsPerOp int
 }
