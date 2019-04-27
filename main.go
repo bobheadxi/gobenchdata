@@ -15,16 +15,16 @@ import (
 // Version is the version of gobenchdata
 var Version string
 
+var (
+	jsonOut   = pflag.String("json", "", "output as json to file")
+	appendOut = pflag.BoolP("append", "a", false, "append to output file")
+
+	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
+	date    = pflag.StringP("date", "d", time.Now().UTC().String(), "date of this run, defaults to UTC time.Now()")
+	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
+)
+
 func main() {
-	var (
-		jsonOut   = pflag.String("json", "", "output as json to file")
-		appendOut = pflag.BoolP("append", "a", false, "append to output file")
-
-		version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
-		date    = pflag.StringP("date", "d", time.Now().UTC().String(), "date of this run, defaults to UTC time.Now()")
-		tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
-	)
-
 	pflag.Parse()
 	if len(pflag.Args()) > 0 {
 		switch cmd := pflag.Args()[0]; cmd {
@@ -40,6 +40,12 @@ func main() {
 			println("flags:\n")
 			pflag.PrintDefaults()
 			println("\nsee https://github.com/bobheadxi/gobenchdata for more documentation")
+		case "merge":
+			args := pflag.Args()[1:]
+			if len(args) < 1 {
+				panic("no merge targets provided")
+			}
+			merge(args...)
 		default:
 			fmt.Printf("unknown command '%s'", cmd)
 		}
@@ -61,13 +67,12 @@ func main() {
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
 
 	// set up results
-	result := []Run{{
+	results := []Run{{
 		Version: *version,
 		Date:    *date,
 		Tags:    *tags,
 		Suites:  suites,
 	}}
-	var b []byte
 	if *appendOut {
 		if *jsonOut == "" {
 			panic("file output needs to be set (try '--json')")
@@ -80,25 +85,13 @@ func main() {
 			if err := json.Unmarshal(b, &runs); err != nil {
 				panic(err)
 			}
-			result = append(result, runs...)
+			results = append(results, runs...)
 		} else {
 			fmt.Printf("could not find specified output file '%s' - creating a new file\n", *jsonOut)
 		}
 	}
 
-	// marshal and output
-	b, err = json.MarshalIndent(result, "", "  ")
-	if err != nil {
-		panic(err)
-	}
-	if *jsonOut != "" {
-		if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
-			panic(err)
-		}
-		fmt.Printf("successfully output results as json to '%s'\n", *jsonOut)
-	} else {
-		println(string(b))
-	}
+	output(results)
 }
 
 // Run denotes one run of gobenchdata, useful for grouping benchmark records

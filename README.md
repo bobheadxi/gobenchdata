@@ -20,3 +20,9 @@ an existing file:
 ```
 go test -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
 ```
+
+You can also merge results:
+
+```
+gobenchdata merge file1.json file2.json file3.json
+```
