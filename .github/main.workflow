@@ -9,7 +9,7 @@ action "filter" {
 }
 
 action "gobenchdata to gh-pages" {
-  uses = "./actions/gh-pages"
+  uses = "./.actions/gh-pages"
   needs = ["filter"]
   secrets = ["GITHUB_TOKEN"]
 }
