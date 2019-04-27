@@ -66,15 +66,17 @@ func main() {
 		Tags:    *tags,
 		Suites:  suites,
 	}
+	b, err := json.MarshalIndent(result, "", "  ")
+	if err != nil {
+		panic(err)
+	}
 	if *jsonOut != "" {
-		b, err := json.MarshalIndent(result, "", "  ")
-		if err != nil {
-			panic(err)
-		}
 		if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
 			panic(err)
 		}
 		fmt.Printf("output results as json to '%s'\n", *jsonOut)
+	} else {
+		println(string(b))
 	}
 }
 
