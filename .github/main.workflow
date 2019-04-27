@@ -11,4 +11,5 @@ action "Filters for GitHub Actions" {
 action "GitHub Action for Uploading Go Benchmark Data to gh-pages" {
   uses = "./actions/ghpages"
   needs = ["Filters for GitHub Actions"]
+  secrets = ["GITHUB_TOKEN"]
 }
