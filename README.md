@@ -37,13 +37,15 @@ action "gobenchdata to gh-pages" {
 
 ### Configuration
 
-| Variable            | Default           | Purpose
-| ------------------- | ----------------- | -------
-| `GITHUB_TOKEN`      | set by GitHub     | token to provide access to repository
-| `GITHUB_ACTOR`      | set by GitHub     | the user to make commits as
-| `GO_BENCHMARKS`     | `.`               | benchmarks to run (argument for `-bench`)
-| `GO_BENCHMARK_PKGS` | `./...`           | packages to test (argument for `go test`)
-| `FINAL_OUTPUT`      | `benchmarks.json` | destination path of benchmark data
+| Variable             | Default                   | Purpose
+| -------------------- | ------------------------- | -------
+| `GITHUB_TOKEN`       | set by GitHub             | token to provide access to repository
+| `GITHUB_ACTOR`       | set by GitHub             | the user to make commits as
+| `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
+| `GO_BENCHMARKS`      | `.`                       | benchmarks to run (argument for `-bench`)
+| `GO_BENCHMARK_FLAGS` |                           | additional flags for `go test`
+| `GO_BENCHMARK_PKGS`  | `./...`                   | packages to test (argument for `go test`)
+| `FINAL_OUTPUT`       | `benchmarks.json`         | destination path of benchmark data
 
 ## CLI
 
