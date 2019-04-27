@@ -1,11 +1,11 @@
 # Contributing
 
 * [Development](#development)
-  * [Testing the Action](#testing-the-action)
+  * [GitHub Action](#github-action)
 
 ## Development
 
-### Testing the Action
+### GitHub Action
 
 The code for the Action is in the `Dockerfile` and `entrypoint.sh`. There is a
 symlink of these to [`/actions/gh-pages`](./.actions/gh-pages) since to publish
