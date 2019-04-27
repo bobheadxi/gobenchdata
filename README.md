@@ -27,7 +27,7 @@ action "filter" {
 }
 
 action "gobenchdata to gh-pages" {
-  uses = "./actions/ghpages"
+  uses = "bobheadxi/gobenchdata@master"
   needs = ["filter"]
   secrets = ["GITHUB_TOKEN"]
 }
