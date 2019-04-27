@@ -5,7 +5,7 @@ LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://github.com/bobheadxi/gobenchdata"
 LABEL homepage="https://github.com/bobheadxi/gobenchdata"
 LABEL "com.github.actions.name"="gobenchdata to gh-pages"
-LABEL "com.github.actions.description"="Runs your benchmarks and dates a JSON file in your gh-pages branch"
+LABEL "com.github.actions.description"="Runs your benchmarks and adds the results to a JSON file in your gh-pages branch"
 LABEL "com.github.actions.icon"="book"
 LABEL "com.github.actions.color"="green"
 
