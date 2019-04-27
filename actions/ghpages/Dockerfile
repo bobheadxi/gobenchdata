@@ -1,4 +1,4 @@
-FROM golang:alpine
+FROM golang:latest
 
 LABEL name="gobenchdata to gh-pages"
 LABEL version="0.0.1"
@@ -10,10 +10,9 @@ LABEL "com.github.actions.description"="Runs your benchmarks and dates a JSON fi
 LABEL "com.github.actions.icon"="book"
 LABEL "com.github.actions.color"="green"
 
-RUN apk add --no-cache git
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 ENV GO111MODULE=on
 RUN go get github.com/bobheadxi/gobenchdata
-RUN mkdir -p /data/gobenchdata
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

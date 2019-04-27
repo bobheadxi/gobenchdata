@@ -2,9 +2,10 @@
 set -e
 
 cd "${GITHUB_WORKSPACE}"
+mkdir -p /tmp/{gobenchdata,build}
 
 echo '📊 Running benchmarks...'
-RUN_OUTPUT="/data/gobenchdata/benchmarks.json"
+RUN_OUTPUT="/tmp/gobenchdata/benchmarks.json"
 go test \
   -bench "${GO_BENCHMARKS:-"."}" \
   -benchmem \
@@ -13,9 +14,8 @@ go test \
   | gobenchdata --json "${OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 
 echo '📚 Checkout out gh-pages...'
-mkdir -p build
-cd build
-git clone https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+cd /tmp/build
+git clone https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
 git checkout gh-pages
 
 FINAL_OUTPUT="${GO_BENCHMARK_OUT:-"benchmarks.json"}"
@@ -29,7 +29,7 @@ fi
 echo '📷 Committing new benchmark data...'
 git add .
 git commit -m "${GIT_COMMIT_MESSAGE:-"add new benchmark run"}"
-git push origin gh-pages
+git push -f origin gh-pages
 cd ../
 
 echo '🚀 Done!'
