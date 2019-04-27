@@ -17,11 +17,12 @@ var Version string
 
 func main() {
 	var (
-		jsonOut = pflag.String("json", "", "output as json")
+		jsonOut   = pflag.String("json", "", "output as json to file")
+		appendOut = pflag.BoolP("append", "a", false, "append to output file")
 
-		version = pflag.String("version", "", "version to tag in your benchmark output")
-		date    = pflag.String("date", time.Now().UTC().String(), "date of this run, defaults to UTC time.Now()")
-		tags    = pflag.StringArray("tag", nil, "array of tags to include in result")
+		version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
+		date    = pflag.StringP("date", "d", time.Now().UTC().String(), "date of this run, defaults to UTC time.Now()")
+		tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
 	)
 
 	pflag.Parse()
@@ -59,14 +60,34 @@ func main() {
 	}
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
 
-	// decode into output if desired
-	result := Run{
+	// set up results
+	result := []Run{{
 		Version: *version,
 		Date:    *date,
 		Tags:    *tags,
 		Suites:  suites,
+	}}
+	var b []byte
+	if *appendOut {
+		if *jsonOut == "" {
+			panic("file output needs to be set (try '--json')")
+		}
+		b, err := ioutil.ReadFile(*jsonOut)
+		if err != nil && !os.IsNotExist(err) {
+			panic(err)
+		} else if !os.IsNotExist(err) {
+			var runs []Run
+			if err := json.Unmarshal(b, &runs); err != nil {
+				panic(err)
+			}
+			result = append(result, runs...)
+		} else {
+			fmt.Printf("could not find specified output file '%s' - creating a new file\n", *jsonOut)
+		}
 	}
-	b, err := json.MarshalIndent(result, "", "  ")
+
+	// marshal and output
+	b, err = json.MarshalIndent(result, "", "  ")
 	if err != nil {
 		panic(err)
 	}
@@ -74,7 +95,7 @@ func main() {
 		if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
 			panic(err)
 		}
-		fmt.Printf("output results as json to '%s'\n", *jsonOut)
+		fmt.Printf("successfully output results as json to '%s'\n", *jsonOut)
 	} else {
 		println(string(b))
 	}
@@ -82,8 +103,8 @@ func main() {
 
 // Run denotes one run of gobenchdata, useful for grouping benchmark records
 type Run struct {
-	Version string
+	Version string `json:",omitempty"`
 	Date    string
-	Tags    []string
+	Tags    []string `json:",omitempty"`
 	Suites  []bench.Suite
 }
