@@ -52,7 +52,8 @@ action "gobenchdata to gh-pages" {
 `gobenchdata` is also available as a CLI:
 
 ```
-go get -u 
+go get -u github.com/bobheadxi/gobenchdata
+gobenchdata help
 ```
 
 Usage documentation can be found in the
