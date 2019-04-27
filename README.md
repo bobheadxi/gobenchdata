@@ -1,22 +1,24 @@
 # gobenchdata [![GoDoc](https://godoc.org/github.com/bobheadxi/gobenchdata?status.svg)](https://godoc.org/github.com/bobheadxi/gobenchdata)
 
-a tool for manipulating `go test -bench` data.
+a tool for inspecting `go test -bench` data, and a
+[GitHub Action](https://github.com/features/actions) for continuous benchmarking.
 
 * [GitHub Action](#github-action)
-  * [Example](#example)
+  * [Setup](#setup)
   * [Configuration](#configuration)
-* [gobenchdata CLI](#gobenchdata-cli)
+* [CLI](#cli)
+* [Development](#development)
 
 ## GitHub Action
 
 A GitHub Action for uploading Go benchmark data to `gh-pages` using `gobenchdata`.
 
-### Example
+### Setup
 
-In `main.workflow`:
+For example, in `main.workflow`:
 
-```
-workflow "Benchmark Demo" {
+```hcl
+workflow "Benchmark" {
   on = "push"
   resolves = ["gobenchdata to gh-pages"]
 }
@@ -43,6 +45,17 @@ action "gobenchdata to gh-pages" {
 | `GO_BENCHMARK_PKGS` | `./...`           | packages to test (argument for `go test`)
 | `FINAL_OUTPUT`      | `benchmarks.json` | destination path of benchmark data
 
-## gobenchdata CLI
+## CLI
 
-CLI documentation can be found in the [godocs](https://godoc.org/github.com/bobheadxi/gobenchdata).
+`gobenchdata` is also available as a CLI:
+
+```
+go get -u 
+```
+
+Usage documentation can be found in the
+[godocs](https://godoc.org/github.com/bobheadxi/gobenchdata).
+
+## Development
+
+
