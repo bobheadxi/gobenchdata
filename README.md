@@ -7,7 +7,7 @@ a tool for inspecting `go test -bench` data, and a
   * [Setup](#setup)
   * [Configuration](#configuration)
 * [CLI](#cli)
-* [Development](#development)
+* [Development and Contributions](#development-and-contributions)
 
 ## GitHub Action
 
@@ -56,6 +56,8 @@ go get -u
 Usage documentation can be found in the
 [godocs](https://godoc.org/github.com/bobheadxi/gobenchdata).
 
-## Development
+## Development and Contributions
 
+Please report bugs and requests in the [repository issues](https://github.com/bobheadxi/gobenchdata)!
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md).
