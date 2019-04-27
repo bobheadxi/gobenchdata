@@ -1,6 +1,5 @@
 FROM golang:latest
 
-LABEL version="0.0.1"
 LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://github.com/bobheadxi/gobenchdata"
 LABEL homepage="https://github.com/bobheadxi/gobenchdata"
