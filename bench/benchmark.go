@@ -1,7 +1,7 @@
-package main
+package bench
 
-// BenchmarkSuite is a suite of benchmark runs
-type BenchmarkSuite struct {
+// Suite is a suite of benchmark runs
+type Suite struct {
 	Goos       string
 	Goarch     string
 	Pkg        string

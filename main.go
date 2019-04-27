@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/bobheadxi/gobenchdata/bench"
 	"github.com/spf13/pflag"
 )
 
@@ -51,8 +52,8 @@ func main() {
 		panic("gobenchdata should be used with a pipe")
 	}
 
-	var p parser
-	suites, err := p.Read(bufio.NewReader(os.Stdin))
+	parser := bench.NewParser(bufio.NewReader(os.Stdin))
+	suites, err := parser.Read()
 	if err != nil {
 		panic(err)
 	}
@@ -82,5 +83,5 @@ type Run struct {
 	Version string
 	Date    string
 	Tags    []string
-	Suites  []BenchmarkSuite
+	Suites  []bench.Suite
 }
