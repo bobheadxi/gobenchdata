@@ -35,11 +35,7 @@ func main() {
 				println("gobenchdata " + Version)
 			}
 		case "help":
-			println("usage:\n")
-			println("      go test -bench . -benchmem ./... | gobenchdata [flags]\n")
-			println("flags:\n")
-			pflag.PrintDefaults()
-			println("\nsee https://github.com/bobheadxi/gobenchdata for more documentation")
+			showHelp()
 		case "merge":
 			args := pflag.Args()[1:]
 			if len(args) < 1 {
@@ -47,7 +43,8 @@ func main() {
 			}
 			merge(args...)
 		default:
-			fmt.Printf("unknown command '%s'", cmd)
+			showHelp()
+			os.Exit(1)
 		}
 		return
 	}
@@ -56,6 +53,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	} else if fi.Mode()&os.ModeNamedPipe == 0 {
+		showHelp()
 		panic("gobenchdata should be used with a pipe")
 	}
 

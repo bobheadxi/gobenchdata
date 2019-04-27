@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+
+	"github.com/spf13/pflag"
 )
 
 func output(results []Run) {
@@ -20,4 +22,23 @@ func output(results []Run) {
 	} else {
 		println(string(b))
 	}
+}
+
+func showHelp() {
+	println(`gobenchdata is a tool for inspecting golang benchmark outputs.
+
+usage:
+
+  go test -bench . -benchmem ./... | gobenchdata [flags]
+
+other commands:
+
+  merge [files]  merge gobenchdata results
+  version        show gobenchdata version
+  help           show help text
+
+flags:
+`)
+	pflag.PrintDefaults()
+	println("\nsee https://github.com/bobheadxi/gobenchdata for more documentation.")
 }
