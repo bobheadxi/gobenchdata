@@ -1,0 +1,19 @@
+FROM golang:alpine
+
+LABEL name="gobenchdata to gh-pages"
+LABEL version="0.0.1"
+LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
+LABEL repository="https://github.com/bobheadxi/gobenchdata"
+LABEL homepage="https://github.com/bobheadxi/gobenchdata"
+LABEL "com.github.actions.name"="GitHub Action for Uploading Go Benchmark Data to gh-pages"
+LABEL "com.github.actions.description"="Runs your benchmarks and dates a JSON file in your gh-pages branch"
+LABEL "com.github.actions.icon"="book"
+LABEL "com.github.actions.color"="green"
+
+RUN apk add --no-cache git
+ENV GO111MODULE=on
+RUN go get github.com/bobheadxi/gobenchdata
+RUN mkdir -p /data/gobenchdata
+
+ADD entrypoint.sh /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
