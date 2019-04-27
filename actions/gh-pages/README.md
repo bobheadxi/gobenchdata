@@ -1,4 +1,4 @@
-# .actions/gh-pages
+# actions/gh-pages
 
 The stuff here is just a hard link from the root directory.
 
