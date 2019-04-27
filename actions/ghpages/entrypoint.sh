@@ -11,7 +11,7 @@ go test \
   -benchmem \
   ${GO_BENCHMARK_FLAGS} \
   ${GO_BENCHMARK_PKGS:-"./..."} \
-  | gobenchdata --json "${OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
+  | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 
 echo '📚 Checkout out gh-pages...'
 cd /tmp/build
