@@ -4,6 +4,9 @@ set -e
 cd "${GITHUB_WORKSPACE}"
 mkdir -p /tmp/{gobenchdata,build}
 
+git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+git config --global user.name "${GITHUB_ACTOR}"
+
 echo '📊 Running benchmarks...'
 RUN_OUTPUT="/tmp/gobenchdata/benchmarks.json"
 go test \
