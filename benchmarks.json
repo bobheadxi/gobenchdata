@@ -1,5 +1,64 @@
 [
   {
+    "Version": "3f126dbd97243d2fddd4402b767efc91cb003959",
+    "Date": 1556418620,
+    "Tags": [
+      "ref=refs/heads/master"
+    ],
+    "Suites": [
+      {
+        "Goos": "linux",
+        "Goarch": "amd64",
+        "Pkg": "github.com/bobheadxi/gobenchdata/demo",
+        "Benchmarks": [
+          {
+            "Name": "BenchmarkFib10/Fib()",
+            "Runs": 3000000,
+            "NsPerOp": 465,
+            "Mem": {
+              "BytesPerOp": 0,
+              "AllocsPerOp": 0
+            }
+          },
+          {
+            "Name": "BenchmarkFib10/FibSlow()",
+            "Runs": 3000000,
+            "NsPerOp": 503,
+            "Mem": {
+              "BytesPerOp": 16,
+              "AllocsPerOp": 1
+            }
+          }
+        ]
+      },
+      {
+        "Goos": "linux",
+        "Goarch": "amd64",
+        "Pkg": "github.com/bobheadxi/gobenchdata/demo/demo2",
+        "Benchmarks": [
+          {
+            "Name": "BenchmarkRegex",
+            "Runs": 200000,
+            "NsPerOp": 7752,
+            "Mem": {
+              "BytesPerOp": 5408,
+              "AllocsPerOp": 69
+            }
+          },
+          {
+            "Name": "BenchmarkParse",
+            "Runs": 10000000,
+            "NsPerOp": 149,
+            "Mem": {
+              "BytesPerOp": 0,
+              "AllocsPerOp": 0
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Version": "ecef913f0549f8299915d18c646d6a9299094462",
     "Date": 1556418464,
     "Tags": [
