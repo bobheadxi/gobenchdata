@@ -1,5 +1,39 @@
 [
   {
+    "Version": "ecef913f0549f8299915d18c646d6a9299094462",
+    "Date": 1556418464,
+    "Tags": [
+      "ref=refs/heads/master"
+    ],
+    "Suites": [
+      {
+        "Goos": "linux",
+        "Goarch": "amd64",
+        "Pkg": "github.com/bobheadxi/gobenchdata/demo",
+        "Benchmarks": [
+          {
+            "Name": "BenchmarkFib10/Fib()",
+            "Runs": 3000000,
+            "NsPerOp": 464,
+            "Mem": {
+              "BytesPerOp": 0,
+              "AllocsPerOp": 0
+            }
+          },
+          {
+            "Name": "BenchmarkFib10/FibSlow()",
+            "Runs": 3000000,
+            "NsPerOp": 501,
+            "Mem": {
+              "BytesPerOp": 16,
+              "AllocsPerOp": 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Version": "cfd28d7f5bc09b818ccbdc5192a3a1f7fe006204",
     "Date": 1556417493,
     "Tags": [
