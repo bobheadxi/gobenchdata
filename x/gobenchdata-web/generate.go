@@ -8,6 +8,11 @@ import (
 	"github.com/bobheadxi/gobenchdata/x/gobenchdata-web/internal"
 )
 
+type indexHTML struct {
+	Title          string
+	BenchmarksPath string
+}
+
 func generate() {
 	// generate index.html
 	os.MkdirAll(*outDir, os.ModePerm)
@@ -24,7 +29,8 @@ func generate() {
 		panic(err)
 	}
 	if err := tmp.Execute(f, &indexHTML{
-		Title: *title,
+		Title:          *title,
+		BenchmarksPath: *benchmarksPath,
 	}); err != nil {
 		panic(err)
 	}

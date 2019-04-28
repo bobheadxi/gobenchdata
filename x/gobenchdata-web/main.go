@@ -8,8 +8,9 @@ import (
 var Version string
 
 var (
-	title  = pflag.String("title", "gobenchdata continuous benchmarks", "title for generated website")
-	outDir = pflag.StringP("out", "o", "", "directory to output website in")
+	title          = pflag.String("title", "gobenchdata continuous benchmarks", "title for generated website")
+	outDir         = pflag.StringP("out", "o", "", "directory to output website in")
+	benchmarksPath = pflag.String("benchmarks-file", "benchmarks.json", "path to file where benchmarks are saved")
 )
 
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
@@ -31,10 +32,6 @@ func main() {
 	}
 
 	generate()
-}
-
-type indexHTML struct {
-	Title string
 }
 
 func showHelp() {
