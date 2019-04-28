@@ -19,6 +19,7 @@ var Version string
 var (
 	jsonOut   = pflag.String("json", "", "output as json to file")
 	appendOut = pflag.BoolP("append", "a", false, "append to output file")
+	flat      = pflag.BoolP("flat", "f", false, "flatten JSON output into one run per line")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")

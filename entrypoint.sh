@@ -24,7 +24,7 @@ git checkout gh-pages
 FINAL_OUTPUT="${GO_BENCHMARK_OUT:-"benchmarks.json"}"
 if [[ -f "${FINAL_OUTPUT}" ]]; then
   echo '📈 Existing report found - merging...'
-  gobenchdata merge "${RUN_OUTPUT}" "${FINAL_OUTPUT}" --json "${FINAL_OUTPUT}"
+  gobenchdata merge "${RUN_OUTPUT}" "${FINAL_OUTPUT}" --flat --json "${FINAL_OUTPUT}"
 else
   cp "${RUN_OUTPUT}" "${FINAL_OUTPUT}"
 fi

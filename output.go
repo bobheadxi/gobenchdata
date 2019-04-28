@@ -12,9 +12,25 @@ import (
 )
 
 func output(results []bench.Run) {
-	b, err := json.MarshalIndent(results, "", "  ")
-	if err != nil {
-		panic(err)
+	var b []byte
+	var err error
+	if *flat {
+		b = make([]byte, 0)
+		b = append(b, '[')
+		for _, run := range results {
+			runBytes, err := json.Marshal(run)
+			if err != nil {
+				panic(err)
+			}
+			b = append(b, '\n', ' ', ' ')
+			b = append(b, runBytes...)
+		}
+		b = append(b, '\n', ']', '\n')
+	} else {
+		b, err = json.MarshalIndent(results, "", "  ")
+		if err != nil {
+			panic(err)
+		}
 	}
 	if *jsonOut != "" {
 		if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
