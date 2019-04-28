@@ -22,6 +22,12 @@ export async function generateCharts({
             .push(newPoint(run, bench));
         });
       } else {
+        // create header
+        const header = document.createElement('h2');
+        header.innerText = suite.Pkg;
+        div.appendChild(header);
+
+        // create chart
         const canvas = document.createElement('canvas');
         div.appendChild(canvas);
         canvas.id = suite.Pkg;
