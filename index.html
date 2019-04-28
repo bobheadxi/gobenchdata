@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    <meta name="theme-color" content="#000000" />
+
+    <title>gobenchdata continuous benchmarks</title>
+  </head>
+
+  <body>
+    <div>
+      <div id="charts"></div>
+    </div>
+
+    <script type="module">
+      import { generateCharts } from './app.js';
+      const charts = document.getElementById('charts');
+      generateCharts({
+        div: charts,
+        json: 'benchmarks.json', // TODO: template
+      }).finally(console.log('done!'));
+    </script>
+  </body>
+</html>
