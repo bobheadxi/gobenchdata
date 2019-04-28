@@ -22,13 +22,16 @@ func output(results []bench.Run) {
 	if *flat {
 		b = make([]byte, 0)
 		b = append(b, '[')
-		for _, run := range results {
+		for i, run := range results {
 			runBytes, err := json.Marshal(run)
 			if err != nil {
 				panic(err)
 			}
 			b = append(b, '\n', ' ', ' ')
 			b = append(b, runBytes...)
+			if i != (len(results) - 1) {
+				b = append(b, ',')
+			}
 		}
 		b = append(b, '\n', ']', '\n')
 	} else {
