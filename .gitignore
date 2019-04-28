@@ -1,2 +1,4 @@
 benchmarks.json
 bench.json
+vendor
+tmp

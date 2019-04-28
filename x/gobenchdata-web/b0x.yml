@@ -1,0 +1,22 @@
+# package
+pkg: internal
+
+# destination
+dest: "./internal"
+
+# gofmt
+fmt: true
+
+# output file
+output: "web.go"
+noprefix: true
+
+# debug mode where the files are read directly from the filesytem
+debug: false
+
+# files
+custom:
+  - files: 
+    # everything inside the folder
+    # type: array of strings
+    - "./web/"
