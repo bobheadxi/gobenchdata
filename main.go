@@ -21,7 +21,6 @@ var (
 	appendOut = pflag.BoolP("append", "a", false, "append to output file")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
-	date    = pflag.StringP("date", "d", time.Now().UTC().String(), "date of this run, defaults to UTC time.Now()")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
 )
 
@@ -68,7 +67,7 @@ func main() {
 	// set up results
 	results := []bench.Run{{
 		Version: *version,
-		Date:    *date,
+		Date:    time.Now().Unix(),
 		Tags:    *tags,
 		Suites:  suites,
 	}}

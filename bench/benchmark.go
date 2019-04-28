@@ -3,7 +3,7 @@ package bench
 // Run denotes one run of gobenchdata, useful for grouping benchmark records
 type Run struct {
 	Version string `json:",omitempty"`
-	Date    string
+	Date    int64
 	Tags    []string `json:",omitempty"`
 	Suites  []Suite
 }
