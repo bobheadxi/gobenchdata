@@ -6,5 +6,6 @@ all:
 	go install -ldflags "-X main.Version=$(COMMIT)"
 	go install -ldflags "-X main.Version=$(COMMIT)" ./x/gobenchdata-web
 
+.PHONY: demo
 demo:
 	go test -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
