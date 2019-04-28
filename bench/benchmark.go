@@ -1,5 +1,18 @@
 package bench
 
+// RunHistory is a sort.Interface that sorts the most recent run first
+type RunHistory []Run
+
+// Runs returns the underlyinng runs
+func (r RunHistory) Runs() []Run        { return r }
+func (r RunHistory) Len() int           { return len(r) }
+func (r RunHistory) Less(i, j int) bool { return r[i].Date > r[j].Date }
+func (r RunHistory) Swap(i, j int) {
+	tmp := r[i]
+	r[i] = r[j]
+	r[j] = tmp
+}
+
 // Run denotes one run of gobenchdata, useful for grouping benchmark records
 type Run struct {
 	Version string `json:",omitempty"`

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"sort"
 
 	"github.com/spf13/pflag"
 
@@ -12,6 +13,10 @@ import (
 )
 
 func output(results []bench.Run) {
+	if !*noSort {
+		sort.Sort(bench.RunHistory(results))
+	}
+
 	var b []byte
 	var err error
 	if *flat {
