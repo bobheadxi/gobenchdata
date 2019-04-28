@@ -8,8 +8,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/bobheadxi/gobenchdata/bench"
 	"github.com/spf13/pflag"
+
+	"github.com/bobheadxi/gobenchdata/bench"
 )
 
 // Version is the version of gobenchdata
@@ -65,7 +66,7 @@ func main() {
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
 
 	// set up results
-	results := []Run{{
+	results := []bench.Run{{
 		Version: *version,
 		Date:    *date,
 		Tags:    *tags,
@@ -79,7 +80,7 @@ func main() {
 		if err != nil && !os.IsNotExist(err) {
 			panic(err)
 		} else if !os.IsNotExist(err) {
-			var runs []Run
+			var runs []bench.Run
 			if err := json.Unmarshal(b, &runs); err != nil {
 				panic(err)
 			}
@@ -90,12 +91,4 @@ func main() {
 	}
 
 	output(results)
-}
-
-// Run denotes one run of gobenchdata, useful for grouping benchmark records
-type Run struct {
-	Version string `json:",omitempty"`
-	Date    string
-	Tags    []string `json:",omitempty"`
-	Suites  []bench.Suite
 }

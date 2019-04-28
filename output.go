@@ -7,9 +7,11 @@ import (
 	"os"
 
 	"github.com/spf13/pflag"
+
+	"github.com/bobheadxi/gobenchdata/bench"
 )
 
-func output(results []Run) {
+func output(results []bench.Run) {
 	b, err := json.MarshalIndent(results, "", "  ")
 	if err != nil {
 		panic(err)

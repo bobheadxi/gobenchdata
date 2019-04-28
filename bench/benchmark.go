@@ -1,5 +1,13 @@
 package bench
 
+// Run denotes one run of gobenchdata, useful for grouping benchmark records
+type Run struct {
+	Version string `json:",omitempty"`
+	Date    string
+	Tags    []string `json:",omitempty"`
+	Suites  []Suite
+}
+
 // Suite is a suite of benchmark runs
 type Suite struct {
 	Goos       string
