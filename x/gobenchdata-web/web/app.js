@@ -3,7 +3,14 @@ export async function generateCharts({
   div,  // div to populate with charts 
   json, // path to JSON database
 }) {
-  const runs = await readJSON(json);
+  let runs = [];
+  try {
+    runs = await readJSON(json);
+  } catch (e) {
+    const err = document.createElement('div');
+    div.appendChild(err);
+    err.innerText = e;
+  }
   const charts = {};
   runs.forEach(run => {
     run.Suites.forEach(suite => {
@@ -22,39 +29,27 @@ export async function generateCharts({
         charts[suite.Pkg] = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: runs.map(run => label(run)),
+            labels: runs.sort((a, b) => a.Date - b.Date).map(run => label(run)),
             datasets: suite.Benchmarks.map(bench => {
               return {
                 label: bench.Name,
-                data: [newPoint(run, bench)]
+                data: [newPoint(run, bench)],
               }
             }),
           },
-          options: {
-            tooltips: {
-              callbacks: {
-                label: function(tt, data) {
-                  let label = data.datasets[tt.datasetIndex].label || '';
-                  if (label) {
-                    label += ': ';
-                  }
-                  label += tt.yLabel;
-                  return label;
-                }
-              },
-            }
-          }
+          options: { },
         });
       }
     });
   })
 }
 
-async function readJSON(path) { return (await fetch(path)).json(); }
+async function readJSON(path) {
+  return (await fetch(path)).json();
+}
 
 function newPoint(run, bench) {
   return {
-    x: run.Version,
     t: new Date(run.Date*1000),
     y: bench.NsPerOp,
   }
