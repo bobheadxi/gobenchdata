@@ -14,7 +14,7 @@ go test \
   -benchmem \
   ${GO_BENCHMARK_FLAGS} \
   ${GO_BENCHMARK_PKGS:-"./..."} \
-  | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
+  | go run github.com/bobheadxi/gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 
 echo '📚 Checkout out gh-pages...'
 cd /tmp/build
@@ -24,7 +24,9 @@ git checkout gh-pages
 FINAL_OUTPUT="${GO_BENCHMARK_OUT:-"benchmarks.json"}"
 if [[ -f "${FINAL_OUTPUT}" ]]; then
   echo '📈 Existing report found - merging...'
-  gobenchdata merge "${RUN_OUTPUT}" "${FINAL_OUTPUT}" --flat --json "${FINAL_OUTPUT}"
+  go run github.com/bobheadxi/gobenchdata merge "${RUN_OUTPUT}" "${FINAL_OUTPUT}" \
+    --flat \
+    --json "${FINAL_OUTPUT}"
 else
   cp "${RUN_OUTPUT}" "${FINAL_OUTPUT}"
 fi
