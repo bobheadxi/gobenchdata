@@ -25,8 +25,9 @@ async function readJSON(path) {
 }
 
 function label(run) {
-  const d = new Date(run.Date*1000)
-  return `${run.Version.substring(0, 7)} (${d.getMonth()}/${d.getDay()}/${d.getFullYear()})`
+  const d = new Date(run.Date*1000);
+  let month = d.getMonth();
+  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
 }
 
 // Generate one chart per suite
@@ -48,17 +49,18 @@ export async function generateCharts({
   // runs should start from the most recent run
   // TODO account for missing data towards end of data and in the middle
   runs.forEach(run => {
+    len++;
+
+    // add data from each suite
     run.Suites.forEach(suite => {
       if (charts[suite.Pkg]) {
         // if the chart div was already set up, append data to chart.
         // if the dataset is isn't in the datasets, then it no longer exists,
         // and we'll ignore it.
         suite.Benchmarks.forEach(bench => {
-          const chart = charts[suite.Pkg];
-          const dataset = chart.data.datasets.find(e => (e.label === bench.Name))
-          if (dataset) {
-            dataset.data.push(newPoint(run, bench));
-          }
+          const { data: { datasets } } = charts[suite.Pkg];
+          const dataset = datasets.find(e => (e.label === bench.Name))
+          if (dataset) dataset.data.push(newPoint(run, bench.NsPerOp));
         });
       } else {
         // create elements
@@ -68,15 +70,16 @@ export async function generateCharts({
 
         // create chart
         let i = randomInt();
+        const { Benchmarks: benchmarks } = suite;
         charts[suite.Pkg] = new Chart(ctx, {
           type: 'line',
           data: {
             labels: runs.sort((a, b) => a.Date - b.Date).map(run => label(run)),
-            datasets: suite.Benchmarks.map(bench => {
+            datasets: benchmarks.map(bench => {
               i += 3;
               return {
                 label: bench.Name,
-                data: [newPoint(run, bench)],
+                data: [newPoint(run, bench.NsPerOp)],
 
                 fill: false,
                 backgroundColor: getColor(i),
@@ -94,7 +97,15 @@ export async function generateCharts({
         div.appendChild(canvasDiv);
       }
     });
-    run++;
+
+    // fill missing data from datasets
+    Object.values(charts).forEach(c => {
+      const { data: { datasets } } = c;
+      datasets.forEach(d => {
+        const { data } = d;
+        if (data.length < len) data.push(newPoint(run, NaN));
+      });
+    })
   })
 }
 
@@ -114,7 +125,7 @@ const chartOptions = (suite) => ({
   },
 })
 
-const newPoint = (run, bench) => ({
+const newPoint = (run, val) => ({
   t: new Date(run.Date*1000),
-  y: bench.NsPerOp,
+  y: val,
 })
