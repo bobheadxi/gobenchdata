@@ -47,7 +47,7 @@
       import { generateCharts } from './app.js';
       const charts = document.getElementById('charts');
       const benchmarks = document.getElementById('benchmarks-path');
-      generateCharts({
+      window.onload = generateCharts({
         div: charts,
         json: (benchmarks.innerText === 'benchmarks.json')
           ? 'benchmarks.json'
