@@ -11,6 +11,23 @@
     <meta name="theme-color" content="#000000" />
     <style>
       .hidden { display: none; }
+
+      body {
+        padding-left:  200px;
+        padding-right: 200px;
+      }
+      @media only screen and (max-width: 1200px) {
+        body {
+          padding-left:  100px;
+          padding-right: 100px;
+        }
+      }
+      @media only screen and (max-width: 800px) {
+        body {
+          padding-left:  25px;
+          padding-right: 25px;
+        }
+      }
     </style>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -19,7 +36,9 @@
   </head>
 
   <body>
+    <!-- define template variables in divs to avoid breaking js code in devg -->
     <div id="benchmarks-path" hidden>{{.BenchmarksPath}}</div>
+  
     <div>
       <div id="charts"></div>
     </div>
