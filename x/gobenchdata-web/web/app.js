@@ -62,10 +62,7 @@ export async function generateCharts({
         });
       } else {
         // create elements
-        const canvasDiv = document.createElement('div');
         const canvas = document.createElement('canvas');
-        canvasDiv.appendChild(canvas);
-        div.appendChild(canvasDiv);
         canvas.id = suite.Pkg;
         const ctx = canvas.getContext('2d');
 
@@ -90,6 +87,11 @@ export async function generateCharts({
           },
           options: chartOptions(suite),
         });
+
+        // attach to dom
+        const canvasDiv = document.createElement('div');
+        canvasDiv.appendChild(canvas);
+        div.appendChild(canvasDiv);
       }
     });
     run++;
