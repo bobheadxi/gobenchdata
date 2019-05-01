@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+command -v gobenchdata
+gobenchdata version
+
 cd "${GITHUB_WORKSPACE}"
 mkdir -p /tmp/{gobenchdata,build}
 
