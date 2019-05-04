@@ -9,6 +9,7 @@ a tool for inspecting `go test -bench` data, and a
 * [GitHub Action](#github-action)
   * [Setup](#setup)
   * [Configuration](#configuration)
+  * [Visualizing Continuous Benchmarks](#visualizing-continuous-benchmarks)
 * [CLI](#cli)
 * [Development and Contributions](#development-and-contributions)
 
@@ -49,6 +50,27 @@ action "gobenchdata to gh-pages" {
 | `GO_BENCHMARK_FLAGS` |                           | additional flags for `go test`
 | `GO_BENCHMARK_PKGS`  | `./...`                   | packages to test (argument for `go test`)
 | `FINAL_OUTPUT`       | `benchmarks.json`         | destination path of benchmark data
+
+### Visualizing Continuous Benchmarks
+
+The `gobenchdata` GitHub action eventually generates a JSON file with past benchmarks.
+You can visualize these continuous benchmarks by creating a web app that reads
+from the JSON benchmarks file, or by using `gobenchdata-web`:
+
+```
+go get -u github.com/bobheadxi/x/gobenchdata-web
+git checkout gh-pages
+gobenchdata-web --title "my benchmarks" # generates a web app in your working directory
+```
+
+You can try it out locally using a tool like [serve](https://www.npmjs.com/package/serve)"
+
+```
+serve .
+```
+
+This feature is a work in progress. An example site published by this repository is
+available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
 
 ## CLI
 
