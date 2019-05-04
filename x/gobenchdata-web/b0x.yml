@@ -17,6 +17,5 @@ debug: false
 # files
 custom:
   - files: 
-    # everything inside the folder
-    # type: array of strings
-    - "./web/"
+    - "./web/app.js"
+    - "./web/index.html"
