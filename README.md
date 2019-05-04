@@ -1,4 +1,7 @@
-# gobenchdata [![GoDoc](https://godoc.org/github.com/bobheadxi/gobenchdata?status.svg)](https://godoc.org/github.com/bobheadxi/gobenchdata)
+# 📉 gobenchdata 
+
+[![View Action](https://img.shields.io/badge/view-action-yellow.svg)](https://github.com/marketplace/actions/gobenchdata-to-gh-pages)
+[![GoDoc](https://godoc.org/github.com/bobheadxi/gobenchdata?status.svg)](https://godoc.org/github.com/bobheadxi/gobenchdata)
 
 a tool for inspecting `go test -bench` data, and a
 [GitHub Action](https://github.com/features/actions) for continuous benchmarking.
@@ -63,4 +66,4 @@ Usage documentation can be found in the
 
 Please report bugs and requests in the [repository issues](https://github.com/bobheadxi/gobenchdata)!
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for more detailed development documentation.
