@@ -12,6 +12,12 @@
     <style>
       .hidden { display: none; }
 
+      * {
+        text-align: center;
+        color: #666;
+        font-family: 'Helvetica Neue';
+      }
+
       body {
         padding-left:  200px;
         padding-right: 200px;
@@ -39,6 +45,13 @@
     <!-- define template variables in divs to avoid breaking js code in devg -->
     <div id="benchmarks-path" hidden>{{.BenchmarksPath}}</div>
   
+    <div>
+      <h1>{{.Title}}</h1>
+      <h4>generated with <a href="https://github.com/marketplace/actions/gobenchdata-to-gh-pages">gobenchdata</a></h4>
+    </div>
+
+    <br />
+
     <div>
       <div id="charts"></div>
     </div>

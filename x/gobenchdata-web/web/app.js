@@ -95,6 +95,7 @@ export async function generateCharts({
         const canvasDiv = document.createElement('div');
         canvasDiv.appendChild(canvas);
         div.appendChild(canvasDiv);
+        div.appendChild(document.createElement('br'));
       }
     });
 
