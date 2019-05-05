@@ -12,6 +12,7 @@ import (
 type indexHTML struct {
 	Title          string
 	BenchmarksPath string
+	RootImport     string
 }
 
 func generate() {
@@ -38,6 +39,7 @@ func generate() {
 	if err := tmp.Execute(f, &indexHTML{
 		Title:          *title,
 		BenchmarksPath: *benchmarksPath,
+		RootImport:     *rootImport,
 	}); err != nil {
 		panic(err)
 	}
