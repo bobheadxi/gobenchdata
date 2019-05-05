@@ -1,10 +1,13 @@
-# 📉 gobenchdata 
+
+# 📉 gobenchdata
 
 [![View Action](https://img.shields.io/badge/view-action-yellow.svg)](https://github.com/marketplace/actions/gobenchdata-to-gh-pages)
 [![GoDoc](https://godoc.org/github.com/bobheadxi/gobenchdata?status.svg)](https://godoc.org/github.com/bobheadxi/gobenchdata)
 
 a tool for inspecting `go test -bench` data, and a
 [GitHub Action](https://github.com/features/actions) for continuous benchmarking.
+
+<img align="right" width="500" src="./.static/demo-chart.png">
 
 * [GitHub Action](#github-action)
   * [Setup](#setup)
