@@ -23,50 +23,99 @@ export async function generateCharts({
 
     // add data from each suite
     run.Suites.forEach(suite => {
-      if (charts[suite.Pkg]) {
+      if (charts[suite.Pkg+'-'+chartsTypes[0]]) {
         // if the chart div was already set up, append data to chart.
         // if the dataset is isn't in the datasets, then it no longer exists,
         // and we'll ignore it.
         suite.Benchmarks.forEach(bench => {
-          const { data: { datasets } } = charts[suite.Pkg];
-          const dataset = datasets.find(e => (e.label === bench.Name))
-          if (dataset) dataset.data.push(newPoint(run, bench.NsPerOp));
+          chartsTypes.forEach(c => {
+            const { data: { datasets } } = charts[suite.Pkg + '-' + c];
+            const dataset = datasets.find(e => (e.label === bench.Name))
+            if (dataset) {
+              switch (c) {
+                case chartsTypes[0]: {
+                  dataset.data.push(newPoint(run, bench.NsPerOp));
+                  break;
+                }
+                case chartsTypes[1]: {
+                  dataset.data.push(newPoint(run, bench.Mem.BytesPerOp));
+                  break;
+                }
+                case chartsTypes[2]: {
+                  dataset.data.push(newPoint(run, bench.Mem.AllocsPerOp));
+                  break;
+                }
+              }
+            }
+          })
         });
       } else {
-        // create elements
-        const canvas = document.createElement('canvas');
-        canvas.id = suite.Pkg;
-        const ctx = canvas.getContext('2d');
+        // group benchmarks for a package under a div
+        const group = document.createElement('div');
+        group.id = suite.Pkg;
+        const title = document.createElement('h3');
+        group.appendChild(title);
+        title.innerText = `package ${suite.Pkg}`;
 
-        // create chart
-        let i = randomInt();
+        // chart for each benchmark type
+        let seedColor = randomInt();
         const { Benchmarks: benchmarks } = suite;
-        charts[suite.Pkg] = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels,
-            datasets: benchmarks.map(bench => {
-              i += 3;
-              return {
-                label: bench.Name,
-                data: [newPoint(run, bench.NsPerOp)],
+        chartsTypes.forEach(c => {
+          const chartName = suite.Pkg + '-' + c;
 
-                fill: false,
-                backgroundColor: getColor(i),
-                borderColor: getColor(i),
-                pointRadius: 4,
-              }
-            }),
-          },
-          options: chartOptions(suite),
+          // create elements
+          const canvas = document.createElement('canvas');
+          canvas.id = chartName;
+          const ctx = canvas.getContext('2d');
+
+          // create chart
+          let i = seedColor;
+          charts[chartName] = new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels,
+              datasets: benchmarks.map(bench => {
+                let p;
+                switch (c) {
+                case chartsTypes[0]: {
+                  p = newPoint(run, bench.NsPerOp);
+                  break;
+                }
+                case chartsTypes[1]: {
+                  p = newPoint(run, bench.Mem.BytesPerOp);
+                  break;
+                }
+                case chartsTypes[2]: {
+                  p = newPoint(run, bench.Mem.AllocsPerOp);
+                  break;
+                }
+                }
+                i += 3;
+                return {
+                  label: bench.Name,
+                  data: [p],
+
+                  fill: false,
+                  backgroundColor: getColor(i),
+                  borderColor: getColor(i),
+                  pointRadius: 4,
+                }
+              }),
+            },
+            options: chartOptions(c),
+          });
+
+          // attach to dom
+          const canvasDiv = document.createElement('div');
+          canvasDiv.setAttribute('class', 'canvaswrapper');
+          canvasDiv.appendChild(canvas);
+          group.appendChild(canvasDiv);
         });
 
-        // attach to dom
-        const canvasDiv = document.createElement('div');
-        canvasDiv.setAttribute('class', 'canvaswrapper');
-        canvasDiv.appendChild(canvas);
-        div.appendChild(canvasDiv);
-        div.appendChild(document.createElement('br'));
+        // attach group to parent
+        group.appendChild(document.createElement('hr'));
+        group.appendChild(document.createElement('br'));
+        div.appendChild(group);
       }
     });
 
@@ -81,12 +130,11 @@ export async function generateCharts({
   })
 }
 
-const chartOptions = (suite) => ({
+const chartOptions = (c) => ({
   responsive: true,
-  aspectRatio: 1.5,
   title: {
     display: true,
-    text: suite.Pkg,
+    text: c,
   },
   tooltips: {
     mode: 'index',
@@ -99,7 +147,7 @@ const chartOptions = (suite) => ({
   scales: {
     yAxes: [{
       display: true,
-      scaleLabel: { display: true, labelString: 'ns/op' },
+      scaleLabel: { display: true, labelString: c },
       ticks: { beginAtZero: true },
     }],
   },
@@ -110,6 +158,11 @@ const newPoint = (run, val) => ({
   y: val,
 })
 
+const chartsTypes = [
+  'ns/op',
+  'bytes/op',
+  'allocs/op',
+]
 
 const chartColors = {
 	red: 'rgb(255, 99, 132)',
