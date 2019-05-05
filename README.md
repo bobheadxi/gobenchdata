@@ -12,8 +12,8 @@ a tool for inspecting `go test -bench` data, and a
 * [GitHub Action](#github-action)
   * [Setup](#setup)
   * [Configuration](#configuration)
-  * [Visualizing Continuous Benchmarks](#visualizing-continuous-benchmarks)
-* [CLI](#cli)
+  * [Visualisation](#visualisation)
+* [`gobenchdata` CLI](#gobenchdata-cli)
 * [Development and Contributions](#development-and-contributions)
 
 ## GitHub Action
@@ -45,6 +45,8 @@ action "gobenchdata to gh-pages" {
 }
 ```
 
+Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
+
 ### Configuration
 
 | Variable             | Default                   | Purpose
@@ -56,8 +58,9 @@ action "gobenchdata to gh-pages" {
 | `GO_BENCHMARK_FLAGS` |                           | additional flags for `go test`
 | `GO_BENCHMARK_PKGS`  | `./...`                   | packages to test (argument for `go test`)
 | `FINAL_OUTPUT`       | `benchmarks.json`         | destination path of benchmark data
+| `PRUNE`              | `0`                       | number of past runs to keep (`0` keeps everything)
 
-### Visualizing Continuous Benchmarks
+### Visualisation
 
 The `gobenchdata` GitHub action eventually generates a JSON file with past benchmarks.
 You can visualize these continuous benchmarks by creating a web app that reads
@@ -78,9 +81,10 @@ serve .
 This feature is a work in progress. An example site published by this repository is
 available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
 
-## CLI
+## `gobenchdata` CLI
 
-`gobenchdata` is also available as a CLI:
+`gobenchdata`, which the GitHub Action leverages to manage benchmark data,
+is also available as a CLI:
 
 ```
 go get -u github.com/bobheadxi/gobenchdata
