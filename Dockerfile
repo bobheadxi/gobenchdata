@@ -3,6 +3,7 @@ FROM golang:latest
 LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://github.com/bobheadxi/gobenchdata"
 LABEL homepage="https://github.com/bobheadxi/gobenchdata"
+LABEL version="v0.1.0-1"
 LABEL "com.github.actions.name"="gobenchdata to gh-pages"
 LABEL "com.github.actions.description"="Runs your benchmarks and adds the results to a JSON file in your gh-pages branch"
 LABEL "com.github.actions.icon"="book"
