@@ -9,3 +9,7 @@ all:
 .PHONY: demo
 demo:
 	go test -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
+
+.PHONY: serve
+serve:
+	serve ./x/gobenchdata-web/web
