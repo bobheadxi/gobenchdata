@@ -67,15 +67,18 @@ export async function generateCharts({
 
           // create chart
           let i = seedColor;
+          let max = 0;
           charts[chartName] = new Chart(ctx, {
             type: 'line',
             data: {
               labels,
               datasets: benchmarks.map(bench => {
+                const p = newRunPoint(c, run, bench);
+                max = Math.max(p.y+p.y*0.1, max);
                 i += 3;
                 return {
                   label: bench.Name,
-                  data: [newRunPoint(c, run, bench)],
+                  data: [p],
 
                   fill: false,
                   backgroundColor: getColor(i),
@@ -86,7 +89,7 @@ export async function generateCharts({
                 }
               }),
             },
-            options: chartOptions(c),
+            options: chartOptions(c, max),
           });
           // TODO: this only works if you click on a point exactly, which is
           // dumb. can't seem to make it work for clicking anywhere (getting
@@ -125,11 +128,17 @@ export async function generateCharts({
   })
 }
 
-const chartOptions = (c) => ({
+const chartOptions = (c, yMax) => ({
   responsive: true,
+  aspectRatio: 1,
   title: {
     display: true,
     text: c,
+  },
+  layout: {
+    padding: {
+      right: 10,
+    },
   },
   tooltips: {
     mode: 'index',
@@ -143,8 +152,7 @@ const chartOptions = (c) => ({
   scales: {
     yAxes: [{
       display: true,
-      scaleLabel: { display: true, labelString: c },
-      ticks: { beginAtZero: true },
+      ticks: { beginAtZero: true, suggestedMax: yMax },
       gridLines: {
         display: true,
         drawBorder: true,
@@ -152,12 +160,7 @@ const chartOptions = (c) => ({
       },
     }],
     xAxes: [{
-      ticks: { display: false },
-      gridLines: {
-        display: false,
-        drawBorder: false,
-        drawOnChartArea: false,
-      },
+      display: false,
     }]
   },
   legend: {
@@ -179,7 +182,7 @@ const newRunPoint = (c, run, bench) => {
     case chartsTypes[0]: return newPoint(run, bench.NsPerOp);
     case chartsTypes[1]: return newPoint(run, bench.Mem.BytesPerOp);
     case chartsTypes[2]: return newPoint(run, bench.Mem.AllocsPerOp);
-    default: console.error('unexpected chart type', c)
+    default: console.error('unexpected chart type', c);
   }
 }
 
