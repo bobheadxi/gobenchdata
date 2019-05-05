@@ -66,7 +66,7 @@ git checkout gh-pages
 gobenchdata-web --title "my benchmarks" # generates a web app in your working directory
 ```
 
-You can try it out locally using a tool like [serve](https://www.npmjs.com/package/serve)"
+You test the web app locally using a tool like [serve](https://www.npmjs.com/package/serve):
 
 ```
 serve .
