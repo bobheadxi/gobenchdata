@@ -18,6 +18,8 @@ a tool for inspecting `go test -bench` data, and a
 * [`gobenchdata` CLI](#gobenchdata-cli)
 * [Development and Contributions](#development-and-contributions)
 
+<br />
+
 ## GitHub Action
 
 A GitHub Action for uploading Go benchmark data to `gh-pages` using `gobenchdata`.
