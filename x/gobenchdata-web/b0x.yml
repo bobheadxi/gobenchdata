@@ -19,3 +19,4 @@ custom:
   - files: 
     - "./web/app.js"
     - "./web/index.html"
+    - "./web/style.css"

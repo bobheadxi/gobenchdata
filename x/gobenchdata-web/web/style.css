@@ -1,0 +1,36 @@
+* {
+  text-align: center;
+  color: #666;
+  font-family: 'Helvetica Neue';
+}
+
+.hidden { display: none; }
+
+body {
+  padding-left:  400px;
+  padding-right: 400px;
+}
+@media only screen and (max-width: 1600px) {
+  body {
+    padding-left:  300px;
+    padding-right: 300px;
+  }
+}
+@media only screen and (max-width: 1200px) {
+  body {
+    padding-left:  150px;
+    padding-right: 150px;
+  }
+}
+@media only screen and (max-width: 900px) {
+  body {
+    padding-left:  50px;
+    padding-right: 50px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  body {
+    padding-left:  0px;
+    padding-right: 0px;
+  }
+}

@@ -57,6 +57,7 @@
     <!-- define template variables in divs to avoid breaking js code in devg -->
     <div id="benchmarks-path" hidden>{{.BenchmarksPath}}</div>
   
+    <!-- headers -->
     <div>
       <h1>{{.Title}}</h1>
       <h4>generated with <a href="https://github.com/marketplace/actions/gobenchdata-to-gh-pages">gobenchdata</a></h4>
@@ -64,10 +65,12 @@
 
     <br />
 
+    <!-- chart content, generated using app.js -->
     <div>
       <div id="charts"></div>
     </div>
 
+    <!-- javascript -->
     <script type="module">
       import { generateCharts } from './app.js';
       const charts = document.getElementById('charts');

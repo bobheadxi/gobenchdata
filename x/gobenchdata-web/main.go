@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"github.com/spf13/pflag"
 )
 
@@ -9,7 +11,7 @@ var Version string
 
 var (
 	title          = pflag.String("title", "gobenchdata continuous benchmarks", "title for generated website")
-	outDir         = pflag.StringP("out", "o", "", "directory to output website in")
+	outDir         = pflag.StringP("out", "o", ".", "directory to output website in")
 	benchmarksPath = pflag.String("benchmarks-file", "benchmarks.json", "path to file where benchmarks are saved")
 )
 
@@ -27,6 +29,9 @@ func main() {
 			}
 		case "help":
 			showHelp()
+		default:
+			println("unknown command provided - try 'help'")
+			os.Exit(1)
 		}
 		return
 	}
