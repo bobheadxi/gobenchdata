@@ -7,7 +7,9 @@
 a tool for inspecting `go test -bench` data, and a
 [GitHub Action](https://github.com/features/actions) for continuous benchmarking.
 
-<img align="right" width="500" src="./.static/demo-chart.png">
+<a href="https://gobenchdata.bobheadxi.dev/" target="_blank">
+  <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
+</a>
 
 * [GitHub Action](#github-action)
   * [Setup](#setup)
