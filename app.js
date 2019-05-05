@@ -63,6 +63,7 @@ export async function generateCharts({
 
         // attach to dom
         const canvasDiv = document.createElement('div');
+        canvasDiv.setAttribute('class', 'canvaswrapper');
         canvasDiv.appendChild(canvas);
         div.appendChild(canvasDiv);
         div.appendChild(document.createElement('br'));
@@ -82,6 +83,7 @@ export async function generateCharts({
 
 const chartOptions = (suite) => ({
   responsive: true,
+  aspectRatio: 1.5,
   title: {
     display: true,
     text: suite.Pkg,
@@ -93,6 +95,13 @@ const chartOptions = (suite) => ({
   hover: {
     mode: 'nearest',
     intersect: true
+  },
+  scales: {
+    yAxes: [{
+      display: true,
+      scaleLabel: { display: true, labelString: 'ns' },
+      ticks: { beginAtZero: true },
+    }],
   },
 })
 
@@ -129,9 +138,5 @@ async function readJSON(path) {
 function label(run) {
   const d = new Date(run.Date*1000);
   let month = d.getMonth();
-  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
+  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()})`;
 }
-, val) => ({
-  t: new Date(run.Date*1000),
-  y: val,
-})

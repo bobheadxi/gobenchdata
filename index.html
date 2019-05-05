@@ -10,28 +10,40 @@
 
     <meta name="theme-color" content="#000000" />
     <style>
-      .hidden { display: none; }
-
       * {
         text-align: center;
         color: #666;
         font-family: 'Helvetica Neue';
       }
 
+      .hidden { display: none; }
+
       body {
-        padding-left:  200px;
-        padding-right: 200px;
+        padding-left:  400px;
+        padding-right: 400px;
+      }
+      @media only screen and (max-width: 1600px) {
+        body {
+          padding-left:  300px;
+          padding-right: 300px;
+        }
       }
       @media only screen and (max-width: 1200px) {
         body {
-          padding-left:  100px;
-          padding-right: 100px;
+          padding-left:  150px;
+          padding-right: 150px;
         }
       }
-      @media only screen and (max-width: 800px) {
+      @media only screen and (max-width: 900px) {
         body {
-          padding-left:  25px;
-          padding-right: 25px;
+          padding-left:  50px;
+          padding-right: 50px;
+        }
+      }
+      @media only screen and (max-width: 600px) {
+        body {
+          padding-left:  0px;
+          padding-right: 0px;
         }
       }
     </style>
@@ -45,6 +57,7 @@
     
     <div id="benchmarks-path" hidden>benchmarks.json</div>
   
+    
     <div>
       <h1>gobenchdata continuous benchmarks</h1>
       <h4>generated with <a href="https://github.com/marketplace/actions/gobenchdata-to-gh-pages">gobenchdata</a></h4>
@@ -52,10 +65,12 @@
 
     <br />
 
+    
     <div>
       <div id="charts"></div>
     </div>
 
+    
     <script type="module">
       import { generateCharts } from './app.js';
       const charts = document.getElementById('charts');
