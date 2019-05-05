@@ -1,12 +1,11 @@
 'use strict';
 
-// Generate one chart per suite
+// Generate charts per suite
 export async function generateCharts({
   div,        // div to populate with charts 
   json,       // path to JSON database
   rootImport, // import path of package, e.g. 'github.com/bobheadxi/gobenchdata'
 }) {
-  console.log({div, json, rootImport});
   let runs = [];
   try {
     runs = await readJSON(json);
@@ -33,22 +32,7 @@ export async function generateCharts({
           chartsTypes.forEach(c => {
             const { data: { datasets } } = charts[suite.Pkg + '-' + c];
             const dataset = datasets.find(e => (e.label === bench.Name))
-            if (dataset) {
-              switch (c) {
-                case chartsTypes[0]: {
-                  dataset.data.push(newPoint(run, bench.NsPerOp));
-                  break;
-                }
-                case chartsTypes[1]: {
-                  dataset.data.push(newPoint(run, bench.Mem.BytesPerOp));
-                  break;
-                }
-                case chartsTypes[2]: {
-                  dataset.data.push(newPoint(run, bench.Mem.AllocsPerOp));
-                  break;
-                }
-              }
-            }
+            if (dataset) dataset.data.push(newRunPoint(c, run, bench));
           })
         });
       } else {
@@ -88,25 +72,10 @@ export async function generateCharts({
             data: {
               labels,
               datasets: benchmarks.map(bench => {
-                let p;
-                switch (c) {
-                  case chartsTypes[0]: {
-                    p = newPoint(run, bench.NsPerOp);
-                    break;
-                  }
-                  case chartsTypes[1]: {
-                    p = newPoint(run, bench.Mem.BytesPerOp);
-                    break;
-                  }
-                  case chartsTypes[2]: {
-                    p = newPoint(run, bench.Mem.AllocsPerOp);
-                    break;
-                  }
-                }
                 i += 3;
                 return {
                   label: bench.Name,
-                  data: [p],
+                  data: [newRunPoint(c, run, bench)],
 
                   fill: false,
                   backgroundColor: getColor(i),
@@ -204,6 +173,15 @@ const newPoint = (run, val) => ({
   t: new Date(run.Date*1000),
   y: val,
 })
+
+const newRunPoint = (c, run, bench) => {
+  switch (c) {
+    case chartsTypes[0]: return newPoint(run, bench.NsPerOp);
+    case chartsTypes[1]: return newPoint(run, bench.Mem.BytesPerOp);
+    case chartsTypes[2]: return newPoint(run, bench.Mem.AllocsPerOp);
+    default: console.error('unexpected chart type', c)
+  }
+}
 
 const chartsTypes = [
   'ns/op',
