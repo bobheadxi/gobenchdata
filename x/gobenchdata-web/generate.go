@@ -29,7 +29,9 @@ func generate() {
 	if err != nil {
 		panic(err)
 	}
-	f, err := os.OpenFile(filepath.Join(*outDir, "index.html"), os.O_CREATE|os.O_WRONLY, os.ModePerm)
+	target := filepath.Join(*outDir, "index.html")
+	os.Remove(target)
+	f, err := os.OpenFile(target, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 	if err != nil {
 		panic(err)
 	}
@@ -51,7 +53,9 @@ func generate() {
 		if err != nil {
 			panic(err)
 		}
-		f, err = os.OpenFile(filepath.Join(*outDir, t), os.O_CREATE|os.O_WRONLY, os.ModePerm)
+		target := filepath.Join(*outDir, t)
+		os.Remove(target)
+		f, err = os.OpenFile(target, os.O_CREATE|os.O_WRONLY, os.ModePerm)
 		if err != nil {
 			panic(err)
 		}
