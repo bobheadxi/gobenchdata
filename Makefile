@@ -1,2 +1,2 @@
 all:
-	gobenchdata-web
+	gobenchdata-web --title "gobenchdata example continuous benchmarks"
