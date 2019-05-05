@@ -1,35 +1,5 @@
 'use strict';
 
-const chartColors = {
-	red: 'rgb(255, 99, 132)',
-	orange: 'rgb(255, 159, 64)',
-	yellow: 'rgb(255, 205, 86)',
-	green: 'rgb(75, 192, 192)',
-	blue: 'rgb(54, 162, 235)',
-	purple: 'rgb(153, 102, 255)',
-	grey: 'rgb(201, 203, 207)'
-};
-
-const chartColorsList = Object.values(chartColors);
-
-function randomInt() {
-  return Math.floor(Math.random() * (chartColorsList.length + 1));
-}
-
-function getColor(i) {
-  return chartColorsList[i % chartColorsList.length];
-}
-
-async function readJSON(path) {
-  return (await fetch(path)).json();
-}
-
-function label(run) {
-  const d = new Date(run.Date*1000);
-  let month = d.getMonth();
-  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
-}
-
 // Generate one chart per suite
 export async function generateCharts({
   div,  // div to populate with charts 
@@ -44,10 +14,10 @@ export async function generateCharts({
     err.innerText = e;
   }
 
+  const labels = runs.sort((a, b) => a.Date - b.Date).map(r => label(r));
   const charts = {};
   let len = 0;
   // runs should start from the most recent run
-  // TODO account for missing data towards end of data and in the middle
   runs.forEach(run => {
     len++;
 
@@ -74,7 +44,7 @@ export async function generateCharts({
         charts[suite.Pkg] = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: runs.sort((a, b) => a.Date - b.Date).map(run => label(run)),
+            labels,
             datasets: benchmarks.map(bench => {
               i += 3;
               return {
@@ -104,7 +74,7 @@ export async function generateCharts({
       const { data: { datasets } } = c;
       datasets.forEach(d => {
         const { data } = d;
-        if (data.length < len) data.push(newPoint(run, NaN));
+        if (data.length < len) data.unshift(newPoint(run, NaN));
       });
     })
   })
@@ -130,3 +100,34 @@ const newPoint = (run, val) => ({
   t: new Date(run.Date*1000),
   y: val,
 })
+
+
+const chartColors = {
+	red: 'rgb(255, 99, 132)',
+	orange: 'rgb(255, 159, 64)',
+	yellow: 'rgb(255, 205, 86)',
+	green: 'rgb(75, 192, 192)',
+	blue: 'rgb(54, 162, 235)',
+	purple: 'rgb(153, 102, 255)',
+	grey: 'rgb(201, 203, 207)'
+};
+
+const chartColorsList = Object.values(chartColors);
+
+function randomInt() {
+  return Math.floor(Math.random() * (chartColorsList.length + 1));
+}
+
+function getColor(i) {
+  return chartColorsList[i % chartColorsList.length];
+}
+
+async function readJSON(path) {
+  return (await fetch(path)).json();
+}
+
+function label(run) {
+  const d = new Date(run.Date*1000);
+  let month = d.getMonth();
+  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
+}
