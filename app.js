@@ -2,9 +2,11 @@
 
 // Generate one chart per suite
 export async function generateCharts({
-  div,  // div to populate with charts 
-  json, // path to JSON database
+  div,        // div to populate with charts 
+  json,       // path to JSON database
+  rootImport, // import path of package, e.g. 'github.com/bobheadxi/gobenchdata'
 }) {
+  console.log({div, json, rootImport});
   let runs = [];
   try {
     runs = await readJSON(json);
@@ -54,8 +56,19 @@ export async function generateCharts({
         const group = document.createElement('div');
         group.id = suite.Pkg;
         const title = document.createElement('h3');
+        const pkgLink = document.createElement('a');
+        if (rootImport) {
+          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${suite.Pkg.replace(rootImport, '')}`);
+        } else {
+          const parts = suite.Pkg.split('/');
+          rootImport = parts.slice(0, 3).join('/');
+          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${parts.slice(3).join('/')}`);
+        }
+        pkgLink.setAttribute('target', '_blank');
+        pkgLink.innerText = suite.Pkg;
+        title.innerText = `package\n`;
+        title.appendChild(pkgLink);
         group.appendChild(title);
-        title.innerText = `package ${suite.Pkg}`;
 
         // chart for each benchmark type
         let seedColor = randomInt();
@@ -77,18 +90,18 @@ export async function generateCharts({
               datasets: benchmarks.map(bench => {
                 let p;
                 switch (c) {
-                case chartsTypes[0]: {
-                  p = newPoint(run, bench.NsPerOp);
-                  break;
-                }
-                case chartsTypes[1]: {
-                  p = newPoint(run, bench.Mem.BytesPerOp);
-                  break;
-                }
-                case chartsTypes[2]: {
-                  p = newPoint(run, bench.Mem.AllocsPerOp);
-                  break;
-                }
+                  case chartsTypes[0]: {
+                    p = newPoint(run, bench.NsPerOp);
+                    break;
+                  }
+                  case chartsTypes[1]: {
+                    p = newPoint(run, bench.Mem.BytesPerOp);
+                    break;
+                  }
+                  case chartsTypes[2]: {
+                    p = newPoint(run, bench.Mem.AllocsPerOp);
+                    break;
+                  }
                 }
                 i += 3;
                 return {
@@ -99,11 +112,24 @@ export async function generateCharts({
                   backgroundColor: getColor(i),
                   borderColor: getColor(i),
                   pointRadius: 4,
+                  pointHoverRadius: 5.5,
+                  lineTension: 0,
                 }
               }),
             },
             options: chartOptions(c),
           });
+          // TODO: this only works if you click on a point exactly, which is
+          // dumb. can't seem to make it work for clicking anywhere (getting
+          // the chart.js x-axis is nontrivial). ugh
+          canvas.onclick = (e) => {
+            const p = charts[chartName].getElementAtEvent(e);
+            if (p && p.length) {
+              const { _index: i, _xScale: x } = p[0];
+              const commit = x.ticks[i].split(' ')[0];
+              window.open(`https://${rootImport}/commit/${commit}`, '_blank');
+            }
+          }
 
           // attach to dom
           const canvasDiv = document.createElement('div');
@@ -139,17 +165,38 @@ const chartOptions = (c) => ({
   tooltips: {
     mode: 'index',
     intersect: false,
+    position: 'nearest',
   },
   hover: {
-    mode: 'nearest',
-    intersect: true
+    mode: 'index',
+    intersect: false,
   },
   scales: {
     yAxes: [{
       display: true,
       scaleLabel: { display: true, labelString: c },
       ticks: { beginAtZero: true },
+      gridLines: {
+        display: true,
+        drawBorder: true,
+        drawOnChartArea: false,
+      },
     }],
+    xAxes: [{
+      ticks: { display: false },
+      gridLines: {
+        display: false,
+        drawBorder: false,
+        drawOnChartArea: false,
+      },
+    }]
+  },
+  legend: {
+    position: 'bottom',
+    labels: {
+      fontSize: 10,
+      boxWidth: 10,
+    },
   },
 })
 
@@ -191,5 +238,5 @@ async function readJSON(path) {
 function label(run) {
   const d = new Date(run.Date*1000);
   let month = d.getMonth();
-  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()})`;
+  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
 }
