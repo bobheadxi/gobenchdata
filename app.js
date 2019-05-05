@@ -1,12 +1,11 @@
 'use strict';
 
-// Generate one chart per suite
+// Generate charts per suite
 export async function generateCharts({
   div,        // div to populate with charts 
   json,       // path to JSON database
   rootImport, // import path of package, e.g. 'github.com/bobheadxi/gobenchdata'
 }) {
-  console.log({div, json, rootImport});
   let runs = [];
   try {
     runs = await readJSON(json);
@@ -33,22 +32,7 @@ export async function generateCharts({
           chartsTypes.forEach(c => {
             const { data: { datasets } } = charts[suite.Pkg + '-' + c];
             const dataset = datasets.find(e => (e.label === bench.Name))
-            if (dataset) {
-              switch (c) {
-                case chartsTypes[0]: {
-                  dataset.data.push(newPoint(run, bench.NsPerOp));
-                  break;
-                }
-                case chartsTypes[1]: {
-                  dataset.data.push(newPoint(run, bench.Mem.BytesPerOp));
-                  break;
-                }
-                case chartsTypes[2]: {
-                  dataset.data.push(newPoint(run, bench.Mem.AllocsPerOp));
-                  break;
-                }
-              }
-            }
+            if (dataset) dataset.data.push(newRunPoint(c, run, bench));
           })
         });
       } else {
@@ -83,26 +67,14 @@ export async function generateCharts({
 
           // create chart
           let i = seedColor;
+          let max = 0;
           charts[chartName] = new Chart(ctx, {
             type: 'line',
             data: {
               labels,
               datasets: benchmarks.map(bench => {
-                let p;
-                switch (c) {
-                  case chartsTypes[0]: {
-                    p = newPoint(run, bench.NsPerOp);
-                    break;
-                  }
-                  case chartsTypes[1]: {
-                    p = newPoint(run, bench.Mem.BytesPerOp);
-                    break;
-                  }
-                  case chartsTypes[2]: {
-                    p = newPoint(run, bench.Mem.AllocsPerOp);
-                    break;
-                  }
-                }
+                const p = newRunPoint(c, run, bench);
+                max = Math.max(p.y+p.y*0.1, max);
                 i += 3;
                 return {
                   label: bench.Name,
@@ -117,7 +89,7 @@ export async function generateCharts({
                 }
               }),
             },
-            options: chartOptions(c),
+            options: chartOptions(c, max),
           });
           // TODO: this only works if you click on a point exactly, which is
           // dumb. can't seem to make it work for clicking anywhere (getting
@@ -156,11 +128,17 @@ export async function generateCharts({
   })
 }
 
-const chartOptions = (c) => ({
+const chartOptions = (c, yMax) => ({
   responsive: true,
+  aspectRatio: 1,
   title: {
     display: true,
     text: c,
+  },
+  layout: {
+    padding: {
+      right: 10,
+    },
   },
   tooltips: {
     mode: 'index',
@@ -174,8 +152,7 @@ const chartOptions = (c) => ({
   scales: {
     yAxes: [{
       display: true,
-      scaleLabel: { display: true, labelString: c },
-      ticks: { beginAtZero: true },
+      ticks: { beginAtZero: true, suggestedMax: yMax },
       gridLines: {
         display: true,
         drawBorder: true,
@@ -183,12 +160,7 @@ const chartOptions = (c) => ({
       },
     }],
     xAxes: [{
-      ticks: { display: false },
-      gridLines: {
-        display: false,
-        drawBorder: false,
-        drawOnChartArea: false,
-      },
+      display: false,
     }]
   },
   legend: {
@@ -204,6 +176,15 @@ const newPoint = (run, val) => ({
   t: new Date(run.Date*1000),
   y: val,
 })
+
+const newRunPoint = (c, run, bench) => {
+  switch (c) {
+    case chartsTypes[0]: return newPoint(run, bench.NsPerOp);
+    case chartsTypes[1]: return newPoint(run, bench.Mem.BytesPerOp);
+    case chartsTypes[2]: return newPoint(run, bench.Mem.AllocsPerOp);
+    default: console.error('unexpected chart type', c);
+  }
+}
 
 const chartsTypes = [
   'ns/op',

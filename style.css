@@ -8,6 +8,20 @@
 .footer {
   margin-bottom: 40px;
 }
+.canvaswrapper {
+  width: 30%;
+  display: inline-block;
+}
+@media only screen and (max-width: 900px) {
+  .canvaswrapper {
+    width: 50%;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .canvaswrapper {
+    width: 100%;
+  }
+}
 
 hr {
   border: 0;
@@ -17,19 +31,19 @@ hr {
   margin-bottom: 40px;
 }
 body {
-  padding-left:  400px;
-  padding-right: 400px;
+  padding-left:  300px;
+  padding-right: 300px;
 }
 @media only screen and (max-width: 1600px) {
   body {
-    padding-left:  300px;
-    padding-right: 300px;
+    padding-left:  200px;
+    padding-right: 200px;
   }
 }
 @media only screen and (max-width: 1200px) {
   body {
-    padding-left:  150px;
-    padding-right: 150px;
+    padding-left:  100px;
+    padding-right: 100px;
   }
 }
 @media only screen and (max-width: 900px) {
