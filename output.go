@@ -16,6 +16,9 @@ func output(results []bench.Run) {
 	if !*noSort {
 		sort.Sort(bench.RunHistory(results))
 	}
+	if *prune > 0 && len(results) > *prune {
+		results = results[:*prune]
+	}
 
 	var b []byte
 	var err error

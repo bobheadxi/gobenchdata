@@ -12,4 +12,7 @@ action "gobenchdata to gh-pages" {
   uses = "./"
   needs = ["filter"]
   secrets = ["GITHUB_TOKEN"]
+  env = {
+    PRUNE = "30"
+  }
 }

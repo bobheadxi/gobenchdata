@@ -36,6 +36,9 @@ action "gobenchdata to gh-pages" {
   uses = "bobheadxi/gobenchdata@master"
   needs = ["filter"]
   secrets = ["GITHUB_TOKEN"]
+  env = {
+    PRUNE = "30"
+  }
 }
 ```
 

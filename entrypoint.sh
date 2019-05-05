@@ -24,11 +24,13 @@ cd /tmp/build
 git clone https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
 git checkout gh-pages
 
+echo '☝️ Updating results...'
 FINAL_OUTPUT="${GO_BENCHMARK_OUT:-"benchmarks.json"}"
 if [[ -f "${FINAL_OUTPUT}" ]]; then
   echo '📈 Existing report found - merging...'
   gobenchdata merge "${RUN_OUTPUT}" "${FINAL_OUTPUT}" \
     --flat \
+    --prune "${PRUNE_COUNT:-"0"}" \
     --json "${FINAL_OUTPUT}"
 else
   cp "${RUN_OUTPUT}" "${FINAL_OUTPUT}"

@@ -21,6 +21,7 @@ var (
 	appendOut = pflag.BoolP("append", "a", false, "append to output file")
 	flat      = pflag.BoolP("flat", "f", false, "flatten JSON output into one run per line")
 	noSort    = pflag.Bool("no-sort", false, "disable sorting")
+	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
