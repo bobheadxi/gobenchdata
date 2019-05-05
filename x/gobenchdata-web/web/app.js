@@ -94,6 +94,9 @@ const chartOptions = (suite) => ({
     mode: 'nearest',
     intersect: true
   },
+  scales: {
+    yAxes: [{ ticks: { beginAtZero: true } }],
+  },
 })
 
 const newPoint = (run, val) => ({
