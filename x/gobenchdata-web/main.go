@@ -14,6 +14,7 @@ var (
 	outDir         = pflag.StringP("out", "o", ".", "directory to output website in")
 	benchmarksPath = pflag.String("benchmarks-file", "benchmarks.json", "path to file where benchmarks are saved")
 	rootImport     = pflag.StringP("root-import", "i", "", "root import path for package, eg 'github.com/bobheadxi/gobenchdata'")
+	description    = pflag.String("desc", "", "a description to include in the generated web app")
 )
 
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
