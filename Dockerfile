@@ -11,7 +11,7 @@ LABEL "com.github.actions.color"="green"
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 ENV GO111MODULE=on
 # TODO: check out specific version for release
-RUN go get -u github.com/bobheadxi/gobenchdata@master
+RUN go get -u github.com/bobheadxi/gobenchdata@v0.1.0
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
