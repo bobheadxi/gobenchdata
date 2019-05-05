@@ -99,7 +99,7 @@ const chartOptions = (suite) => ({
   scales: {
     yAxes: [{
       display: true,
-      scaleLabel: { display: true, labelString: 'ns' },
+      scaleLabel: { display: true, labelString: 'ns/op' },
       ticks: { beginAtZero: true },
     }],
   },
