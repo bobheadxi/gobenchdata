@@ -10,7 +10,7 @@ variables:
   GOBIN:  '$(GOPATH)/bin' # Go binaries path
   GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
   GO111MODULE: 'on' # enable Go modules
-  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+  modulePath: '$(GOPATH)/src/go.bobheadxi.dev/gobenchdata' # Path to the module's code
 
 steps:
 - task: GoTool@0
@@ -25,7 +25,6 @@ steps:
     shopt -s dotglob
     mv !(gopath) '$(modulePath)'
     echo '##vso[task.prependpath]$(GOBIN)'
-    echo '##vso[task.prependpath]$(GOROOT)/bin'
   displayName: 'Set up the Go workspace'
 
 - script: |
