@@ -14,7 +14,7 @@ LABEL version="v0.2.0"
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 ENV GO111MODULE=on
 # TODO: check out specific version for release
-RUN go get -u go.bobheadxi.dev/gobenchdata@v0.2.0
+RUN go get -u go.bobheadxi.dev/gobenchdata@master
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
