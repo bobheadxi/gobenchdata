@@ -11,7 +11,7 @@ import (
 
 type indexHTML struct {
 	Title          string
-	Description    string
+	Description    template.HTML
 	BenchmarksPath string
 	RootImport     string
 }
@@ -39,7 +39,7 @@ func generate() {
 	}
 	if err := tmp.Execute(f, &indexHTML{
 		Title:          *title,
-		Description:    *description,
+		Description:    template.HTML(*description),
 		BenchmarksPath: *benchmarksPath,
 		RootImport:     *rootImport,
 	}); err != nil {
