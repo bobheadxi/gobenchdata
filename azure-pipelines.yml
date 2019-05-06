@@ -1,0 +1,53 @@
+# Go
+# Build your Go project.
+# Add steps that test, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/go
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+variables:
+  GOBIN:  '$(GOPATH)/bin' # Go binaries path
+  GOPATH: '$(system.defaultWorkingDirectory)/gopath' # Go workspace path
+  GO111MODULE: 'on' # enable Go modules
+  modulePath: '$(GOPATH)/src/github.com/$(build.repository.name)' # Path to the module's code
+
+steps:
+- task: GoTool@0
+  inputs:
+    version: '1.12'
+
+- script: |
+    mkdir -p '$(GOBIN)'
+    mkdir -p '$(GOPATH)/pkg'
+    mkdir -p '$(modulePath)'
+    shopt -s extglob
+    shopt -s dotglob
+    mv !(gopath) '$(modulePath)'
+    echo '##vso[task.prependpath]$(GOBIN)'
+    echo '##vso[task.prependpath]$(GOROOT)/bin'
+  displayName: 'Set up the Go workspace'
+
+- script: |
+    go version
+    go mod download
+  workingDirectory: '$(modulePath)'
+  displayName: 'Get dependencies'
+
+- script: |
+    go vet ./...
+    go fmt ./...
+    go run golang.org/x/lint/golint $(go list ./... | grep -v /vendor/)
+    go build -v
+  workingDirectory: '$(modulePath)'
+  displayName: 'Run static analysis'
+
+- script: |
+    go test -race -coverprofile=coverage.txt ./...
+  workingDirectory: '$(modulePath)'
+  displayName: 'Run tests and report coverage'
+
+- script: bash <(curl -s https://codecov.io/bash) -t $(CODECOV_TOKEN)
+  workingDirectory: '$(modulePath)'
+  displayName: 'Report coverage'
+  condition: succeeded()
