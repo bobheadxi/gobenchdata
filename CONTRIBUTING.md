@@ -7,6 +7,9 @@
 
 ## Development
 
+[![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
+[![codecov](https://codecov.io/gh/bobheadxi/gobenchdata/branch/master/graph/badge.svg)](https://codecov.io/gh/bobheadxi/gobenchdata)
+
 ### GitHub Action
 
 The code for the Action is in the `Dockerfile` and `entrypoint.sh`.
