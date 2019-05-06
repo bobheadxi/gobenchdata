@@ -9,6 +9,7 @@
 
 [![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
 [![codecov](https://codecov.io/gh/bobheadxi/gobenchdata/branch/master/graph/badge.svg)](https://codecov.io/gh/bobheadxi/gobenchdata)
+[![Go Report Card](https://goreportcard.com/badge/github.com/bobheadxi/gobenchdata)](https://goreportcard.com/report/github.com/bobheadxi/gobenchdata)
 
 ### GitHub Action
 
