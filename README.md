@@ -3,7 +3,7 @@
 
 [![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
 [![View Action](https://img.shields.io/badge/view-action-yellow.svg)](https://github.com/marketplace/actions/gobenchdata-to-gh-pages)
-[![GoDoc](https://godoc.org/github.com/bobheadxi/gobenchdata?status.svg)](https://godoc.org/github.com/bobheadxi/gobenchdata)
+[![GoDoc](https://godoc.org/go.bobheadxi.dev/gobenchdata?status.svg)](https://godoc.org/go.bobheadxi.dev/gobenchdata)
 [![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
 
 a tool for inspecting `go test -bench` data, and a
@@ -93,15 +93,15 @@ available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
 is also available as a CLI:
 
 ```
-go get -u github.com/bobheadxi/gobenchdata
+go get -u go.bobheadxi.dev/gobenchdata
 gobenchdata help
 ```
 
 Usage documentation can be found in the
-[godocs](https://godoc.org/github.com/bobheadxi/gobenchdata).
+[godocs](https://godoc.org/go.bobheadxi.dev/gobenchdata).
 
 ## Development and Contributions
 
-Please report bugs and requests in the [repository issues](https://github.com/bobheadxi/gobenchdata)!
+Please report bugs and requests in the [repository issues](https://go.bobheadxi.dev/gobenchdata)!
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for more detailed development documentation.

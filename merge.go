@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/bobheadxi/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/bench"
 )
 
 func merge(files ...string) {

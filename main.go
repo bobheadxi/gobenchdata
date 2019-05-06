@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/bobheadxi/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/bench"
 )
 
 // Version is the version of gobenchdata

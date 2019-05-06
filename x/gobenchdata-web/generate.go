@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bobheadxi/gobenchdata/x/gobenchdata-web/internal"
+	"go.bobheadxi.dev/gobenchdata/x/gobenchdata-web/internal"
 )
 
 type indexHTML struct {

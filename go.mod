@@ -1,4 +1,4 @@
-module github.com/bobheadxi/gobenchdata
+module go.bobheadxi.dev/gobenchdata
 
 go 1.12
 

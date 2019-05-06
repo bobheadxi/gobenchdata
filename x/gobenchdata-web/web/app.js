@@ -4,7 +4,7 @@
 export async function generateCharts({
   div,        // div to populate with charts 
   json,       // path to JSON database
-  rootImport, // import path of package, e.g. 'github.com/bobheadxi/gobenchdata'
+  rootImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
 }) {
   let runs = [];
   try {

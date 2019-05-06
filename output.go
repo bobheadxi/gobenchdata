@@ -9,7 +9,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"github.com/bobheadxi/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/bench"
 )
 
 func output(results []bench.Run) {
@@ -69,5 +69,5 @@ other commands:
 flags:
 `)
 	pflag.PrintDefaults()
-	println("\nsee https://github.com/bobheadxi/gobenchdata for more documentation.")
+	println("\nsee https://go.bobheadxi.dev/gobenchdata for more documentation.")
 }

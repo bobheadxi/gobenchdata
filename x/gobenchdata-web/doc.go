@@ -3,7 +3,7 @@
 Gobenchdata-web is a utility for generating a website template to visualize
 your continuous benchmark. To install it:
 
-	go get -u github.com/bobheadxi/gobenchdata/x/gobenchdata-web
+	go get -u go.bobheadxi.dev/gobenchdata/x/gobenchdata-web
 	gobenchdata-web help
 
 An example usage might be:

@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bobheadxi/gobenchdata/internal"
+	"go.bobheadxi.dev/gobenchdata/internal"
 )
 
 // Parser is gobenchdata's benchmark output parser

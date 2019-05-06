@@ -3,7 +3,7 @@
 Gobenchdata is a tool for inspecting golang benchmark outputs. To install it,
 you must have Go installed:
 
-	go get -u github.com/bobheadxi/gobenchdata
+	go get -u go.bobheadxi.dev/gobenchdata
 	gobenchdata help
 
 Then pipe your benchmark into the tool:

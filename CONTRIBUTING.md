@@ -9,7 +9,7 @@
 
 [![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
 [![codecov](https://codecov.io/gh/bobheadxi/gobenchdata/branch/master/graph/badge.svg)](https://codecov.io/gh/bobheadxi/gobenchdata)
-[![Go Report Card](https://goreportcard.com/badge/github.com/bobheadxi/gobenchdata)](https://goreportcard.com/report/github.com/bobheadxi/gobenchdata)
+[![Go Report Card](https://goreportcard.com/badge/go.bobheadxi.dev/gobenchdata)](https://goreportcard.com/report/go.bobheadxi.dev/gobenchdata)
 
 ### GitHub Action
 
@@ -52,7 +52,7 @@ The web app should remain as simple as possible - right now it only consists of
 ideally it'll stay that way.
 
 To test the web app, add a `benchmarks.json` (for example, the demo data available
-in [`gh-pages`](https://github.com/bobheadxi/gobenchdata/blob/gh-pages/benchmarks.json))
+in [`gh-pages`](https://go.bobheadxi.dev/gobenchdata/blob/gh-pages/benchmarks.json))
 to the `web` directory, and run:
 
 ```

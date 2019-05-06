@@ -13,7 +13,7 @@ var (
 	title          = pflag.String("title", "gobenchdata continuous benchmarks", "title for generated website")
 	outDir         = pflag.StringP("out", "o", ".", "directory to output website in")
 	benchmarksPath = pflag.String("benchmarks-file", "benchmarks.json", "path to file where benchmarks are saved")
-	rootImport     = pflag.StringP("root-import", "i", "", "root import path for package, eg 'github.com/bobheadxi/gobenchdata'")
+	rootImport     = pflag.StringP("root-import", "i", "", "root import path for package, eg 'go.bobheadxi.dev/gobenchdata'")
 	description    = pflag.String("desc", "", "a description to include in the generated web app")
 )
 
