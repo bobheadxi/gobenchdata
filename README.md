@@ -73,7 +73,7 @@ You can visualize these continuous benchmarks by creating a web app that reads
 from the JSON benchmarks file, or by using `gobenchdata-web`:
 
 ```
-go get -u github.com/bobheadxi/x/gobenchdata-web
+go get -u go.bobheadxi.dev/gobenchdata/x/gobenchdata-web
 git checkout gh-pages
 gobenchdata-web --title "my benchmarks" # generates a web app in your working directory
 ```
