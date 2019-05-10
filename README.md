@@ -46,7 +46,7 @@ action "gobenchdata to gh-pages" {
   needs = ["filter"]
   secrets = ["GITHUB_TOKEN"]
   env = {
-    PRUNE = "20"
+    PRUNE_COUNT = "20"
   }
 }
 ```
@@ -64,7 +64,7 @@ Learn more about GitHub Actions in the [official documentation](https://github.c
 | `GO_BENCHMARK_FLAGS` |                           | additional flags for `go test`
 | `GO_BENCHMARK_PKGS`  | `./...`                   | packages to test (argument for `go test`)
 | `FINAL_OUTPUT`       | `benchmarks.json`         | destination path of benchmark data
-| `PRUNE`              | `0`                       | number of past runs to keep (`0` keeps everything)
+| `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
 
 ### Visualisation
 
