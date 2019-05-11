@@ -2,9 +2,10 @@
 
 // Generate charts per suite
 export async function generateCharts({
-  div,        // div to populate with charts 
-  json,       // path to JSON database
-  rootImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
+  div,             // div to populate with charts 
+  json,            // path to JSON database
+  source,          // source repository for package, e.g. 'github.com/bobheadxi/gobenchdata'
+  canonicalImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
 }) {
   let runs = [];
   try {
@@ -41,12 +42,12 @@ export async function generateCharts({
         group.id = suite.Pkg;
         const title = document.createElement('h3');
         const pkgLink = document.createElement('a');
-        if (rootImport) {
-          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${suite.Pkg.replace(rootImport, '')}`);
+        if (canonicalImport) {
+          pkgLink.setAttribute('href', `https://${source}/tree/master/${suite.Pkg.replace(canonicalImport || source, '')}`);
         } else {
           const parts = suite.Pkg.split('/');
-          rootImport = parts.slice(0, 3).join('/');
-          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${parts.slice(3).join('/')}`);
+          source = parts.slice(0, 3).join('/');
+          pkgLink.setAttribute('href', `https://${source}/tree/master/${parts.slice(3).join('/')}`);
         }
         pkgLink.setAttribute('target', '_blank');
         pkgLink.innerText = suite.Pkg;
@@ -99,7 +100,7 @@ export async function generateCharts({
             if (p && p.length) {
               const { _index: i, _xScale: x } = p[0];
               const commit = x.ticks[i].split(' ')[0];
-              window.open(`https://${rootImport}/commit/${commit}`, '_blank');
+              window.open(`https://${source}/commit/${commit}`, '_blank');
             }
           }
 

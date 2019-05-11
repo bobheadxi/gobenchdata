@@ -13,7 +13,9 @@ type indexHTML struct {
 	Title          string
 	Description    template.HTML
 	BenchmarksPath string
-	RootImport     string
+
+	Source          string
+	CanonicalImport string
 }
 
 func generate() {
@@ -41,7 +43,9 @@ func generate() {
 		Title:          *title,
 		Description:    template.HTML(*description),
 		BenchmarksPath: *benchmarksPath,
-		RootImport:     *rootImport,
+
+		Source:          *source,
+		CanonicalImport: *canonical,
 	}); err != nil {
 		panic(err)
 	}
