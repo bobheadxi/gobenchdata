@@ -195,6 +195,7 @@ const chartOptions = (c, yMax) => ({
   legend: {
     position: 'bottom',
     labels: {
+      font: "'Open Sans', sans-serif",
       fontSize: 10,
       boxWidth: 10,
     },
