@@ -19,7 +19,8 @@
   <body>
     
     <div id="benchmarks-path" hidden>benchmarks.json</div>
-    <div id="root-import" hidden></div>
+    <div id="source" hidden></div>
+    <div id="canonical-import" hidden></div>
   
     
     <div class="header">
@@ -51,16 +52,21 @@
     <script type="module">
       import { generateCharts } from './app.js';
       const charts = document.getElementById('charts');
-      const benchmarks = document.getElementById('benchmarks-path');
-      const rootImport = document.getElementById('root-import');
+      const benchmarks = document.getElementById('benchmarks-path').innerText;
+      const source = document.getElementById('source').innerText;
+      const canonicalImport = document.getElementById('canonical-import').innerText;
       window.onload = generateCharts({
         div: charts,
-        json: (benchmarks.innerText === 'benchmarks.json')
+        json: benchmarks.includes('.BenchmarksPath')
           ? 'benchmarks.json'
-          : benchmarks.innerText,
-        rootImport: (rootImport.innerText === '')
+          : benchmarks,
+
+        source: source.includes('.Source')
           ? ''
-          : rootImport.innerText,
+          : source,
+        canonicalImport: canonicalImport.includes('.CanonicalImport')
+          ? ''
+          : canonicalImport,
       }).finally(console.log('charts loaded!'));
     </script>
   </body>

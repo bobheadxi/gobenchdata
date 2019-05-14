@@ -1,11 +1,40 @@
 'use strict';
 
+function initChartsJS() {
+  Chart.defaults['line-with-guides'] = Chart.defaults.line;
+  Chart.controllers['line-with-guides'] = Chart.controllers.line.extend({
+    draw: function(ease) {
+      Chart.controllers.line.prototype.draw.call(this, ease);
+
+      if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
+        let activePoint = this.chart.tooltip._active[0],
+            ctx = this.chart.ctx,
+            x = activePoint.tooltipPosition().x,
+            topY = this.chart.scales['y-axis-0'].top,
+            bottomY = this.chart.scales['y-axis-0'].bottom;
+
+        // draw line
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#666';
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  });
+}
+
 // Generate charts per suite
 export async function generateCharts({
-  div,        // div to populate with charts 
-  json,       // path to JSON database
-  rootImport, // import path of package, e.g. 'github.com/bobheadxi/gobenchdata'
+  div,             // div to populate with charts 
+  json,            // path to JSON database
+  source,          // source repository for package, e.g. 'github.com/bobheadxi/gobenchdata'
+  canonicalImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
 }) {
+  initChartsJS();
   let runs = [];
   try {
     runs = await readJSON(json);
@@ -41,12 +70,12 @@ export async function generateCharts({
         group.id = suite.Pkg;
         const title = document.createElement('h3');
         const pkgLink = document.createElement('a');
-        if (rootImport) {
-          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${suite.Pkg.replace(rootImport, '')}`);
+        if (canonicalImport) {
+          pkgLink.setAttribute('href', `https://${source}/tree/master/${suite.Pkg.replace(canonicalImport || source, '')}`);
         } else {
           const parts = suite.Pkg.split('/');
-          rootImport = parts.slice(0, 3).join('/');
-          pkgLink.setAttribute('href', `https://${rootImport}/tree/master/${parts.slice(3).join('/')}`);
+          source = parts.slice(0, 3).join('/');
+          pkgLink.setAttribute('href', `https://${source}/tree/master/${parts.slice(3).join('/')}`);
         }
         pkgLink.setAttribute('target', '_blank');
         pkgLink.innerText = suite.Pkg;
@@ -69,7 +98,7 @@ export async function generateCharts({
           let i = seedColor;
           let max = 0;
           charts[chartName] = new Chart(ctx, {
-            type: 'line',
+            type: 'line-with-guides',
             data: {
               labels,
               datasets: benchmarks.map(bench => {
@@ -99,7 +128,7 @@ export async function generateCharts({
             if (p && p.length) {
               const { _index: i, _xScale: x } = p[0];
               const commit = x.ticks[i].split(' ')[0];
-              window.open(`https://${rootImport}/commit/${commit}`, '_blank');
+              window.open(`https://${source}/commit/${commit}`, '_blank');
             }
           }
 
