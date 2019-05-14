@@ -1,5 +1,32 @@
 'use strict';
 
+function initChartsJS() {
+  Chart.defaults['line-with-guides'] = Chart.defaults.line;
+  Chart.controllers['line-with-guides'] = Chart.controllers.line.extend({
+    draw: function(ease) {
+      Chart.controllers.line.prototype.draw.call(this, ease);
+
+      if (this.chart.tooltip._active && this.chart.tooltip._active.length) {
+        let activePoint = this.chart.tooltip._active[0],
+            ctx = this.chart.ctx,
+            x = activePoint.tooltipPosition().x,
+            topY = this.chart.scales['y-axis-0'].top,
+            bottomY = this.chart.scales['y-axis-0'].bottom;
+
+        // draw line
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(x, topY);
+        ctx.lineTo(x, bottomY);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = '#666';
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+  });
+}
+
 // Generate charts per suite
 export async function generateCharts({
   div,             // div to populate with charts 
@@ -7,6 +34,7 @@ export async function generateCharts({
   source,          // source repository for package, e.g. 'github.com/bobheadxi/gobenchdata'
   canonicalImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
 }) {
+  initChartsJS();
   let runs = [];
   try {
     runs = await readJSON(json);
@@ -70,7 +98,7 @@ export async function generateCharts({
           let i = seedColor;
           let max = 0;
           charts[chartName] = new Chart(ctx, {
-            type: 'line',
+            type: 'line-with-guides',
             data: {
               labels,
               datasets: benchmarks.map(bench => {
