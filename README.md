@@ -13,6 +13,7 @@ a tool for inspecting `go test -bench` data, and a
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
 </a>
 
+* [About](#about)
 * [GitHub Action](#github-action)
   * [Setup](#setup)
   * [Configuration](#configuration)
@@ -22,9 +23,19 @@ a tool for inspecting `go test -bench` data, and a
 
 <br />
 
+## About
+
+`gobenchdata` was inspired by the [deno.land](https://deno.land/benchmarks.html)
+continuous benchmarks, which aims to display performance improvements/regressions
+on a continuous basis.
+
+It is available as a GitHub action or a command-line application.
+
 ## GitHub Action
 
-A GitHub Action for uploading Go benchmark data to `gh-pages` using `gobenchdata`.
+`gobenchdata` can be used as GitHub Action for uploading Go benchmark data as
+JSON to `gh-pages` and visualizing it with a generated web app (using `gobenchdata-web`)
+or your own web application.
 
 ### Setup
 
