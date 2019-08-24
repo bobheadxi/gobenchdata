@@ -23,7 +23,7 @@ go test \
 echo
 echo '📚 Checking out gh-pages...'
 cd /tmp/build
-git clone https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
+git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
 git checkout gh-pages
 
 echo
