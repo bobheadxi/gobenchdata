@@ -34,8 +34,9 @@ type Benchmark struct {
 	Name string
 	Runs int
 
-	NsPerOp int
-	Mem     Mem
+	NsPerOp float64
+	Mem     Mem                // from '-benchmem'
+	Custom  map[string]float64 `json:",omitempty"` // https://tip.golang.org/pkg/testing/#B.ReportMetric
 }
 
 // Mem is memory allocation information about a run

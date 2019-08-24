@@ -2,6 +2,7 @@ package bench
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strconv"
 	"strings"
@@ -75,41 +76,53 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 	return &suite, nil
 }
 
+// readBenchmark parses a single line from a benchmark.
+//
+// Benchmarks take the following format:
+//     BenchmarkRegex            300000              5160 ns/op            5408 B/op         69 allocs/op
 func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
-	var bench Benchmark
-	var err error
+	var (
+		bench Benchmark
+		err   error
+		tmp   string
+	)
+
+	// split out name
 	split := strings.Split(line, "\t")
 	bench.Name, split = internal.Popleft(split)
 
-	// runs
-	var tmp string
+	// runs - doesn't include units
 	tmp, split = internal.Popleft(split)
 	if bench.Runs, err = strconv.Atoi(tmp); err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%s: could not parse runs: %v", bench.Name, err)
 	}
 
-	// ns/op
-	tmp, split = internal.Popleft(split)
-	tmpSplit := strings.Split(tmp, " ")
-	if bench.NsPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
-		return nil, err
-	}
-
-	// the following are optional
-	if len(split) > 0 {
+	// parse metrics with units
+	for len(split) > 0 {
 		tmp, split = internal.Popleft(split)
-		tmpSplit = strings.Split(tmp, " ")
-		if bench.Mem.BytesPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
-			return nil, err
+		valueAndUnits := strings.Split(tmp, " ")
+		if len(valueAndUnits) < 2 {
+			return nil, fmt.Errorf("expected two parts in value '%s', got %d", tmp, len(valueAndUnits))
+		}
+
+		var value, units = valueAndUnits[0], valueAndUnits[1]
+		switch units {
+		case "ns/op":
+			bench.NsPerOp, err = strconv.ParseFloat(value, 64)
+		case "B/op":
+			bench.Mem.BytesPerOp, err = strconv.Atoi(value)
+		case "allocs/op":
+			bench.Mem.AllocsPerOp, err = strconv.Atoi(value)
+		default:
+			if bench.Custom == nil {
+				bench.Custom = make(map[string]float64)
+			}
+			bench.Custom[units], err = strconv.ParseFloat(value, 64)
+		}
+		if err != nil {
+			return nil, fmt.Errorf("%s: could not parse %s: %v", bench.Name, units, err)
 		}
 	}
-	if len(split) > 0 {
-		tmp, split = internal.Popleft(split)
-		tmpSplit = strings.Split(tmp, " ")
-		if bench.Mem.AllocsPerOp, err = strconv.Atoi(tmpSplit[0]); err != nil {
-			return nil, err
-		}
-	}
 
-	return &bench, err
+	return &bench, nil
 }
