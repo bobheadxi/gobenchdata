@@ -76,7 +76,7 @@
 
         chartsTypes: chartsTypes.includes('.ChartsTypes')
           ? ['bytes/op', 'allocs/op']
-          : JSON.parse(`[${chartsTypes}]`),
+          : chartsTypes.split(','),
       }).finally(console.log('charts loaded!'));
     </script>
   </body>
