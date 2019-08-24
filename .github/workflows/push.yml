@@ -1,16 +1,18 @@
-on: push
-name: Benchmark Demo
+name: gobenchdata demo
+on:
+  push:
+    branches: [ master ]
+
 jobs:
-  filter:
+  benchmark:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: filter
-      uses: actions/bin/filter@master
+    - name: checkout
+      uses: actions/checkout@v1
       with:
-        args: branch master
+        fetch-depth: 1
     - name: gobenchdata to gh-pages
       uses: ./
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PRUNE_COUNT: "20"
+        PRUNE_COUNT: 20
