@@ -8,13 +8,14 @@ LABEL "com.github.actions.description"="Runs your benchmarks and adds the result
 LABEL "com.github.actions.icon"="book"
 LABEL "com.github.actions.color"="green"
 
-# version label is used for triggering dockerfile rebuilds for the demo
-LABEL version="v0.2.0"
+# version label is used for triggering dockerfile rebuilds for the demo, or on
+# release
+ENV VERSION=master
+LABEL version=${VERSION}
 
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 ENV GO111MODULE=on
-# TODO: check out specific version for release
-RUN go get -u go.bobheadxi.dev/gobenchdata@master
+RUN go get -u go.bobheadxi.dev/gobenchdata@${VERSION}
 
 ADD entrypoint.sh /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
