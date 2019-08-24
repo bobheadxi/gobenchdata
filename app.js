@@ -33,7 +33,9 @@ export async function generateCharts({
   json,            // path to JSON database
   source,          // source repository for package, e.g. 'github.com/bobheadxi/gobenchdata'
   canonicalImport, // import path of package, e.g. 'go.bobheadxi.dev/gobenchdata'
+  chartsTypes,     // additional types of charts to generate
 }) {
+  chartsTypes.unshift('ns/op');
   initChartsJS();
   let runs = [];
   try {
@@ -195,6 +197,7 @@ const chartOptions = (c, yMax) => ({
   legend: {
     position: 'bottom',
     labels: {
+      font: "'Open Sans', sans-serif",
       fontSize: 10,
       boxWidth: 10,
     },
@@ -208,18 +211,16 @@ const newPoint = (run, val) => ({
 
 const newRunPoint = (c, run, bench) => {
   switch (c) {
-    case chartsTypes[0]: return newPoint(run, bench.NsPerOp);
-    case chartsTypes[1]: return newPoint(run, bench.Mem.BytesPerOp);
-    case chartsTypes[2]: return newPoint(run, bench.Mem.AllocsPerOp);
-    default: console.error('unexpected chart type', c);
+    case 'ns/op': return newPoint(run, bench.NsPerOp);
+    case 'bytes/op': return newPoint(run, bench.Mem.BytesPerOp);
+    case 'allocs/op': return newPoint(run, bench.Mem.AllocsPerOp);
+    default:
+      if (!bench.custom || bench.custom[c] === undefined) {
+        console.error('no value for chart type', c)
+      }
+      return newPoint(run, bench.Cusom[c]);
   }
 }
-
-const chartsTypes = [
-  'ns/op',
-  'bytes/op',
-  'allocs/op',
-]
 
 const chartColors = {
 	red: 'rgb(255, 99, 132)',
@@ -248,5 +249,7 @@ async function readJSON(path) {
 function label(run) {
   const d = new Date(run.Date*1000);
   let month = d.getMonth();
-  return `${run.Version.substring(0, 7)} (${++month}/${d.getDate()}/${d.getFullYear()})`;
+  const ds = `${++month}/${d.getDate()}/${d.getFullYear()}`
+  if (!run.Version) return ds;
+  return `${run.Version.substring(0, 7)} (${ds})`;
 }
