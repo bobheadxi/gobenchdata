@@ -5,8 +5,9 @@ branding:
   icon: activity
   color: white
 inputs:
-  GIT_COMMIT_MESSAGE:
-    description: the commit message for the benchmark update
+  SUBDIRECTORY:
+    description: subdirectory of project to run commands from
+    default: '.'
   GO_BENCHMARKS:
     description: enchmarks to run (argument for `-bench`)
     default: '.'
@@ -21,6 +22,8 @@ inputs:
   PRUNE_COUNT:
     description: number of past runs to keep (`0` keeps everything)
     default: 0
+  GIT_COMMIT_MESSAGE:
+    description: the commit message for the benchmark update
 runs:
   using: docker
   image: Dockerfile

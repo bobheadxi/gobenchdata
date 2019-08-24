@@ -76,12 +76,13 @@ Input variables are configured using
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
-| `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
+| `SUBDIRECTORY`       | `.`                       | subdirectory of project to run commands from
 | `GO_BENCHMARKS`      | `.`                       | benchmarks to run (argument for `-bench`)
 | `GO_TEST_FLAGS`      |                           | additional flags for `go test`
 | `GO_TEST_PKGS`       | `./...`                   | packages to test (argument for `go test`)
 | `BENCHMARKS_OUT`     | `benchmarks.json`         | destination path of benchmark data
 | `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
+| `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
 
 #### `env`
 
