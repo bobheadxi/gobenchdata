@@ -59,8 +59,9 @@ jobs:
         fetch-depth: 1
     - name: gobenchdata to gh-pages
       uses: bobheadxi/gobenchdata@v0.3.0
-      inputs:
-        PRUNE_COUNT: 20
+      with:
+        PRUNE_COUNT: 30
+        GO_TEST_FLAGS: -cpu 1,2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```

@@ -11,6 +11,7 @@ jobs:
     - name: gobenchdata to gh-pages
       uses: ./
       with:
-        PRUNE_COUNT: 20
+        PRUNE_COUNT: 30
+        GO_TEST_FLAGS: -cpu 1,2
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
