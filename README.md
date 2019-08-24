@@ -39,27 +39,25 @@ or your own web application.
 
 ### Setup
 
-For example, in `main.workflow`:
+For example, in `.github/workflows/push.yml`:
 
-```hcl
-workflow "Benchmark" {
-  on = "push"
-  resolves = ["gobenchdata to gh-pages"]
-}
-
-action "filter" {
-  uses = "actions/bin/filter@master"
-  args = "branch master"
-}
-
-action "gobenchdata to gh-pages" {
-  uses = "bobheadxi/gobenchdata@master"
-  needs = ["filter"]
-  secrets = ["GITHUB_TOKEN"]
-  env = {
-    PRUNE_COUNT = "20"
-  }
-}
+```yml
+on: push
+name: gobenchdata benchmarking
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: filter
+      uses: actions/bin/filter@master
+      with:
+        args: branch master
+    - name: gobenchdata to gh-pages
+      uses: bobheadxi/gobenchdata@v0.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PRUNE: "20"
 ```
 
 Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).

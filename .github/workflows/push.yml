@@ -1,0 +1,16 @@
+on: push
+name: Benchmark Demo
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: filter
+      uses: actions/bin/filter@master
+      with:
+        args: branch master
+    - name: gobenchdata to gh-pages
+      uses: ./
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        PRUNE_COUNT: "20"
