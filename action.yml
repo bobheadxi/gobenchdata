@@ -1,6 +1,6 @@
-name: gobenchdata to gh-pages
+name: Continuous Benchmarking for Go
 author: Robert Lin <robert@bobheadxi.dev>
-description: Runs your benchmarks and adds the results to a JSON file in your gh-pages branch
+description: Runs your Go benchmarks and publishes the results to a JSON file in your gh-pages branch.
 branding:
   icon: activity
   color: white
