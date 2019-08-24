@@ -1,8 +1,5 @@
 name: gobenchdata demo
-on:
-  push:
-    branches: [ master ]
-
+on: push
 jobs:
   benchmark:
     runs-on: ubuntu-latest
