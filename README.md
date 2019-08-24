@@ -41,7 +41,7 @@ or your own web application.
 
 ### Setup
 
-For example, in `.github/workflows/push.yml`:
+For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions):
 
 ```yml
 name: Benchmark
