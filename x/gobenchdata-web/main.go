@@ -16,7 +16,9 @@ var (
 	description    = pflag.String("desc", "", "a description to include in the generated web app")
 
 	source    = pflag.StringP("source", "s", "", "source repository for package, eg 'github.com/bobheadxi/gobenchdata'")
-	canonical = pflag.StringP("canonical-import", "c", "", "canonical import path for package, eg 'go.bobheadxi.dev/gobenchdata'")
+	canonical = pflag.StringP("canonical-import", "i", "", "canonical import path for package, eg 'go.bobheadxi.dev/gobenchdata' (used to generate links to source code)")
+
+	chartsTypes = pflag.StringP("charts-types", "c", "bytes/op,allocs/op", "additional chart types to generate (comma-separated, in addition to 'ns/op')")
 )
 
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
