@@ -7,9 +7,13 @@ all:
 	go install -ldflags "-X main.Version=$(COMMIT)" ./x/gobenchdata-web
 
 .PHONY: demo
-demo:
-	go test -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
+demo: all bench bench2 bench3 serve
+
+.PHONY: bench
+bench bench2 bench3:
+	go test -cpu 1,2 -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
 
 .PHONY: serve
 serve:
+	cp ./benchmarks.json ./x/gobenchdata-web/web/benchmarks.json
 	serve ./x/gobenchdata-web/web

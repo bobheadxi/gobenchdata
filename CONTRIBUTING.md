@@ -28,9 +28,10 @@ act
 The `gobenchdata` CLI and its associated utilities are written in [Golang](https://golang.org/).
 To get started, clone the repository and enable [Go Modules](https://github.com/golang/go/wiki/Modules):
 
-```
+```sh
 export GO111MODULE=on
 go mod download
+make # install binary
 ```
 
 Utilities like `gobenchdata-web` are developed in subdirectories under [`/x`](./x).
@@ -40,6 +41,8 @@ Code generation tasks should be able to be triggered by [go generate](https://bl
 ```
 go generate ./...
 ```
+
+The example benchmarks can be run using `make bench`.
 
 ### Web App
 
@@ -60,3 +63,9 @@ make serve
 ```
 
 This requires [serve](https://www.npmjs.com/package/serve) to be installed.
+
+To generate benchmarks for the demo web app, run:
+
+```
+make demo
+```
