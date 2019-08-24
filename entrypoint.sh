@@ -40,9 +40,9 @@ else
 fi
 
 echo
-echo '📷 Committing new benchmark data...'
+echo '📷 Committing and pushing new benchmark data...'
 git add .
-git commit -m "${GIT_COMMIT_MESSAGE:-"add new benchmark run"}"
+git commit -m "${GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
 git push -f origin gh-pages
 cd ../
 
