@@ -17,6 +17,8 @@ a tool for inspecting `go test -bench` data, and a
 * [GitHub Action](#github-action)
   * [Setup](#setup)
   * [Configuration](#configuration)
+    * [`inputs`](#inputs)
+    * [`env`](#env)
   * [Visualisation](#visualisation)
 * [`gobenchdata` CLI](#gobenchdata-cli)
 * [Development and Contributions](#development-and-contributions)
@@ -42,38 +44,54 @@ or your own web application.
 For example, in `.github/workflows/push.yml`:
 
 ```yml
-on: push
-name: gobenchdata benchmarking
+name: Benchmark
+on:
+  push:
+    branches: [ master ]
+
 jobs:
-  filter:
+  benchmark:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: filter
-      uses: actions/bin/filter@master
+    - name: checkout
+      uses: actions/checkout@v1
       with:
-        args: branch master
+        fetch-depth: 1
     - name: gobenchdata to gh-pages
-      uses: bobheadxi/gobenchdata@v0.2.0
+      uses: bobheadxi/gobenchdata@v0.3.0
+      inputs:
+        PRUNE_COUNT: 20
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PRUNE: "20"
 ```
 
 Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
 
 ### Configuration
 
+#### `inputs`
+
+Input variables are configured using
+[`jobs.<job_id>.steps.with`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepswith).
+
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
-| `GITHUB_TOKEN`       | set by GitHub             | token to provide access to repository
-| `GITHUB_ACTOR`       | set by GitHub             | the user to make commits as
 | `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
 | `GO_BENCHMARKS`      | `.`                       | benchmarks to run (argument for `-bench`)
-| `GO_BENCHMARK_FLAGS` |                           | additional flags for `go test`
-| `GO_BENCHMARK_PKGS`  | `./...`                   | packages to test (argument for `go test`)
-| `FINAL_OUTPUT`       | `benchmarks.json`         | destination path of benchmark data
+| `GO_TEST_FLAGS`      |                           | additional flags for `go test`
+| `GO_TEST_PKGS`       | `./...`                   | packages to test (argument for `go test`)
+| `BENCHMARKS_OUT`     | `benchmarks.json`         | destination path of benchmark data
 | `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
+
+#### `env`
+
+Environment variables are configured using
+[`jobs.<job_id>.steps.env`](https://help.github.com/en/articles/workflow-syntax-for-github-actions#jobsjob_idstepsenv).
+
+| Variable             | Recommended                   | Purpose
+| -------------------- | ----------------------------- | -------
+| `GITHUB_TOKEN`       | `${{ secrets.GITHUB_TOKEN }}` | token to provide access to repository
+| `GITHUB_ACTOR`       | set by GitHub                 | the user to make commits as
 
 ### Visualisation
 

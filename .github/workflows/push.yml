@@ -13,6 +13,7 @@ jobs:
         fetch-depth: 1
     - name: gobenchdata to gh-pages
       uses: ./
+      with:
+        PRUNE_COUNT: 20
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        PRUNE_COUNT: 20

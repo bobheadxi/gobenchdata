@@ -1,0 +1,26 @@
+name: gobenchdata to gh-pages
+author: Robert Lin <robert@bobheadxi.dev>
+description: Runs your benchmarks and adds the results to a JSON file in your gh-pages branch
+branding:
+  icon: activity
+  color: white
+inputs:
+  GIT_COMMIT_MESSAGE:
+    description: the commit message for the benchmark update
+  GO_BENCHMARKS:
+    description: enchmarks to run (argument for `-bench`)
+    default: '.'
+  GO_TEST_FLAGS:
+    description: additional flags for `go test`
+  GO_TEST_PKGS:
+    description: packages to test (argument for `go test`)
+    default: './...'
+  BENCHMARKS_OUT:
+    description: destination path of benchmark data
+    default: 'benchmarks.json'
+  PRUNE_COUNT:
+    description: number of past runs to keep (`0` keeps everything)
+    default: 0
+runs:
+  using: docker
+  image: Dockerfile
