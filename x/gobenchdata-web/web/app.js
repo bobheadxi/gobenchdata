@@ -50,20 +50,32 @@ export async function generateCharts({
   const charts = {};
   let len = 0;
   // runs should start from the most recent run
-  runs.forEach(run => {
+  runs.forEach((run, runIndex) => {
     len++;
 
     // add data from each suite
     run.Suites.forEach(suite => {
-      if (charts[suite.Pkg+'-'+chartsTypes[0]]) {
+      if (charts[makeChartName(suite.Pkg, chartsTypes[0])]) {
         // if the chart div was already set up, append data to chart.
-        // if the dataset is isn't in the datasets, then it no longer exists,
-        // and we'll ignore it.
         suite.Benchmarks.forEach(bench => {
           chartsTypes.forEach(c => {
-            const { data: { datasets } } = charts[suite.Pkg + '-' + c];
-            const dataset = datasets.find(e => (e.label === bench.Name))
-            if (dataset) dataset.data.push(newRunPoint(c, run, bench));
+            const p = newRunPoint(c, run, bench);
+            const chart = charts[makeChartName(suite.Pkg, c)];
+
+            // find appropriate dataset
+            const { data: { datasets } } = chart;
+            const dataset = datasets.find(e => (e ? e.label === bench.Name : false));
+            if (dataset) {
+              // append new point to existing dataset
+              dataset.data.push(p);
+            } else {
+              // generate missing points and create new dataset if it is missing
+              const dataPoints = [];
+              for (let runI = 0; runI < runIndex; runI++) dataPoints.push(newPoint(runs[runI], NaN));
+              dataPoints.push(p)
+              // append new dataset
+              datasets.push(newDataset(bench.Name, datasets.length + 3, dataPoints));
+            }
           })
         });
       } else {
@@ -89,7 +101,7 @@ export async function generateCharts({
         let seedColor = randomInt();
         const { Benchmarks: benchmarks } = suite;
         chartsTypes.forEach(c => {
-          const chartName = suite.Pkg + '-' + c;
+          const chartName = makeChartName(suite.Pkg, c);
 
           // create elements
           const canvas = document.createElement('canvas');
@@ -99,29 +111,21 @@ export async function generateCharts({
           // create chart
           let i = seedColor;
           let max = 0;
+          const datasets = benchmarks.map(bench => {
+            const p = newRunPoint(c, run, bench);
+            max = Math.max(p.y+p.y*0.1, max);
+            i += 3;
+            return newDataset(bench.Name, i, [p]);
+          })
           charts[chartName] = new Chart(ctx, {
             type: 'line-with-guides',
             data: {
               labels,
-              datasets: benchmarks.map(bench => {
-                const p = newRunPoint(c, run, bench);
-                max = Math.max(p.y+p.y*0.1, max);
-                i += 3;
-                return {
-                  label: bench.Name,
-                  data: [p],
-
-                  fill: false,
-                  backgroundColor: getColor(i),
-                  borderColor: getColor(i),
-                  pointRadius: 4,
-                  pointHoverRadius: 5.5,
-                  lineTension: 0,
-                }
-              }),
+              datasets,
             },
             options: chartOptions(c, max),
           });
+          console.log('NEW CHART', datasets.length, charts[chartName].data.datasets, benchmarks.length)
           // TODO: this only works if you click on a point exactly, which is
           // dumb. can't seem to make it work for clicking anywhere (getting
           // the chart.js x-axis is nontrivial). ugh
@@ -204,9 +208,22 @@ const chartOptions = (c, yMax) => ({
   },
 })
 
+const makeChartName = (pkg, chart) => `${pkg}-${chart}`;
+
 const newPoint = (run, val) => ({
   t: new Date(run.Date*1000),
   y: val,
+})
+
+const newDataset = (label, colorIndex, data) => ({
+  label,
+  data,
+  fill: false,
+  backgroundColor: getColor(colorIndex),
+  borderColor: getColor(colorIndex),
+  pointRadius: 4,
+  pointHoverRadius: 5.5,
+  lineTension: 0,
 })
 
 const newRunPoint = (c, run, bench) => {
