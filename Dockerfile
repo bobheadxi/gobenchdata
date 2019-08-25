@@ -6,7 +6,7 @@ LABEL homepage="https://bobheadxi.dev/r/gobenchdata"
 
 # version label is used for triggering dockerfile rebuilds for the demo, or on
 # release
-ENV VERSION=v0.4.1
+ENV VERSION=master
 LABEL version=${VERSION}
 
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
