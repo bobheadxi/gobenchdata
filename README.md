@@ -27,9 +27,8 @@ a tool for inspecting `go test -bench` data, and a
 
 ## About
 
-`gobenchdata` was inspired by the [deno.land](https://deno.land/benchmarks.html)
-continuous benchmarks, which aims to display performance improvements/regressions
-on a continuous basis.
+`gobenchdata` was inspired by the [deno.land continuous benchmarks](https://deno.land/benchmarks.html),
+which aims to display performance improvements and regressions on a continuous basis.
 
 It is available as a GitHub action or a command-line application.
 
