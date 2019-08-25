@@ -2,7 +2,7 @@ FROM golang:latest
 
 LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://go.bobheadxi.dev/gobenchdata"
-LABEL homepage="https://go.bobheadxi.dev/gobenchdata"
+LABEL homepage="https://bobheadxi.dev/r/gobenchdata"
 
 # version label is used for triggering dockerfile rebuilds for the demo, or on
 # release
