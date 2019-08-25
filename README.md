@@ -101,20 +101,34 @@ The `gobenchdata` GitHub action eventually generates a JSON file with past bench
 You can visualize these continuous benchmarks by creating a web app that reads
 from the JSON benchmarks file, or by using `gobenchdata-web`:
 
-```
+```sh
 go get -u go.bobheadxi.dev/gobenchdata/x/gobenchdata-web
 git checkout gh-pages
 gobenchdata-web --title "my benchmarks" # generates a web app in your working directory
 ```
 
-You test the web app locally using a tool like [serve](https://www.npmjs.com/package/serve):
+The generator offers a variety of customization options documented under
+`gobenchdata-web help` to configure descriptions, charts, and more. The easiest
+way to use `gobenchdata-web` is to set up a Makefile in your `gh-pages` branch
+to update the web app using the latest version of `gobenchdata-web` with your
+desired configuration - [for example](https://github.com/bobheadxi/gobenchdata/blob/gh-pages/Makefile):
+
+```makefile
+all: build
+	git commit -a -m "regenerate web app"
+
+build:
+	gobenchdata-web --title "gobenchdata continuous benchmark demo" --desc "This is a demo for gobenchdata"
+```
+
+You can test the web app locally using a tool like [serve](https://www.npmjs.com/package/serve):
 
 ```
 serve .
 ```
 
-This feature is a work in progress. An example site published by this repository is
-available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
+The web application generator is a work in progress. An example site published
+by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
 
 ## `gobenchdata` CLI
 
@@ -126,8 +140,16 @@ go get -u go.bobheadxi.dev/gobenchdata
 gobenchdata help
 ```
 
-Usage documentation can be found in the
-[godocs](https://godoc.org/go.bobheadxi.dev/gobenchdata).
+The easiest way to use the CLI is by piping the output of `go test -bench` to
+it:
+
+```
+go test -bench . -benchmem ./... | gobenchdata --json bench.json
+```
+
+More detailed usage documentation and examples can be found in the
+[godocs](https://godoc.org/go.bobheadxi.dev/gobenchdata) or by running
+`gobenchdata help`.
 
 ## Development and Contributions
 
