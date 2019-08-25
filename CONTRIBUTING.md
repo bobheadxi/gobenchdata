@@ -13,15 +13,14 @@
 
 ### GitHub Action
 
-The code for the Action is in the `Dockerfile` and `entrypoint.sh`.
+The code for the Action is in the `Dockerfile` and `entrypoint.sh`. It is
+continuously tested by the [demo workflow](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml),
+though `VERSION=master` must be set in the [Dockerfile](https://github.com/bobheadxi/gobenchdata/blob/master/Dockerfile#L9).
+This variable is set to specific versions for releases.
 
-To test the action, [`act`](https://github.com/nektos/act) is an awesome tool for
-running Actions locally:
-
-```sh
-curl https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash
-act
-```
+[`act`](https://github.com/nektos/act) used to be the tool to test Actions locally,
+but it hasn't been updated to support the new Actions with YML configuration.
+I'm still looking for a replacement.
 
 ### CLI
 
