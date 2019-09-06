@@ -15,7 +15,7 @@ variables:
 steps:
 - task: GoTool@0
   inputs:
-    version: '1.12'
+    version: '1.13'
 
 - script: |
     mkdir -p '$(GOBIN)'
