@@ -5,7 +5,7 @@
 [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
 [![GoDoc](https://godoc.org/go.bobheadxi.dev/gobenchdata?status.svg)](https://godoc.org/go.bobheadxi.dev/gobenchdata)
 [![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
-[![Demo Benchmarks](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml)](https://github.com/bobheadxi/gobenchdata/workflows/gobenchdata%20demo/badge.svg)
+[![Demo Benchmarks](https://github.com/bobheadxi/gobenchdata/workflows/gobenchdata%20demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml)
 
 a tool for inspecting `go test -bench` data, and a
 [GitHub Action](https://github.com/features/actions) for continuous benchmarking.
