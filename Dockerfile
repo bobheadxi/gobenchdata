@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /
 ENV GO111MODULE=on
 COPY . .
 RUN go build -ldflags "-X main.Version=${VERSION}" -o /bin/gobenchdata
-RUN rm -rf .
+RUN rm -rf /tmp/build
 
 # init entrypoint
 WORKDIR /tmp/entrypoint
