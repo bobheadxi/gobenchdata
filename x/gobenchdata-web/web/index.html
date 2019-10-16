@@ -54,29 +54,21 @@
     <script type="module">
       import { generateCharts } from './app.js';
 
-      // extract template variables from generated HTML
-      const benchmarks = document.getElementById('benchmarks-path').innerText;
-      const source = document.getElementById('source').innerText;
-      const canonicalImport = document.getElementById('canonical-import').innerText;
-      const chartsTypes = document.getElementById('charts-types').innerText;
+      const getVariable = (key, def='') => {
+        const v = document.getElementById(key).innerText;
+        // if the value incldues the default template value, then it is invalid
+        return (v.startsWith('.') && !v.startsWith('./')) ? v : def;
+      }
 
-      // if the value incldues the default template value, then it is invalid
+      const chartsTypes = getVariable('charts-types');
       window.onload = generateCharts({
         div: document.getElementById('charts'),
-        json: benchmarks.includes('.BenchmarksPath')
-          ? 'benchmarks.json'
-          : benchmarks,
 
-        source: source.includes('.Source')
-          ? ''
-          : source,
-        canonicalImport: canonicalImport.includes('.CanonicalImport')
-          ? ''
-          : canonicalImport,
+        json: getVariable('benchmarks-path', 'benchmarks.json'),
+        source: getVariable('source'),
+        canonicalImport: getVariable('canonical-import'),
 
-        chartsTypes: chartsTypes.includes('.ChartsTypes')
-          ? ['bytes/op', 'allocs/op']
-          : chartsTypes.split(','),
+        chartsTypes: chartsTypes ? chartsTypes.split(',') : ['bytes/op', 'allocs/op'],
       }).finally(console.log('charts loaded!'));
     </script>
   </body>
