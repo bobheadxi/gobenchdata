@@ -128,7 +128,12 @@ serve .
 ```
 
 The web application generator is a work in progress. An example site published
-by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/).
+by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/)
+([configuration](https://github.com/angeleneleow/gobenchdata/blob/master/.github/workflows/push.yml).
+
+Other examples:
+
+* [`bobheadxi/zapx`](https://zapx.bobheadxi.dev/benchmarks/)
 
 ## `gobenchdata` CLI
 
