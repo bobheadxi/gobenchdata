@@ -133,8 +133,10 @@ export async function generateCharts({
             const p = charts[chartName].getElementAtEvent(e);
             if (p && p.length) {
               const { _index: i, _xScale: x } = p[0];
-              const commit = x.ticks[i].split(' ')[0];
-              window.open(`https://${source}/commit/${commit}`, '_blank');
+              const label = x.ticks[i].split(' ');
+              // a commit label should have 2 parts (see label())
+              if (label.length === 1) return;
+              window.open(`https://${source}/commit/${label[0]}`, '_blank');
             }
           }
 
@@ -267,6 +269,6 @@ function label(run) {
   const d = new Date(run.Date*1000);
   let month = d.getMonth();
   const ds = `${++month}/${d.getDate()}/${d.getFullYear()}`
-  if (!run.Version) return ds;
-  return `${run.Version.substring(0, 7)} (${ds})`;
+  // if no version is available, just return the datestamp
+  return run.Version ? `${run.Version.substring(0, 7)} (${ds})` : ds;
 }
