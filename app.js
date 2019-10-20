@@ -134,9 +134,9 @@ export async function generateCharts({
             if (p && p.length) {
               const { _index: i, _xScale: x } = p[0];
               const label = x.ticks[i].split(' ');
-              // a commit label should have 2 parts
+              // a commit label should have 2 parts (see label())
               if (label.length === 1) return;
-              window.open(`https://${source}/commit/${commit}`, '_blank');
+              window.open(`https://${source}/commit/${label[0]}`, '_blank');
             }
           }
 
