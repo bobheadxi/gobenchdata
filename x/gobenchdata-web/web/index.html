@@ -57,7 +57,7 @@
       const getVariable = (key, def='') => {
         const v = document.getElementById(key).innerText;
         // if the value incldues the default template value, then it is invalid
-        return (v.startsWith('.') && !v.startsWith('./')) ? v : def;
+        return (v && v.startsWith('{{') && v.endsWith('}}')) ? def : v;
       }
 
       const chartsTypes = getVariable('charts-types');
