@@ -134,6 +134,7 @@ by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdat
 Other examples:
 
 * [`bobheadxi/zapx`](https://zapx.bobheadxi.dev/benchmarks/)
+* [`benchx.temporal.cloud`](https://benchx.temporal.cloud/) by [@RTradeLtd](https://github.com/RTradeLtd/)
 
 ## `gobenchdata` CLI
 
