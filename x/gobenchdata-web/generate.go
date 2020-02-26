@@ -17,6 +17,7 @@ type indexHTML struct {
 	Source          string
 	CanonicalImport string
 	ChartsTypes     string
+	PerBenchmark    bool
 }
 
 func generate() {
@@ -48,7 +49,8 @@ func generate() {
 		Source:          *source,
 		CanonicalImport: *canonical,
 
-		ChartsTypes: *chartsTypes,
+		ChartsTypes:  *chartsTypes,
+		PerBenchmark: *perBenchmark,
 	}); err != nil {
 		panic(err)
 	}

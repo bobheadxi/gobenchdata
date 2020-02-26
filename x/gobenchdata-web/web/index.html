@@ -23,7 +23,8 @@
     <div id="source" hidden>{{.Source}}</div>
     <div id="canonical-import" hidden>{{.CanonicalImport}}</div>
     <div id="charts-types" hidden>{{.ChartsTypes}}</div>
-  
+    <div id="perBenchmark" hidden>{{.PerBenchmark}}</div>
+
     <!-- headers -->
     <div class="header">
       <h1>{{.Title}}</h1>
@@ -69,6 +70,7 @@
         canonicalImport: getVariable('canonical-import'),
 
         chartsTypes: chartsTypes ? chartsTypes.split(',') : ['bytes/op', 'allocs/op'],
+        perBenchmark: (getVariable('perBenchmark') == 'true'),
       }).finally(console.log('charts loaded!'));
     </script>
   </body>

@@ -18,7 +18,8 @@ var (
 	source    = pflag.StringP("source", "s", "", "source repository for package, eg 'github.com/bobheadxi/gobenchdata'")
 	canonical = pflag.StringP("canonical-import", "i", "", "canonical import path for package, eg 'go.bobheadxi.dev/gobenchdata' (used to generate links to source code)")
 
-	chartsTypes = pflag.StringP("charts-types", "c", "bytes/op,allocs/op", "additional chart types to generate (comma-separated, in addition to 'ns/op')")
+	chartsTypes  = pflag.StringP("charts-types", "c", "bytes/op,allocs/op", "additional chart types to generate (comma-separated, in addition to 'ns/op')")
+	perBenchmark = pflag.Bool("per-benchmark", false, "toggle per-benchmark graphs (grouped by package by default)")
 )
 
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
