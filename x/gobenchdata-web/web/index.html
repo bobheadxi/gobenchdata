@@ -70,7 +70,7 @@
         canonicalImport: getVariable('canonical-import'),
 
         chartsTypes: chartsTypes ? chartsTypes.split(',') : ['bytes/op', 'allocs/op'],
-        perBenchmark: getVariable('perBenchmark'),
+        perBenchmark: (getVariable('perBenchmark') == 'true'),
       }).finally(console.log('charts loaded!'));
     </script>
   </body>

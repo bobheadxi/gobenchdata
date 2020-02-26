@@ -47,8 +47,6 @@ export async function generateCharts({
     err.innerText = e;
   }
 
-  perBenchmark = (perBenchmark == 'true');
-
   const labels = runs.sort((a, b) => a.Date - b.Date).map(r => label(r));
   const charts = {};
   let len = 0;
@@ -185,7 +183,7 @@ export async function generateCharts({
     Object.values(charts).forEach(c => {
       const {data: {datasets}} = c;
       datasets.forEach(d => {
-        const {data} = d;
+        const { data } = d;
         if (data.length < len) data.unshift(newPoint(run, NaN));
       });
     })
