@@ -1,4 +1,9 @@
 benchmarks.json
 bench.json
-vendor
 tmp
+gobenchdata
+
+# dependencies
+vendor
+node_modules
+package-lock.json
