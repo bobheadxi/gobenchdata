@@ -17,6 +17,10 @@ steps:
   inputs:
     version: '1.13'
 
+- task: NodeTool@0 
+  inputs:
+    versionSpec: '13.2.x'
+
 - script: |
     mkdir -p '$(GOBIN)'
     mkdir -p '$(GOPATH)/pkg'
@@ -29,15 +33,12 @@ steps:
 
 - script: |
     go version
-    go mod download
+    npm version
+    make deps
   workingDirectory: '$(modulePath)'
   displayName: 'Get dependencies'
 
-- script: |
-    go vet ./...
-    go fmt ./...
-    go run golang.org/x/lint/golint $(go list ./... | grep -v /vendor/)
-    go build -v
+- script: make check
   workingDirectory: '$(modulePath)'
   displayName: 'Run static analysis'
 
