@@ -14,15 +14,15 @@ a tool for inspecting `go test -bench` data, and a
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
 </a>
 
-* [About](#about)
-* [GitHub Action](#github-action)
-  * [Setup](#setup)
-  * [Configuration](#configuration)
-    * [`inputs`](#inputs)
-    * [`env`](#env)
-  * [Visualisation](#visualisation)
-* [`gobenchdata` CLI](#gobenchdata-cli)
-* [Development and Contributions](#development-and-contributions)
+- [About](#about)
+- [GitHub Action](#github-action)
+  - [Setup](#setup)
+  - [Configuration](#configuration)
+    - [`inputs`](#inputs)
+    - [`env`](#env)
+  - [Visualisation](#visualisation)
+- [`gobenchdata` CLI](#gobenchdata-cli)
+- [Development and Contributions](#development-and-contributions)
 
 <br />
 
@@ -32,6 +32,8 @@ a tool for inspecting `go test -bench` data, and a
 which aims to display performance improvements and regressions on a continuous basis.
 
 It is available as a GitHub action or a command-line application.
+
+<br />
 
 ## GitHub Action
 
@@ -129,12 +131,14 @@ serve .
 
 The web application generator is a work in progress. An example site published
 by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/)
-([configuration](https://github.com/angeleneleow/gobenchdata/blob/master/.github/workflows/push.yml).
+([configuration](https://github.com/angeleneleow/gobenchdata/blob/master/.github/workflows/push.yml)).
 
 Other examples:
 
 * [`bobheadxi/zapx`](https://zapx.bobheadxi.dev/benchmarks/)
 * [`benchx.temporal.cloud`](https://benchx.temporal.cloud/) by [@RTradeLtd](https://github.com/RTradeLtd/)
+
+<br />
 
 ## `gobenchdata` CLI
 
@@ -156,6 +160,8 @@ go test -bench . -benchmem ./... | gobenchdata --json bench.json
 More detailed usage documentation and examples can be found in the
 [godocs](https://godoc.org/go.bobheadxi.dev/gobenchdata) or by running
 `gobenchdata help`.
+
+<br />
 
 ## Development and Contributions
 
