@@ -60,7 +60,7 @@ jobs:
       with:
         fetch-depth: 1
     - name: gobenchdata to gh-pages
-      uses: bobheadxi/gobenchdata@v0.3.0
+      uses: bobheadxi/gobenchdata@v0.5.1
       with:
         PRUNE_COUNT: 30
         GO_TEST_FLAGS: -cpu 1,2
