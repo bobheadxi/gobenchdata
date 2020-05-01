@@ -97,6 +97,11 @@ Environment variables are configured using
 | `GITHUB_TOKEN`       | `${{ secrets.GITHUB_TOKEN }}` | token to provide access to repository
 | `GITHUB_ACTOR`       | set by GitHub                 | the user to make commits as
 
+Note that for `GITHUB_TOKEN`, it seems that pushes to `gh-pages` made by the default
+`secrets.GITHUB_TOKEN` do not trigger page builds. This issue can be resolved by using
+a [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
+instead.
+
 ### Visualisation
 
 The `gobenchdata` GitHub action eventually generates a JSON file with past benchmarks.
