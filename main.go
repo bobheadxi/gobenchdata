@@ -82,7 +82,7 @@ func main() {
 				if err := web.GenerateApp(pflag.Args()[2], web.Config{
 					Title:          "gobenchdata benchmarks",
 					Description:    "My benchmarks!",
-					BenchmarksFile: "benchmarks.json",
+					BenchmarksFile: internal.StringP("benchmarks.json"),
 				}); err != nil {
 					panic(err)
 				}

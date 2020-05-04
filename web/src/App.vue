@@ -9,11 +9,12 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { Config, Run } from './types/generated';
 
 type AppState = {
   loading: boolean;
-  config: {};
-  benchmarks: {}[];
+  config: Config;
+  benchmarks: Run[];
   error: any;
 }
 
@@ -21,7 +22,7 @@ export default Vue.extend({
   name: 'App',
   data: (): AppState => ({
     loading: true,
-    config: {},
+    config: new Config(),
     benchmarks: [],
     error: undefined,
   }),
@@ -34,11 +35,12 @@ export default Vue.extend({
         const configResp = await fetch('/gobenchdata-web-config.json');
         if (configResp.status > 400) throw new Error(`${configResp.status}: failed to load config`);
 
-        const config = await configResp.json();
-        const benchmarksResp = await fetch(`/${config.benchmarksFile || 'benchmarks.json'}`);
+        const config = new Config(await configResp.json());
+        const benchmarksResp = await fetch(`/${config.BenchmarksFile || 'benchmarks.json'}`);
         if (benchmarksResp.status > 400) throw new Error(`${benchmarksResp.status}: failed to load benchmarks`);
 
-        this.benchmarks = await benchmarksResp.json();
+        const runs = await benchmarksResp.json();
+        this.benchmarks = runs.map((r: any) => new Run(r));
         this.config = config;
       } catch (err) {
         this.error = err;
