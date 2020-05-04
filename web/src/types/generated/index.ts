@@ -54,17 +54,40 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
+// struct2ts:go.bobheadxi.dev/gobenchdata/web.ConfigChartConfig
+class ConfigChartConfig {
+	Name: string | null;
+	Description: string | null;
+	Package: string;
+	Benchmarks: string[];
+
+	constructor(data?: any) {
+		const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
+		this.Name = ('Name' in d) ? d.Name as string : null;
+		this.Description = ('Description' in d) ? d.Description as string : null;
+		this.Package = ('Package' in d) ? d.Package as string : '';
+		this.Benchmarks = ('Benchmarks' in d) ? d.Benchmarks as string[] : [];
+	}
+
+	toObject(): any {
+		const cfg: any = {};
+		return ToObject(this, cfg);
+	}
+}
+
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.Config
 class Config {
 	Title: string;
 	Description: string;
 	BenchmarksFile: string | null;
+	Charts: ConfigChartConfig[];
 
 	constructor(data?: any) {
 		const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
 		this.Title = ('Title' in d) ? d.Title as string : '';
 		this.Description = ('Description' in d) ? d.Description as string : '';
 		this.BenchmarksFile = ('BenchmarksFile' in d) ? d.BenchmarksFile as string : null;
+		this.Charts = Array.isArray(d.Charts) ? d.Charts.map((v: any) => new ConfigChartConfig(v)) : [];
 	}
 
 	toObject(): any {
@@ -162,6 +185,7 @@ class Run {
 
 // exports
 export {
+	ConfigChartConfig,
 	Config,
 	RunSuiteBenchmarkMem,
 	RunSuiteBenchmark,

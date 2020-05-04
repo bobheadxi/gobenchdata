@@ -8,7 +8,7 @@ build: generate cli
 .PHONY: generate
 generate:
 	# can't seem to get this working with go:generate
-	go run github.com/OneOfOne/struct2ts/cmd/struct2ts --out="./web/src/types/generated.ts" web.Config bench.Run
+	go run github.com/OneOfOne/struct2ts/cmd/struct2ts --out="./web/src/types/generated/index.ts" web.Config bench.Run
 	go generate ./...
 
 .PHONY: cli
