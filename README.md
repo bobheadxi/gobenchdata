@@ -107,42 +107,21 @@ instead.
 
 The `gobenchdata` GitHub action eventually generates a JSON file with past benchmarks.
 You can visualize these continuous benchmarks by creating a web app that reads
-from the JSON benchmarks file, or by using `gobenchdata-web`:
+from the JSON benchmarks file, or by using `gobenchdata`. An easy way to get started is:
 
 ```sh
-go get -u go.bobheadxi.dev/gobenchdata/x/gobenchdata-web
-git checkout gh-pages
-gobenchdata-web --title "my benchmarks" # generates a web app in your working directory
+go get -u go.bobheadxi.dev/gobenchdata
+gobenchdata web generate --web.config-only .
+gobenchdata web serve # opens visualization in browser
 ```
 
-The generator offers a variety of customization options documented under
-`gobenchdata-web help` to configure descriptions, charts, and more. The easiest
-way to use `gobenchdata-web` is to set up a Makefile in your `gh-pages` branch
-to update the web app using the latest version of `gobenchdata-web` with your
-desired configuration - [for example](https://github.com/bobheadxi/gobenchdata/blob/gh-pages/Makefile):
+You can configure the web application using `gobenchdata-web.json`. TODO: documentation
 
-```makefile
-all: build
-	git commit -a -m "regenerate web app"
+You can output the entire web application (to commit to Github pages, for example) using:
 
-build:
-	gobenchdata-web --title "gobenchdata continuous benchmark demo" --desc "This is a demo for gobenchdata"
+```sh
+gobenchdata web generate .
 ```
-
-You can test the web app locally using a tool like [serve](https://www.npmjs.com/package/serve):
-
-```
-serve .
-```
-
-The web application generator is a work in progress. An example site published
-by this repository is available at [gobenchdata.bobheaxi.dev](https://gobenchdata.bobheadxi.dev/)
-([configuration](https://github.com/angeleneleow/gobenchdata/blob/master/.github/workflows/push.yml)).
-
-Other examples:
-
-* [`bobheadxi/zapx`](https://zapx.bobheadxi.dev/benchmarks/)
-* [`benchx.temporal.cloud`](https://benchx.temporal.cloud/) by [@RTradeLtd](https://github.com/RTradeLtd/)
 
 <br />
 
