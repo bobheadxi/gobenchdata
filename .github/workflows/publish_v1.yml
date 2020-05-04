@@ -1,0 +1,20 @@
+name: Publish v1
+on:
+  release: [ published ]
+
+jobs:
+  publish_v1:
+    if: github.event_name == 'release' && contains(github.ref, 'v1')
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+    - name: set up credentials
+      run: |
+        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        git config --global user.name "${GITHUB_ACTOR}"
+    - name: update tag
+      run: |
+        git tag -fa v1 -m "Update v1 tag"
+        git push origin v1 --force
