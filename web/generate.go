@@ -14,7 +14,7 @@ import (
 // GenerateApp dumps the web app template into the provided directory
 func GenerateApp(dir string, defaultConfig Config) error {
 	// clear directory of everything except config
-	appConfigPath := path.Join(dir, "gobenchdata-config.json")
+	appConfigPath := path.Join(dir, "gobenchdata-web-config.json")
 	dirs, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return fmt.Errorf("cannot access target directory: %w", err)

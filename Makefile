@@ -37,3 +37,4 @@ demo: all bench bench2 bench3 serve
 .PHONY: bench
 bench bench2 bench3:
 	go test -cpu 1,2 -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
+	cp ./benchmarks.json ./web/public/benchmarks.json

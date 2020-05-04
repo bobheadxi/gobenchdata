@@ -18,3 +18,4 @@ debug: false
 custom:
   - files: [ ./dist ]
     base: 'dist'
+    exclude: [ public/gobenchdata-web-config.json, public/benchmarks.json ]
