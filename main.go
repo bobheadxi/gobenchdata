@@ -118,6 +118,9 @@ func main() {
 				os.Exit(1)
 			}
 
+		case "checks":
+			panic("TODO: not yet implemented")
+
 		default:
 			showHelp()
 			os.Exit(1)

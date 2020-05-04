@@ -10,8 +10,12 @@ INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
 INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
 
 # publishing configuration
-INPUT_PUBLISH_REPO="${INPUT_PUBLSIH_REPO:-${GITHUB_REPOSITORY}}"
+INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
 INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
+
+# pull request checks
+INPUT_CHECK="${INPUT_CHECK:-"false"}"
+INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.json"}"
 
 # output build data
 echo '========================'
@@ -53,15 +57,19 @@ git checkout ${INPUT_PUBLISH_BRANCH}
 
 # generate output
 echo
-echo '☝️ Updating results...'
-if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
-  echo '📈 Existing report found - merging...'
-  gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
-    --flat \
-    --prune "${INPUT_PRUNE_COUNT}" \
-    --json "${INPUT_BENCHMARKS_OUT}"
+if [[ "${INPUT_CHECK}" == "false" ]]; then
+  echo '☝️ Updating results...'
+  if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
+    echo '📈 Existing report found - merging...'
+    gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
+      --flat \
+      --prune "${INPUT_PRUNE_COUNT}" \
+      --json "${INPUT_BENCHMARKS_OUT}"
+  else
+    cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+  fi
 else
-  cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+  echo 'TODO: check against publish data'
 fi
 
 # publish results

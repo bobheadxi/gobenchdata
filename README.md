@@ -20,7 +20,10 @@ a tool for inspecting `go test -bench` data, and a
   - [Setup](#setup)
   - [Configuration](#configuration)
     - [`inputs`](#inputs)
+      - [Publishing](#publishing)
+      - [Checks](#checks)
     - [`env`](#env)
+  - [Pull Request Checks](#pull-request-checks)
   - [Visualisation](#visualisation)
 - [`gobenchdata` CLI](#gobenchdata-cli)
 - [Development and Contributions](#development-and-contributions)
@@ -84,9 +87,30 @@ Input variables are configured using
 | `GO_BENCHMARKS`      | `.`                       | benchmarks to run (argument for `-bench`)
 | `GO_TEST_FLAGS`      |                           | additional flags for `go test`
 | `GO_TEST_PKGS`       | `./...`                   | packages to test (argument for `go test`)
-| `BENCHMARKS_OUT`     | `benchmarks.json`         | destination path of benchmark data
+
+##### Publishing
+
+The default behaviour of the `gobenchdata` Action is to commit and publish to your repository's `gh-pages` branch.
+
+| Variable             | Default                   | Purpose
+| -------------------- | ------------------------- | -------
 | `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
 | `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
+| `PUBLISH_REPO`       |                           | an alternative repository to publish to
+| `PUBLISH_BRANCH`     | `gh-pages`                | branch to publish to
+| `BENCHMARKS_OUT`     | `benchmarks.json`         | destination path of benchmark data
+
+##### Checks
+
+The following `inputs` are for enabling [Pull Request Checks](#pull-request-checks):
+
+| Variable             | Default                   | Purpose
+| -------------------- | ------------------------- | -------
+| `CHECK`              | `false`                   | if `true`, disables publishing and runs checks instead
+| `CHECKS_CONFIG`      | `gobenchdata-checks.json` | path to checks configuration
+| `PUBLISH_REPO`       |                           | repository of benchmark data to check against
+| `PUBLISH_BRANCH`     | `gh-pages`                | branch of benchmark data to check against
+| `BENCHMARKS_OUT`     | `benchmarks.json`         | path to benchmark data to check against
 
 #### `env`
 
@@ -102,6 +126,13 @@ Note that for `GITHUB_TOKEN`, it seems that pushes to `gh-pages` made by the def
 `secrets.GITHUB_TOKEN` do not trigger page builds. This issue can be resolved by using
 a [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
 instead.
+
+### Pull Request Checks
+
+Instead of publishing results, benchmark output can be used to pass and fail pull requests
+using `CHECKS: true`. To get started, set up a file called `gobenchdata-checks.json`:
+
+TODO
 
 ### Visualisation
 
