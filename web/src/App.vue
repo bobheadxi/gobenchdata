@@ -1,15 +1,33 @@
 <template>
   <div>
-    <h1>Hello World</h1>
-    <p v-if="loading">loading...</p>
-    <P v-if="error"> {{ error }} </p>
-    <p v-else> {{ config }} {{ benchmarks }} </p>
+    <div v-if="loading">
+      loading...
+    </div>
+    <div v-if="error">
+      {{ error }}
+    </div>
+
+    <!-- okay state -->
+    <div v-else>
+      <h1>{{ config.Title }}</h1>
+      <h2>{{ config.Description }}</h2>
+
+      <div v-for="g in chartGroups" :key="g.name">
+        <ChartGroup :group="g" :runs="benchmarks" />
+      </div>
+
+      <hr />
+
+      {{ benchmarks }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { Config, Run } from './types/generated';
+import ChartGroup from '@/components/ChartGroup.vue';
+
+import { Config, Run, ConfigChartGroup, ConfigChartGroupChart } from './generated';
 
 type AppState = {
   loading: boolean;
@@ -20,12 +38,33 @@ type AppState = {
 
 export default Vue.extend({
   name: 'App',
+  components: {
+    ChartGroup,
+  },
   data: (): AppState => ({
     loading: true,
     config: new Config(),
     benchmarks: [],
     error: undefined,
   }),
+  computed: {
+    chartGroups(): ConfigChartGroup[] {
+      if (this.config.ChartGroups && this.config.ChartGroups.length > 0) return this.config.ChartGroups;
+      // TODO: generate chart groups from benchmark runs
+      return [
+        new ConfigChartGroup({
+          Name: 'test group',
+          Description: 'a test group',
+          Charts: [
+            new ConfigChartGroupChart({
+              Name: 'test chart',
+              Description: 'a test chart',
+            }),
+          ],
+        }),
+      ];
+    },
+  },
   created() {
     this.load();
   },
