@@ -14,7 +14,6 @@ require (
 	github.com/mattn/go-runewidth v0.0.4 // indirect
 	github.com/nsf/termbox-go v0.0.0-20190325093121-288510b9734e // indirect
 	github.com/spf13/pflag v1.0.5
-	github.com/tkrajina/typescriptify-golang-structs v0.0.10 // indirect
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422
 	golang.org/x/net v0.0.0-20190503192946-f4e77d36d62c
