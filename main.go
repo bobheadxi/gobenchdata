@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/internal"
 	"go.bobheadxi.dev/gobenchdata/web"
 )
 
@@ -27,6 +28,21 @@ var (
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
 )
+
+const helpText = `gobenchdata is a tool for inspecting golang benchmark outputs.
+
+basic usage:
+
+  go test -bench . -benchmem ./... | gobenchdata [flags]
+
+other commands:
+
+  merge [files]             merge gobenchdata results
+  web generate [directory]  generate web application in directory
+  web serve [address]       serve web application using './gobenchdata-config.json'
+  version                   show gobenchdata version
+  help                      show help text
+`
 
 func main() {
 	pflag.Parse()
@@ -64,13 +80,23 @@ func main() {
 					panic("no output directory provided")
 				}
 				if err := web.GenerateApp(pflag.Args()[2], web.Config{
-					Title:       "gobenchdata benchmarks",
-					Description: "My benchmarks!",
+					Title:          "gobenchdata benchmarks",
+					Description:    "My benchmarks!",
+					BenchmarksFile: "benchmarks.json",
 				}); err != nil {
 					panic(err)
 				}
+				println("web application generated!")
 			case "serve":
-				panic("not yet implemented")
+				addr := "localhost:8080"
+				if len(pflag.Args()) == 3 {
+					addr = pflag.Args()[2]
+				}
+				fmt.Printf("serving on '%s'\n", addr)
+				go internal.OpenBrowser("http://" + addr)
+				if err := web.ListenAndServe(addr); err != nil {
+					panic(err)
+				}
 			default:
 				showHelp()
 				os.Exit(1)

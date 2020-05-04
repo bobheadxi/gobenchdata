@@ -54,21 +54,8 @@ func output(results []bench.Run) {
 }
 
 func showHelp() {
-	println(`gobenchdata is a tool for inspecting golang benchmark outputs.
-
-basic usage:
-
-  go test -bench . -benchmem ./... | gobenchdata [flags]
-
-other commands:
-
-  merge [files]     merge gobenchdata results
-  web [directory]   generate web application in directory
-  version           show gobenchdata version
-  help              show help text
-
-flags:
-`)
+	println(helpText)
+	println("flags:")
 	pflag.PrintDefaults()
 	println("\nsee https://go.bobheadxi.dev/gobenchdata for more documentation.")
 }

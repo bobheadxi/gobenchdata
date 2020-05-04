@@ -50,6 +50,5 @@ func GenerateApp(dir string, defaultConfig Config) error {
 		println("found existing web app configuration")
 	}
 
-	println("web application generated!")
 	return nil
 }
