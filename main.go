@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/web"
 )
 
 // Version is the version of gobenchdata
@@ -29,6 +30,8 @@ var (
 
 func main() {
 	pflag.Parse()
+
+	// run command if provided
 	if len(pflag.Args()) > 0 {
 		switch cmd := pflag.Args()[0]; cmd {
 		case "version":
@@ -37,14 +40,42 @@ func main() {
 			} else {
 				println("gobenchdata " + Version)
 			}
+
 		case "help":
 			showHelp()
+			os.Exit(0)
+
 		case "merge":
 			args := pflag.Args()[1:]
 			if len(args) < 1 {
 				panic("no merge targets provided")
 			}
 			merge(args...)
+
+		case "web":
+			if len(pflag.Args()) < 2 {
+				showHelp()
+				os.Exit(1)
+			}
+
+			switch webCmd := pflag.Args()[1]; webCmd {
+			case "generate":
+				if len(pflag.Args()) < 3 {
+					panic("no output directory provided")
+				}
+				if err := web.GenerateApp(pflag.Args()[2], web.Config{
+					Title:       "gobenchdata benchmarks",
+					Description: "My benchmarks!",
+				}); err != nil {
+					panic(err)
+				}
+			case "serve":
+				panic("not yet implemented")
+			default:
+				showHelp()
+				os.Exit(1)
+			}
+
 		default:
 			showHelp()
 			os.Exit(1)
@@ -52,12 +83,12 @@ func main() {
 		return
 	}
 
+	// default behaviour
 	fi, err := os.Stdin.Stat()
 	if err != nil {
 		panic(err)
 	} else if fi.Mode()&os.ModeNamedPipe == 0 {
-		showHelp()
-		panic("gobenchdata should be used with a pipe")
+		panic("gobenchdata should be used with a pipe - see 'gobenchdata help'")
 	}
 
 	parser := bench.NewParser(bufio.NewReader(os.Stdin))

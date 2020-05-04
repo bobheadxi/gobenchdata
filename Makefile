@@ -1,18 +1,26 @@
 COMMIT=`git rev-parse HEAD`
 
-all: deps check
-	@echo Version $(COMMIT)
+all: deps check build
+
+.PHONY: build
+build: generate cli
+
+.PHONY: generate
+generate:
 	go generate ./...
-	go install -ldflags "-X main.Version=$(COMMIT)"
-	go install -ldflags "-X main.Version=$(COMMIT)" ./x/gobenchdata-web
+
+.PHONY: cli
+cli:
+	@echo Version $(COMMIT)
+	go build -ldflags "-X main.Version=$(COMMIT)"
 
 .PHONY: deps
 deps:
 	go mod download
-	( cd x/gobenchdata-web/web ; npm install )
+	( cd web ; npm install )
 
 .PHONY: check
-check: check-go check-x-gobenchdata-web
+check: check-go check-web
 
 check-go:
 	go vet ./...
@@ -20,8 +28,8 @@ check-go:
 	go run golang.org/x/lint/golint $(go list ./... | grep -v /vendor/)
 	go build -v
 
-check-x-gobenchdata-web:
-	( cd x/gobenchdata-web/web ; npm run lint )
+check-web:
+	(cd web ; npm run lint)
 
 .PHONY: demo
 demo: all bench bench2 bench3 serve
@@ -29,8 +37,3 @@ demo: all bench bench2 bench3 serve
 .PHONY: bench
 bench bench2 bench3:
 	go test -cpu 1,2 -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
-	cp ./benchmarks.json ./x/gobenchdata-web/web/benchmarks.json
-
-.PHONY: serve
-serve:
-	serve ./x/gobenchdata-web/web

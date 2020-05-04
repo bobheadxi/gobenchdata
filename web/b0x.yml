@@ -1,14 +1,14 @@
 # package
-pkg: internal
+pkg: web
 
 # destination
-dest: "./internal"
+dest: "."
 
 # gofmt
 fmt: true
 
 # output file
-output: "web.go"
+output: "app.go"
 noprefix: true
 
 # debug mode where the files are read directly from the filesytem
@@ -16,7 +16,5 @@ debug: false
 
 # files
 custom:
-  - files: 
-    - "./web/app.js"
-    - "./web/index.html"
-    - "./web/style.css"
+  - files: [ ./dist ]
+    base: 'dist'

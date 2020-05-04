@@ -2,6 +2,7 @@ benchmarks.json
 bench.json
 tmp
 gobenchdata
+dist
 
 # dependencies
 vendor

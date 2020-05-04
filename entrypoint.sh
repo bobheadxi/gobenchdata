@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-# generate some defaults
+# core configuration
 INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
 INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
 INPUT_GO_TEST_PKGS="${INPUT_GO_TEST_PKGS:-"./..."}"
 INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
 INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
+
+# publishing configuration
+INPUT_PUBLISH_REPO="${INPUT_PUBLISH_BRANCH:-${GITHUB_REPOSITORY}}"
+INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
 
 # output build data
 echo '========================'
@@ -40,12 +44,12 @@ go test \
   | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
-# fetch github pages branch
+# fetch publish destination
 echo
-echo '📚 Checking out gh-pages...'
+echo "📚 Checking out ${INPUT_PUBLISH_REPO}@${INPUT_PUBLISH_BRANCH}..."
 cd /tmp/build
-git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
-git checkout gh-pages
+git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_PUBLISH_REPO}.git .
+git checkout ${INPUT_PUBLISH_BRANCH}
 
 # generate output
 echo
@@ -65,7 +69,7 @@ echo
 echo '📷 Committing and pushing new benchmark data...'
 git add .
 git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
-git push -f origin gh-pages
+git push -f origin ${INPUT_PUBLISH_BRANCH}
 
 echo
 echo '🚀 Done!'
