@@ -5,7 +5,7 @@ LABEL repository="https://go.bobheadxi.dev/gobenchdata"
 LABEL homepage="https://bobheadxi.dev/r/gobenchdata"
 
 # set version to release version
-ENV VERSION=v0.5.1
+ENV VERSION=v1
 LABEL version=${VERSION}
 
 # set up gobenchdata
