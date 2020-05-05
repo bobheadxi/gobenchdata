@@ -44,7 +44,7 @@ other commands:
 
   merge [files]             merge gobenchdata results
   web generate [directory]  generate web application in directory
-  web serve [address]       serve web application using './gobenchdata-config.json'
+  web serve [port]          serve web application using './gobenchdata-config.json'
   version                   show gobenchdata version
   help                      show help text
 `
@@ -111,15 +111,16 @@ func main() {
 				println("web application configuration generated!")
 
 			case "serve":
-				addr := "localhost:8080"
+				port := "8080"
 				if len(pflag.Args()) == 3 {
-					addr = pflag.Args()[2]
+					port = pflag.Args()[2]
 				}
+				addr := "localhost:" + port
 				if existing, err := web.OpenConfig("./gobenchdata-web.json"); err != nil {
 					if !os.IsNotExist(err) {
 						panic(err)
 					}
-				} else {
+				} else if existing != nil {
 					config = existing
 				}
 				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)

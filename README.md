@@ -162,8 +162,13 @@ go test -bench . -benchmem ./... | gobenchdata --json bench.json
 You can then visualize the benchmark using the built-in web application:
 
 ```sh
-gobenchdata web generate --web.config .
 gobenchdata web serve
+```
+
+You can further customize the visualization by generating a configuration file:
+
+```sh
+gobenchdata web generate --web.config .
 ```
 
 More detailed usage documentation and examples can be found in the

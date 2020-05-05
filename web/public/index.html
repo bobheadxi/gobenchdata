@@ -5,16 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>{{ .Title }}</title>
+    <title>{{.Title}}</title>
 
-    {{ Header }}
+    {{.Header}}
 
     <link rel="stylesheet" type="text/css" href="<%= BASE_URL %>overrides.css" />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but {{ .Title }} doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but {{.Title}} doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
