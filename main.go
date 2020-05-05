@@ -27,6 +27,8 @@ var (
 	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
 	webConfigOnly = pflag.Bool("web.config", false, "only generate configuration for 'gobenchdata web'")
+	webIndexTitle = pflag.String("web.title", "gobenchdata web", "header <title> for 'gobenchdata web'")
+	webIndexHead  = pflag.StringArray("web.head", []string{}, "additional <head> elements for 'gobenchdata web'")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
@@ -76,6 +78,15 @@ func main() {
 				showHelp()
 				os.Exit(1)
 			}
+			it := web.TemplateIndexHTML{
+				Title:   *webIndexTitle,
+				Headers: *webIndexHead,
+			}
+			config := &web.Config{
+				Title:          *webIndexTitle,
+				Description:    "Benchmarks generated using 'gobenchdata'",
+				BenchmarksFile: internal.StringP("benchmarks.json"),
+			}
 
 			switch webCmd := pflag.Args()[1]; webCmd {
 			case "generate":
@@ -84,17 +95,13 @@ func main() {
 				}
 				dir := pflag.Args()[2]
 				if !*webConfigOnly {
-					if err := web.GenerateApp(dir); err != nil {
+					if err := web.GenerateApp(dir, it); err != nil {
 						panic(err)
 					}
 					println("web application generated!")
 				}
 				// only override if we are generating config only
-				if err := web.GenerateConfig(dir, web.Config{
-					Title:          "gobenchdata benchmarks",
-					Description:    "My benchmarks!",
-					BenchmarksFile: internal.StringP("benchmarks.json"),
-				}, *webConfigOnly); err != nil {
+				if err := web.GenerateConfig(dir, *config, *webConfigOnly); err != nil {
 					if !*webConfigOnly && errors.Is(err, os.ErrExist) {
 						println("found existing web app configuration")
 					} else {
@@ -108,9 +115,16 @@ func main() {
 				if len(pflag.Args()) == 3 {
 					addr = pflag.Args()[2]
 				}
-				fmt.Printf("serving on '%s'\n", addr)
+				if existing, err := web.OpenConfig("./gobenchdata-web.json"); err != nil {
+					if !os.IsNotExist(err) {
+						panic(err)
+					}
+				} else {
+					config = existing
+				}
+				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)
 				go internal.OpenBrowser("http://" + addr)
-				if err := web.ListenAndServe(addr); err != nil {
+				if err := web.ListenAndServe(addr, *config, it); err != nil {
 					panic(err)
 				}
 			default:

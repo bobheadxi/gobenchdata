@@ -17,10 +17,8 @@
       </div>
     </div>
 
-    <hr />
-
-    <div>
-      <p>generated with <a href="https://bobheadxi.dev/gobenchdata">gobenchdata</a></p>
+    <div class="footer">
+      <p>generated using <a href="https://bobheadxi.dev/gobenchdata">gobenchdata</a></p>
     </div>
   </div>
 </template>
@@ -33,7 +31,7 @@
   font-family: 'Fira Code', monospace;
   text-align: center;
 
-  hr {
+  .footer {
     margin-top: 2 * $gap;
     margin-bottom: 2 * $gap;
   }

@@ -14,9 +14,8 @@ import (
 func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.json") }
 
 // GenerateApp dumps the web app template into the provided directory
-func GenerateApp(dir string) error {
-	// clear directory of everything except config
-	appConfigPath := defaultConfigPath(dir)
+func GenerateApp(dir string, it TemplateIndexHTML) error {
+	// clear directory of build stuff
 	dirs, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return fmt.Errorf("cannot access target directory: %w", err)
@@ -24,10 +23,17 @@ func GenerateApp(dir string) error {
 	for _, f := range dirs {
 		fullName := path.Join(dir, f.Name())
 		if f.IsDir() {
-			os.RemoveAll(fullName)
-		} else if fullName != appConfigPath {
+			// clear build folders
+			if f.Name() == "css" || f.Name() == "js" {
+				os.RemoveAll(fullName)
+			}
+		} else if f.Name() == "index.html" {
 			os.Remove(fullName)
 		}
+	}
+
+	if err := populateFileIndexHTML(it); err != nil {
+		return err
 	}
 
 	// generate app
