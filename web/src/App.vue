@@ -90,16 +90,23 @@ export default Vue.extend({
   methods: {
     async load() {
       try {
-        const configResp = await fetch('/gobenchdata-web.json');
-        if (configResp.status > 400) throw new Error(`${configResp.status}: failed to load config`);
+        const configResp = await fetch('./gobenchdata-web.json');
+        if (configResp.status > 400) {
+          console.error(configResp);
+          throw new Error(`${configResp.status}: failed to load config`);
+        }
 
         const config = new Config(await configResp.json());
-        const benchmarksResp = await fetch(`/${config.BenchmarksFile || 'benchmarks.json'}`);
-        if (benchmarksResp.status > 400) throw new Error(`${benchmarksResp.status}: failed to load benchmarks`);
+        const benchmarksResp = await fetch(`./${config.BenchmarksFile || 'benchmarks.json'}`);
+        if (benchmarksResp.status > 400) {
+          console.error(benchmarksResp);
+          throw new Error(`${benchmarksResp.status}: failed to load benchmarks`);
+        }
 
         const runs = await benchmarksResp.json();
         this.benchmarks = runs.map((r: any) => new Run(r));
         this.config = config;
+        console.log('config loaded', { config });
       } catch (err) {
         this.error = err;
       }

@@ -55,8 +55,6 @@ export function generateSeries(
     // check each suite for measurements
     for (let sID = 0; sID < run.Suites.length; sID += 1) {
       const suite = run.Suites[sID];
-
-      console.debug('check', suite.Pkg, pkg.source, pkg.test(suite.Pkg));
       if (!pkg.test(suite.Pkg)) continue;
 
       // check each measurement for matching benchmarks
@@ -64,8 +62,6 @@ export function generateSeries(
         const bench = suite.Benchmarks[bID];
         for (let i = 0; i < benches.length; i += 1) {
           const benchMatch = benches[i];
-
-          console.debug('check', bench.Name, benchMatch.source, benchMatch.test(bench.Name));
           if (!benchMatch.test(bench.Name)) continue;
 
           // add benchmark data
