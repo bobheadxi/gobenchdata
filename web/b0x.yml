@@ -18,4 +18,4 @@ debug: false
 custom:
   - files: [ ./dist ]
     base: 'dist'
-    exclude: [ dist/gobenchdata-web.json, dist/benchmarks.json ]
+    exclude: [ '**/*.json' ]
