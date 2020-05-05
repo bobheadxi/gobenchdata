@@ -124,7 +124,7 @@ from the JSON benchmarks file, or by using `gobenchdata`. An easy way to get sta
 
 ```sh
 go get -u go.bobheadxi.dev/gobenchdata
-gobenchdata web generate --web.config-only .
+gobenchdata web generate --web.config .
 gobenchdata web serve # opens visualization in browser
 ```
 
@@ -155,8 +155,15 @@ gobenchdata help
 The easiest way to use the CLI is by piping the output of `go test -bench` to
 it:
 
-```
+```sh
 go test -bench . -benchmem ./... | gobenchdata --json bench.json
+```
+
+You can then visualize the benchmark using the built-in web application:
+
+```sh
+gobenchdata web generate --web.config .
+gobenchdata web serve
 ```
 
 More detailed usage documentation and examples can be found in the

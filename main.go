@@ -26,7 +26,7 @@ var (
 	noSort    = pflag.Bool("no-sort", false, "disable sorting")
 	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
-	webConfigOnly = pflag.Bool("web.config-only", false, "only generate configuration for 'gobenchdata web'")
+	webConfigOnly = pflag.Bool("web.config", false, "only generate configuration for 'gobenchdata web'")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
