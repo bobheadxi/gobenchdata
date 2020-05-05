@@ -8,7 +8,7 @@
     </div>
 
     <!-- okay state -->
-    <div v-else>
+    <div v-if="!loading && !error">
       <h1>{{ config.Title }}</h1>
       <h3>{{ config.Description }}</h3>
 
@@ -42,6 +42,7 @@
 import Vue from 'vue';
 import ChartGroup from '@/components/ChartGroup.vue';
 
+import { iterateSuites } from '@/lib/series';
 import { Config, Run, ConfigChartGroup, ConfigChartGroupChart } from '@/generated';
 
 type AppState = {
@@ -65,19 +66,19 @@ export default Vue.extend({
   computed: {
     chartGroups(): ConfigChartGroup[] {
       if (this.config.ChartGroups && this.config.ChartGroups.length > 0) return this.config.ChartGroups;
-      // TODO: generate chart groups from benchmark runs
+
+      // group by package by default
+      const suites: { [pkg: string]: boolean } = {};
+      iterateSuites(this.benchmarks, (s) => { suites[s.Pkg] = true; });
       return [
         new ConfigChartGroup({
           Name: 'Benchmarks',
-          Description: 'All detected benchmarks - configure using `gobenchdata-web.json`',
-          Charts: [
-            new ConfigChartGroupChart({
-              Name: 'Results',
-              Description: 'All detected benchmarks',
-              Package: '.',
-              Benchmarks: ['.'],
-            }),
-          ],
+          Description: 'All detected benchmarks, grouped by Package',
+          Charts: Object.keys(suites).sort().map((pkg) => new ConfigChartGroupChart({
+            Name: pkg,
+            Package: pkg,
+            Benchmarks: ['.'],
+          })),
         }),
       ];
     },
