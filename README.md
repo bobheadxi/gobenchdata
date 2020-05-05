@@ -10,6 +10,8 @@
 a tool for inspecting `go test -bench` data, and a
 [GitHub Action](https://github.com/features/actions) for continuous benchmarking.
 
+> :wave: I am currently working on `gobenchdata@v1`, which will bring significant changes to the GitHub Action and web visualization - if you currently use `gobenchdata`, I'd love to hear from you over at the [`gobenchdata@v1` tracking issue](https://github.com/bobheadxi/gobenchdata/issues/36)!
+
 <a href="https://gobenchdata.bobheadxi.dev/" target="_blank">
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
 </a>
