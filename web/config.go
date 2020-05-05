@@ -23,9 +23,14 @@ type Chart struct {
 	Name        string
 	Description string
 
-	// Regex matcher
+	// Regex matcher when looking for benchmarks
 	Package string
 
-	// Regex matchers
+	// Regex matchers - each matcher will be treated as a series
 	Benchmarks []string
+
+	// empty for all, otherwise fill
+	// builtins: 'NsPerOp' | 'Mem.BytesPerOp' | 'Mem.AllocsPerOp'
+	// each metric is charted in a separate subchart
+	Metrics map[string]bool
 }

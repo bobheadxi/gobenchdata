@@ -4,7 +4,7 @@
     <p>{{ group.Description }}</p>
 
     <div v-for="c in group.Charts" :key="c.name">
-      <Chart :chart="c" :runs="runs" />
+      <Chart :config="c" :runs="runs" />
     </div>
   </div>
 </template>
@@ -12,8 +12,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Chart from '@/components/Chart.vue';
-
-import { Run, ConfigChartGroup } from '../generated';
+import { Run, ConfigChartGroup } from '@/generated';
 
 export default Vue.extend({
   name: 'ChartGroup',

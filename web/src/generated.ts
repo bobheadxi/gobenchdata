@@ -60,6 +60,7 @@ class ConfigChartGroupChart {
   Description: string;
   Package: string;
   Benchmarks: string[];
+  Metrics: { [key: string]: boolean };
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
@@ -67,6 +68,7 @@ class ConfigChartGroupChart {
     this.Description = ('Description' in d) ? d.Description as string : '';
     this.Package = ('Package' in d) ? d.Package as string : '';
     this.Benchmarks = ('Benchmarks' in d) ? d.Benchmarks as string[] : [];
+    this.Metrics = ('Metrics' in d) ? d.Metrics as { [key: string]: boolean } : {};
   }
 
   toObject(): any {

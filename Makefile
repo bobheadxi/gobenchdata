@@ -34,7 +34,7 @@ check-web:
 	(cd web ; npm run lint)
 
 .PHONY: demo
-demo: all bench bench2 bench3 serve
+demo: all bench bench2 bench3
 
 .PHONY: bench
 bench bench2 bench3:

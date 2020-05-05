@@ -17,8 +17,6 @@
       </div>
 
       <hr />
-
-      {{ benchmarks }}
     </div>
   </div>
 </template>
@@ -27,7 +25,7 @@
 import Vue from 'vue';
 import ChartGroup from '@/components/ChartGroup.vue';
 
-import { Config, Run, ConfigChartGroup, ConfigChartGroupChart } from './generated';
+import { Config, Run, ConfigChartGroup, ConfigChartGroupChart } from '@/generated';
 
 type AppState = {
   loading: boolean;
@@ -59,6 +57,8 @@ export default Vue.extend({
             new ConfigChartGroupChart({
               Name: 'test chart',
               Description: 'a test chart',
+              Package: '**',
+              Benchmarks: ['**'],
             }),
           ],
         }),
@@ -71,7 +71,7 @@ export default Vue.extend({
   methods: {
     async load() {
       try {
-        const configResp = await fetch('/gobenchdata-web-config.json');
+        const configResp = await fetch('/gobenchdata-web.json');
         if (configResp.status > 400) throw new Error(`${configResp.status}: failed to load config`);
 
         const config = new Config(await configResp.json());

@@ -11,10 +11,12 @@ import (
 //go:generate npm run build
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
 
+func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.json") }
+
 // GenerateApp dumps the web app template into the provided directory
-func GenerateApp(dir string, defaultConfig Config) error {
+func GenerateApp(dir string) error {
 	// clear directory of everything except config
-	appConfigPath := path.Join(dir, "gobenchdata-web-config.json")
+	appConfigPath := defaultConfigPath(dir)
 	dirs, err := ioutil.ReadDir(dir)
 	if err != nil {
 		return fmt.Errorf("cannot access target directory: %w", err)
@@ -39,15 +41,26 @@ func GenerateApp(dir string, defaultConfig Config) error {
 		}
 	}
 
-	// generate config if not exists
-	if _, err := os.Stat(appConfigPath); os.IsNotExist(err) {
-		println("generating configuration")
-		b, _ := json.MarshalIndent(&defaultConfig, "", "  ")
-		if err := ioutil.WriteFile(appConfigPath, b, os.ModePerm); err != nil {
-			return fmt.Errorf("failed to generate configuration: %w", err)
+	return nil
+}
+
+// GenerateConfig generates configuration for the web app
+func GenerateConfig(dir string, defaultConfig Config, override bool) error {
+	appConfigPath := defaultConfigPath(dir)
+
+	// check for existing
+	if !override {
+		if _, err := os.Stat(appConfigPath); os.IsExist(err) {
+			return fmt.Errorf("found existing configuration: %w", err)
 		}
 	} else {
-		println("found existing web app configuration")
+		os.Remove(appConfigPath)
+	}
+
+	// generate configuration
+	b, _ := json.MarshalIndent(&defaultConfig, "", "  ")
+	if err := ioutil.WriteFile(appConfigPath, b, os.ModePerm); err != nil {
+		return fmt.Errorf("failed to generate configuration: %w", err)
 	}
 
 	return nil
