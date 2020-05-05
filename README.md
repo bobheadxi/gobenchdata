@@ -42,34 +42,14 @@ It is available as a GitHub action or a command-line application.
 ## GitHub Action
 
 `gobenchdata` can be used as GitHub Action for uploading Go benchmark data as
-JSON to `gh-pages` and visualizing it with a generated web app (using `gobenchdata-web`)
-or your own web application.
+JSON to `gh-pages` and visualizing it with a generated web app or your own web application.
 
 ### Setup
 
 For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions):
 
 ```yml
-name: Benchmark
-on:
-  push:
-    branches: [ master ]
-
-jobs:
-  benchmark:
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout
-      uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-    - name: gobenchdata to gh-pages
-      uses: bobheadxi/gobenchdata@v0.5.1
-      with:
-        PRUNE_COUNT: 30
-        GO_TEST_FLAGS: -cpu 1,2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+TODO
 ```
 
 Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
@@ -132,7 +112,7 @@ instead.
 Instead of publishing results, benchmark output can be used to pass and fail pull requests
 using `CHECKS: true`. To get started, set up a file called `gobenchdata-checks.json`:
 
-TODO
+TODO - configure thresholds for specific benchmarks using [minimatch](https://github.com/isaacs/minimatch)
 
 ### Visualisation
 
@@ -153,6 +133,10 @@ You can output the entire web application (to commit to Github pages, for exampl
 ```sh
 gobenchdata web generate .
 ```
+
+TODO - configure:
+* chart groups: group of charts
+* chart: a set of metrics to render (by name), each metric gets its own chart, matching on packages and benchmark names (using [minimatch](https://github.com/isaacs/minimatch))
 
 <br />
 
