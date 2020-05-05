@@ -114,7 +114,7 @@ instead.
 Instead of publishing results, benchmark output can be used to pass and fail pull requests
 using `CHECKS: true`. To get started, set up a file called `gobenchdata-checks.json`:
 
-TODO - configure thresholds for specific benchmarks using [minimatch](https://github.com/isaacs/minimatch)
+TODO - configure thresholds for specific benchmarks using regexp
 
 ### Visualisation
 
@@ -138,7 +138,7 @@ gobenchdata web generate .
 
 TODO - configure:
 * chart groups: group of charts
-* chart: a set of metrics to render (by name), each metric gets its own chart, matching on packages and benchmark names (using [minimatch](https://github.com/isaacs/minimatch))
+* chart: a set of metrics to render (by name), each metric gets its own chart, matching on packages and benchmark names (using regexp)
 
 <br />
 

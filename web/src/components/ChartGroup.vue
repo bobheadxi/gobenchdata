@@ -1,9 +1,9 @@
 <template>
   <div class="chart-group">
-    <h3>{{ group.Name }}</h3>
+    <h2>{{ group.Name }}</h2>
     <p>{{ group.Description }}</p>
 
-    <div v-for="c in group.Charts" :key="c.name">
+    <div v-for="c in group.Charts" :key="c.name" class="chart">
       <Chart :config="c" :runs="runs" />
     </div>
   </div>
@@ -12,6 +12,11 @@
 <style lang="scss">
 .chart-group {
   margin-top: 2 * $gap;
+
+  .chart {
+    margin-top: $gap;
+    margin-bottom: $gap;
+  }
 }
 </style>
 

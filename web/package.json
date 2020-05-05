@@ -10,7 +10,6 @@
   "dependencies": {
     "apexcharts": "^3.19.0",
     "core-js": "^3.6.4",
-    "minimatch": "^3.0.4",
     "vue": "^2.6.11",
     "vue-apexcharts": "^1.5.3"
   },

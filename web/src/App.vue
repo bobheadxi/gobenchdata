@@ -10,7 +10,7 @@
     <!-- okay state -->
     <div v-else>
       <h1>{{ config.Title }}</h1>
-      <h2>{{ config.Description }}</h2>
+      <h3>{{ config.Description }}</h3>
 
       <div v-for="g in chartGroups" :key="g.name">
         <ChartGroup :group="g" :runs="benchmarks" />
@@ -68,14 +68,14 @@ export default Vue.extend({
       // TODO: generate chart groups from benchmark runs
       return [
         new ConfigChartGroup({
-          Name: 'test group',
-          Description: 'a test group',
+          Name: 'Benchmarks',
+          Description: 'All detected benchmarks - configure using `gobenchdata-web.json`',
           Charts: [
             new ConfigChartGroupChart({
-              Name: 'test chart',
-              Description: 'a test chart',
-              Package: '**',
-              Benchmarks: ['**'],
+              Name: 'Results',
+              Description: 'All detected benchmarks',
+              Package: '.',
+              Benchmarks: ['.'],
             }),
           ],
         }),

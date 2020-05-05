@@ -1,6 +1,7 @@
 <template>
   <div class="chart">
-    <h4>{{ config.Name }}</h4>
+    <h3>{{ config.Name }}</h3>
+    <p>{{ description }}</p>
     <div v-if="error">{{ error }}</div>
     <div v-else class="chart-set">
       <div v-for="c in generateCharts()" :key="c.metric" class="metric">
@@ -31,6 +32,10 @@
       @media (max-width: $touch) {
         width: 100%
       }
+
+      .chart-container {
+        height: 520px;
+      }
     }
   }
 }
@@ -39,7 +44,6 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { ApexOptions } from 'apexcharts';
-import { Minimatch } from 'minimatch';
 import { Run, ConfigChartGroupChart } from '@/generated';
 import { generateSeries } from '@/lib/series';
 
@@ -56,20 +60,26 @@ export default Vue.extend({
     },
   },
   data: () => ({ error: undefined }),
+  computed: {
+    description(): string {
+      return this.config.Description
+        || `"Package": "${this.config.Package}", "Benchmarks": ${JSON.stringify(this.config.Benchmarks)}`;
+    },
+  },
   methods: {
     generateCharts(): { metric: string; options: ApexOptions }[] {
       try {
-        // use https://github.com/isaacs/minimatch syntax
-        const pkgMatcher = new Minimatch(this.config.Package).makeRe();
-        const benchMatchers = this.config.Benchmarks.map((b) => new Minimatch(b).makeRe());
+        const pkgMatcher = new RegExp(this.config.Package || '.');
+        const benchMatchers = this.config.Benchmarks.map((b) => new RegExp(b || '.'));
+        if (benchMatchers.length === 0) benchMatchers.push(new RegExp('.'));
         const seriesByMetric = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.Metrics);
 
-        const results = Object.keys(seriesByMetric).map((m): { metric: string; options: ApexOptions } => ({
+        const generatedCharts = Object.keys(seriesByMetric).map((m): { metric: string; options: ApexOptions } => ({
           metric: m,
           options: {
             chart: {
               type: 'line',
-              height: 400,
+              height: 500,
             },
             markers: {
             },
@@ -80,9 +90,10 @@ export default Vue.extend({
             series: seriesByMetric[m],
           },
         }));
-        console.log(results);
-        return results;
+        console.log(`chart ${this.config.Name}`, generatedCharts);
+        return generatedCharts || [];
       } catch (err) {
+        console.error(`chart ${this.config.Name}`, this.config, err);
         this.error = err;
         return [];
       }
