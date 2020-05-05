@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="chart-group">
     <h3>{{ group.Name }}</h3>
     <p>{{ group.Description }}</p>
 
@@ -8,6 +8,12 @@
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.chart-group {
+  margin-top: 2 * $gap;
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue';
@@ -31,7 +37,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped lang="scss">
-
-</style>

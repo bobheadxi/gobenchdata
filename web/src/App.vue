@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div v-if="loading">
       loading...
     </div>
@@ -15,11 +15,30 @@
       <div v-for="g in chartGroups" :key="g.name">
         <ChartGroup :group="g" :runs="benchmarks" />
       </div>
+    </div>
 
-      <hr />
+    <hr />
+
+    <div>
+      <p>generated with <a href="https://bobheadxi.dev/gobenchdata">gobenchdata</a></p>
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.app {
+  padding-left: $gap;
+  padding-right: $gap;
+
+  font-family: 'Fira Code', monospace;
+  text-align: center;
+
+  hr {
+    margin-top: 2 * $gap;
+    margin-bottom: 2 * $gap;
+  }
+}
+</style>
 
 <script lang="ts">
 import Vue from 'vue';
@@ -89,7 +108,3 @@ export default Vue.extend({
   },
 });
 </script>
-
-<style scoped lang="scss">
-
-</style>

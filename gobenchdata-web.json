@@ -1,0 +1,6 @@
+{
+  "Title": "gobenchdata benchmarks",
+  "Description": "My benchmarks!",
+  "BenchmarksFile": "benchmarks.json",
+  "ChartGroups": null
+}

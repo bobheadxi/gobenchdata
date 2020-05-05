@@ -34,9 +34,12 @@ check-web:
 	(cd web ; npm run lint)
 
 .PHONY: demo
-demo: all bench bench2 bench3
+demo: all
+
+.PHONY: benches
+benches: bench bench2 bench3 bench4 bench5 bench6
 
 .PHONY: bench
-bench bench2 bench3:
-	go test -cpu 1,2 -benchtime 10000x -bench . -benchmem ./... | gobenchdata --json benchmarks.json --append
+bench bench2 bench3 bench4 bench5 bench6:
+	go test -cpu 1,2 -benchtime 10000x -bench . -benchmem ./... | ./gobenchdata --json benchmarks.json --append
 	cp ./benchmarks.json ./web/public/benchmarks.json
