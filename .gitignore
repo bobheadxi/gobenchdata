@@ -3,6 +3,7 @@ bench.json
 tmp
 gobenchdata
 dist
+gobenchdata-web.json
 
 # dependencies
 vendor
