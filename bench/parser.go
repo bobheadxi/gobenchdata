@@ -113,6 +113,8 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 			bench.Mem.BytesPerOp, err = strconv.Atoi(value)
 		case "allocs/op":
 			bench.Mem.AllocsPerOp, err = strconv.Atoi(value)
+		case "MB/s":
+			bench.Mem.MBPerSec, err = strconv.ParseFloat(value, 64)
 		default:
 			if bench.Custom == nil {
 				bench.Custom = make(map[string]float64)

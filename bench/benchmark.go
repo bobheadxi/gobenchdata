@@ -57,4 +57,5 @@ type Benchmark struct {
 type Mem struct {
 	BytesPerOp  int
 	AllocsPerOp int
+	MBPerSec    float64
 }
