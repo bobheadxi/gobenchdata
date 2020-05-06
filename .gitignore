@@ -5,6 +5,7 @@ gobenchdata
 dist
 gobenchdata-web.json
 gobenchdata-web.yml
+/gobenchdata-checks.yml
 
 # dependencies
 vendor

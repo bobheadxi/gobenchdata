@@ -53,6 +53,22 @@ func output(results []bench.Run) {
 	}
 }
 
+func load(files ...string) []bench.RunHistory {
+	hist := []bench.RunHistory{}
+	for _, f := range files {
+		b, err := ioutil.ReadFile(f)
+		if err != nil {
+			panic(err)
+		}
+		var runs bench.RunHistory
+		if err := json.Unmarshal(b, &runs); err != nil {
+			panic(err)
+		}
+		hist = append(hist, runs)
+	}
+	return hist
+}
+
 func showHelp() {
 	println(helpText)
 	println("flags:")

@@ -21,6 +21,20 @@ type Run struct {
 	Suites  []Suite
 }
 
+// FindBenchmark returns benchmark by package and bench name
+func (r *Run) FindBenchmark(pkg, bench string) (*Benchmark, bool) {
+	for _, s := range r.Suites {
+		if s.Pkg == pkg {
+			for _, b := range s.Benchmarks {
+				if b.Name == bench {
+					return &b, true
+				}
+			}
+		}
+	}
+	return nil, false
+}
+
 // Suite is a suite of benchmark runs
 type Suite struct {
 	Goos       string

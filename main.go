@@ -12,6 +12,7 @@ import (
 	"github.com/spf13/pflag"
 
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/checks"
 	"go.bobheadxi.dev/gobenchdata/internal"
 	"go.bobheadxi.dev/gobenchdata/web"
 )
@@ -42,11 +43,16 @@ basic usage:
 
 other commands:
 
-  merge [files]             merge gobenchdata results
-  web generate [directory]  generate web application in directory
-  web serve [port]          serve web application using './gobenchdata-config.json'
-  version                   show gobenchdata version
-  help                      show help text
+  merge [files]                  merge gobenchdata results
+
+  web generate [directory]       generate web application in directory
+  web serve [port]               serve web application using './gobenchdata-config.yml'
+
+  checks generate                generate checks configuration
+  checks eval [base] [current]   evaluate checks defined in './gobenchdata-checks.yml'
+
+  version                        show gobenchdata version
+  help                           show help text
 `
 
 func main() {
@@ -55,6 +61,7 @@ func main() {
 	// run command if provided
 	if len(pflag.Args()) > 0 {
 		switch cmd := pflag.Args()[0]; cmd {
+		// gobenchdata version
 		case "version":
 			if Version == "" {
 				println("gobenchdata version unknown")
@@ -62,10 +69,12 @@ func main() {
 				println("gobenchdata " + Version)
 			}
 
+		// gobenchdata help
 		case "help":
 			showHelp()
 			os.Exit(0)
 
+		// gobenchdata merge
 		case "merge":
 			args := pflag.Args()[1:]
 			if len(args) < 1 {
@@ -73,6 +82,7 @@ func main() {
 			}
 			merge(args...)
 
+		// gobenchdata web
 		case "web":
 			if len(pflag.Args()) < 2 {
 				showHelp()
@@ -133,8 +143,47 @@ func main() {
 				os.Exit(1)
 			}
 
+		// gobenchdata checks
 		case "checks":
-			panic("TODO: not yet implemented")
+			if len(pflag.Args()) < 2 {
+				showHelp()
+				os.Exit(1)
+			}
+			switch checksCmd := pflag.Args()[1]; checksCmd {
+			case "generate":
+				if err := checks.GenerateConfig("."); err != nil {
+					panic(err)
+				}
+			case "eval":
+				cfg, err := checks.LoadConfig(".")
+				if err != nil {
+					panic(err)
+				}
+				args := pflag.Args()[2:]
+				if len(args) != 2 {
+					panic("two targets required")
+				}
+				histories := load(args[0], args[1])
+				res, err := checks.Evaluate(cfg.Checks, histories[0], histories[1])
+				if err != nil {
+					panic(err)
+				}
+
+				b, err := json.MarshalIndent(res, "", "  ")
+				if err != nil {
+					panic(err)
+				}
+				if *jsonOut == "" {
+					println(string(b))
+				} else {
+					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+						panic(err)
+					}
+				}
+			default:
+				showHelp()
+				os.Exit(1)
+			}
 
 		default:
 			showHelp()
