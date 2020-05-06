@@ -4,6 +4,7 @@ tmp
 gobenchdata
 dist
 gobenchdata-web.json
+gobenchdata-web.yml
 
 # dependencies
 vendor

@@ -1,6 +1,6 @@
 <template>
   <div class="chart">
-    <h3>{{ config.Name }}</h3>
+    <h3>{{ config.name }}</h3>
     <p>{{ description }}</p>
     <div v-if="error">{{ error }}</div>
     <div v-else class="chart-set">
@@ -62,17 +62,17 @@ export default Vue.extend({
   data: () => ({ error: undefined }),
   computed: {
     description(): string {
-      return this.config.Description
-        || `"Package": "${this.config.Package}", "Benchmarks": ${JSON.stringify(this.config.Benchmarks)}`;
+      return this.config.description
+        || `"Package": "${this.config.package}", "Benchmarks": ${JSON.stringify(this.config.benchmarks)}`;
     },
   },
   methods: {
     generateCharts(): { metric: string; options: ApexOptions }[] {
       try {
-        const pkgMatcher = new RegExp(this.config.Package || '.');
-        const benchMatchers = this.config.Benchmarks.map((b) => new RegExp(b || '.'));
+        const pkgMatcher = new RegExp(this.config.package || '.');
+        const benchMatchers = this.config.benchmarks.map((b) => new RegExp(b || '.'));
         if (benchMatchers.length === 0) benchMatchers.push(new RegExp('.'));
-        const seriesByMetric = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.Metrics);
+        const seriesByMetric = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.metrics);
 
         const generatedCharts = Object.keys(seriesByMetric).map((m): { metric: string; options: ApexOptions } => ({
           metric: m,
@@ -90,10 +90,10 @@ export default Vue.extend({
             series: seriesByMetric[m],
           },
         }));
-        console.log(`chart ${this.config.Name}`, generatedCharts);
+        console.log(`chart ${this.config.name}`, generatedCharts);
         return generatedCharts || [];
       } catch (err) {
-        console.error(`chart ${this.config.Name}`, this.config, err);
+        console.error(`chart ${this.config.name}`, this.config, err);
         this.error = err;
         return [];
       }

@@ -56,19 +56,19 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 // classes
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.ConfigChartGroupChart
 class ConfigChartGroupChart {
-  Name: string;
-  Description: string;
-  Package: string;
-  Benchmarks: string[];
-  Metrics: { [key: string]: boolean };
+  name: string;
+  description: string;
+  package: string;
+  benchmarks: string[];
+  metrics: { [key: string]: boolean };
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
-    this.Name = ('Name' in d) ? d.Name as string : '';
-    this.Description = ('Description' in d) ? d.Description as string : '';
-    this.Package = ('Package' in d) ? d.Package as string : '';
-    this.Benchmarks = ('Benchmarks' in d) ? d.Benchmarks as string[] : [];
-    this.Metrics = ('Metrics' in d) ? d.Metrics as { [key: string]: boolean } : {};
+    this.name = ('name' in d) ? d.name as string : '';
+    this.description = ('description' in d) ? d.description as string : '';
+    this.package = ('package' in d) ? d.package as string : '';
+    this.benchmarks = ('benchmarks' in d) ? d.benchmarks as string[] : [];
+    this.metrics = ('metrics' in d) ? d.metrics as { [key: string]: boolean } : {};
   }
 
   toObject(): any {
@@ -79,15 +79,15 @@ class ConfigChartGroupChart {
 
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.ConfigChartGroup
 class ConfigChartGroup {
-  Name: string;
-  Description: string;
-  Charts: ConfigChartGroupChart[];
+  name: string;
+  description: string;
+  charts: ConfigChartGroupChart[];
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
-    this.Name = ('Name' in d) ? d.Name as string : '';
-    this.Description = ('Description' in d) ? d.Description as string : '';
-    this.Charts = Array.isArray(d.Charts) ? d.Charts.map((v: any) => new ConfigChartGroupChart(v)) : [];
+    this.name = ('name' in d) ? d.name as string : '';
+    this.description = ('description' in d) ? d.description as string : '';
+    this.charts = Array.isArray(d.charts) ? d.charts.map((v: any) => new ConfigChartGroupChart(v)) : [];
   }
 
   toObject(): any {
@@ -98,17 +98,17 @@ class ConfigChartGroup {
 
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.Config
 class Config {
-  Title: string;
-  Description: string;
-  BenchmarksFile: string | null;
-  ChartGroups: ConfigChartGroup[];
+  title: string;
+  description: string;
+  benchmarksFile: string | null;
+  chartGroups: ConfigChartGroup[];
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
-    this.Title = ('Title' in d) ? d.Title as string : '';
-    this.Description = ('Description' in d) ? d.Description as string : '';
-    this.BenchmarksFile = ('BenchmarksFile' in d) ? d.BenchmarksFile as string : null;
-    this.ChartGroups = Array.isArray(d.ChartGroups) ? d.ChartGroups.map((v: any) => new ConfigChartGroup(v)) : [];
+    this.title = ('title' in d) ? d.title as string : '';
+    this.description = ('description' in d) ? d.description as string : '';
+    this.benchmarksFile = ('benchmarksFile' in d) ? d.benchmarksFile as string : null;
+    this.chartGroups = Array.isArray(d.chartGroups) ? d.chartGroups.map((v: any) => new ConfigChartGroup(v)) : [];
   }
 
   toObject(): any {

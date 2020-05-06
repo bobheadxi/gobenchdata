@@ -11,7 +11,8 @@
     "apexcharts": "^3.19.0",
     "core-js": "^3.6.4",
     "vue": "^2.6.11",
-    "vue-apexcharts": "^1.5.3"
+    "vue-apexcharts": "^1.5.3",
+    "yaml": "^1.9.2"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.26.0",

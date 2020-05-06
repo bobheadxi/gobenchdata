@@ -1,17 +1,18 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+
+	"gopkg.in/yaml.v2"
 )
 
 //go:generate npm run build
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
 
-func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.json") }
+func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.yml") }
 
 // GenerateApp dumps the web app template into the provided directory
 func GenerateApp(dir string, it TemplateIndexHTML) error {
@@ -64,7 +65,7 @@ func GenerateConfig(dir string, defaultConfig Config, override bool) error {
 	}
 
 	// generate configuration
-	b, _ := json.MarshalIndent(&defaultConfig, "", "  ")
+	b, _ := yaml.Marshal(&defaultConfig)
 	if err := ioutil.WriteFile(appConfigPath, b, os.ModePerm); err != nil {
 		return fmt.Errorf("failed to generate configuration: %w", err)
 	}

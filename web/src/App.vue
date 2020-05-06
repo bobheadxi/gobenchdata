@@ -9,8 +9,8 @@
 
     <!-- okay state -->
     <div v-if="!loading && !error">
-      <h1>{{ config.Title }}</h1>
-      <h3>{{ config.Description }}</h3>
+      <h1>{{ config.title }}</h1>
+      <h3>{{ config.description }}</h3>
 
       <div v-for="g in chartGroups" :key="g.name">
         <ChartGroup :group="g" :runs="benchmarks" />
@@ -40,6 +40,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import yaml from 'yaml';
 import ChartGroup from '@/components/ChartGroup.vue';
 
 import { iterateSuites } from '@/lib/series';
@@ -65,7 +66,7 @@ export default Vue.extend({
   }),
   computed: {
     chartGroups(): ConfigChartGroup[] {
-      if (this.config.ChartGroups && this.config.ChartGroups.length > 0) return this.config.ChartGroups;
+      if (this.config.chartGroups && this.config.chartGroups.length > 0) return this.config.chartGroups;
 
       // group by package by default
       const suites: { [pkg: string]: boolean } = {};
@@ -89,20 +90,25 @@ export default Vue.extend({
   methods: {
     async load() {
       try {
-        const configResp = await fetch('./gobenchdata-web.json');
+        // load config
+        const configResp = await fetch('./gobenchdata-web.yml');
         if (configResp.status > 400) {
           console.error(configResp);
           throw new Error(`${configResp.status}: failed to load config`);
         }
+        const raw = await configResp.text();
+        console.log(raw);
+        const config = new Config(yaml.parse(raw));
 
-        const config = new Config(await configResp.json());
-        const benchmarksResp = await fetch(`./${config.BenchmarksFile || 'benchmarks.json'}`);
+        // load benchmark runs
+        const benchmarksResp = await fetch(`./${config.benchmarksFile || 'benchmarks.json'}`);
         if (benchmarksResp.status > 400) {
           console.error(benchmarksResp);
           throw new Error(`${benchmarksResp.status}: failed to load benchmarks`);
         }
-
         const runs = await benchmarksResp.json();
+
+        // update state
         this.benchmarks = runs.map((r: any) => new Run(r));
         this.config = config;
         console.log('config loaded', { config });

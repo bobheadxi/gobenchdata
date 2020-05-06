@@ -1,0 +1,19 @@
+title: gobenchdata web
+description: Benchmarks generated using 'gobenchdata'
+benchmarksFile: benchmarks.json
+chartGroups:
+  - name: Demo Benchmarks
+    description: |
+      This is a demo for gobenchdata, a tool and GitHub action for setting up simple continuous
+      benchmarks to monitor performance improvements and regressions in your Golang benchmarks!
+    charts:
+      - name: specify charts by package
+        package: go.bobheadxi.dev\/gobenchdata\/demo
+      - name: match on specific benchmarks across packages with glob patterns
+        benchmarks: [ 'BenchmarkFib.' ]
+  - name: More Demo Benchmarks
+    description: Create multiple groups of benchmarks
+    charts:
+      - name: match by a combination of package and benchmarks
+        package: go.bobheadxi.dev\/gobenchdata\/.
+        benchmarks: [ 'BenchmarkPizzas.', '.FibSlow.' ]
