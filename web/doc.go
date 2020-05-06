@@ -1,2 +1,2 @@
-// Package web contains to gobenchdata web application
+// Package web embeds the gobenchdata web application, configuration, and utilities
 package web
