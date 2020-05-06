@@ -19,5 +19,15 @@ You can also merge results:
 
 	gobenchdata merge file1.json file2.json file3.json
 
+Visualize the results:
+
+	gobenchdata web serve
+
+Compare results:
+
+	gobenchdata checks generate # generates config file to define checks
+	gobenchdata checks eval base-benchmarks.json current-benchmarks.json
+
+Learn more in the repository README: https://github.com/bobheadxi/gobenchdata
 */
 package main
