@@ -64,7 +64,7 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
     --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
     --json ${CHECKS_OUTPUT}
-  RESULTS=$(cat results)
+  RESULTS=$(cat ${CHECKS_OUTPUT})
   echo "::set-output name=checks-results::$RESULTS"
 
   # output results
