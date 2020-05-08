@@ -1,7 +1,7 @@
 <template>
   <div class="chart-group">
     <h2>{{ group.name }}</h2>
-    <p>{{ group.description }}</p>
+    <p v-html="group.description"></p>
 
     <div v-for="c in group.charts" :key="c.name" class="chart">
       <Chart :config="c" :runs="runs" :repo="repo" />

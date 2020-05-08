@@ -1,7 +1,7 @@
 <template>
   <div class="chart">
     <h3>{{ config.name }}</h3>
-    <p>{{ description }}</p>
+    <p v-html="description"></p>
     <div v-if="error">{{ error }}</div>
     <div v-else class="chart-set">
       <div v-for="c in generateCharts()" :key="c.metric" class="metric">

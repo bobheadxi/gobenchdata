@@ -10,7 +10,7 @@
     <!-- okay state -->
     <div v-if="!loading && !error">
       <h1>{{ config.title }}</h1>
-      <h3>{{ config.description }}</h3>
+      <h3 v-html="config.description"></h3>
 
       <div v-for="g in chartGroups" :key="g.name">
         <ChartGroup :group="g" :runs="benchmarks" :repo="config.repository" />
@@ -111,7 +111,7 @@ export default Vue.extend({
         // update state
         this.benchmarks = runs.map((r: any) => new Run(r));
         this.config = config;
-        console.log('config loaded', { config });
+        console.log('data loaded', { config, runs: this.benchmarks.length });
       } catch (err) {
         this.error = err;
       }

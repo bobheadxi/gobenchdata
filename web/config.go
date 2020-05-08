@@ -3,15 +3,16 @@ package web
 import (
 	"encoding/json"
 	"fmt"
+	"html/template"
 	"io/ioutil"
 )
 
 // Config is the configuration template for the web app.
 type Config struct {
-	Title          string  `json:"title" yaml:"title"`
-	Description    string  `json:"description" yaml:"description"`
-	Repository     string  `json:"repository" yaml:"repository"`
-	BenchmarksFile *string `json:"benchmarksFile" yaml:"benchmarksFile"`
+	Title          string        `json:"title" yaml:"title"`
+	Description    template.HTML `json:"description" yaml:"description"`
+	Repository     string        `json:"repository" yaml:"repository"`
+	BenchmarksFile *string       `json:"benchmarksFile" yaml:"benchmarksFile"`
 
 	// leave blank to generate per-package
 	ChartGroups []ChartGroup `json:"chartGroups" yaml:"chartGroups"`
@@ -19,16 +20,16 @@ type Config struct {
 
 // ChartGroup describes a group of charts
 type ChartGroup struct {
-	Name        string `json:"name" yaml:"name"`
-	Description string `json:"description" yaml:"description"`
+	Name        string        `json:"name" yaml:"name"`
+	Description template.HTML `json:"description" yaml:"description"`
 
 	Charts []Chart `json:"charts" yaml:"charts"`
 }
 
 // Chart describes a chart
 type Chart struct {
-	Name        string `json:"name" yaml:"name"`
-	Description string `json:"description" yaml:"description"`
+	Name        string        `json:"name" yaml:"name"`
+	Description template.HTML `json:"description" yaml:"description"`
 
 	// Regex matcher when looking for benchmarks
 	Package string `json:"package" yaml:"package"`
