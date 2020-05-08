@@ -63,7 +63,8 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
   gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
     --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
-    --json ${CHECKS_OUTPUT}
+    --json ${CHECKS_OUTPUT} \
+    --flat
   RESULTS=$(cat ${CHECKS_OUTPUT})
   echo "::set-output name=checks-results::$RESULTS"
 
@@ -81,9 +82,9 @@ if [[ "${INPUT_PUBLISH}" == "true" ]]; then
   if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
     echo '📈 Existing report found - merging...'
     gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
-      --flat \
       --prune "${INPUT_PRUNE_COUNT}" \
-      --json "${INPUT_BENCHMARKS_OUT}"
+      --json "${INPUT_BENCHMARKS_OUT}" \
+      --flat
   else
     cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
   fi
