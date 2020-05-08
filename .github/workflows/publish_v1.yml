@@ -1,6 +1,7 @@
 name: Publish v1
 on:
-  release: [ published ]
+  release:
+    types: [ published ]
 
 jobs:
   publish_v1:
