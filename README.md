@@ -16,7 +16,6 @@
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
 </a>
 
-- [About](#about)
 - [GitHub Action](#github-action)
   - [Setup](#setup)
   - [Configuration](#configuration)
@@ -26,16 +25,10 @@
     - [`env`](#env)
   - [Pull Request Checks](#pull-request-checks)
   - [Visualisation](#visualisation)
-- [`gobenchdata` CLI](#gobenchdata-cli)
+- [Command Line Interface](#command-line-interface)
 - [Development and Contributions](#development-and-contributions)
 
 <br />
-
-## About
-
-
-
-It is available as a GitHub action or a command-line application.
 
 <br />
 
@@ -49,7 +42,24 @@ JSON to `gh-pages` and visualizing it with a generated web app or your own web a
 For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions):
 
 ```yml
-TODO
+name: gobenchdata publish
+on: push
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+      with: { fetch-depth: 1 }
+    - name: gobenchdata publish
+      uses: ./
+      with:
+        PRUNE_COUNT: 30
+        GO_TEST_FLAGS: -cpu 1,2
+        PUBLISH: true
+        PUBLISH_BRANCH: gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 ```
 
 Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
@@ -70,7 +80,8 @@ Input variables are configured using
 
 ##### Publishing
 
-The default behaviour of the `gobenchdata` Action is to commit and publish to your repository's `gh-pages` branch.
+The following `inputs` enable publishing - this merges and publishes benchmark results to a
+repository and branch of your choice. This is most useful in conjunction with the [`gobenchdata` web application](#visualisation).
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
@@ -83,7 +94,8 @@ The default behaviour of the `gobenchdata` Action is to commit and publish to yo
 
 ##### Checks
 
-The following `inputs` are for enabling [Pull Request Checks](#pull-request-checks):
+The following `inputs` are for enabling [Pull Request Checks](#pull-request-checks), which allow
+you to watch for performance regressions in your pull requests.
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
@@ -104,7 +116,7 @@ Environment variables are configured using
 | `GITHUB_ACTOR`       | set by GitHub                 | the user to make commits as
 
 Note that for `GITHUB_TOKEN`, it seems that pushes to `gh-pages` made by the default
-`secrets.GITHUB_TOKEN` do not trigger page builds. This issue can be resolved by using
+`secrets.GITHUB_TOKEN` might not trigger page builds. This issue can be resolved by using
 a [personal access token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line)
 instead.
 
@@ -119,11 +131,14 @@ gobenchdata checks generate
 ```
 
 This will generate a file, `gobenchdata-checks.yml`, where you can configure what checks are
-executed.
+executed. The checks are run against any benchmarks that match given `package` and `benchmarks`
+values, which should be provided as [regular expressions](https://regexr.com/).
 
 <details>
 <summary>Simple Example</summary>
 <p>
+
+<!-- copy from './gobenchdata checks generate --checks.config ./tmp/gobenchdata-checks.yml' -->
 
 ```yml
 checks:
@@ -154,52 +169,85 @@ gobenchdata web generate --web.config-only .
 gobenchdata web serve # opens visualization in browser
 ```
 
-You can configure the web application using `gobenchdata-web.json`. TODO: documentation
+You can configure the web application using `gobenchdata-web.yml`. The configuration allows
+you to define groups of charts, where each group can be used to compare a set of benchmarks.
+Benchmarks are selected with [regular expressions](https://regexr.com/) by package and benchmark
+names provided in the configuration.
 
-You can output the entire web application (to commit to Github pages, for example) using:
+Note that in each set of compared benchmarks, every metric will get its own chart. You can
+select which metrics to display using the `metrics` option.
 
-```sh
-gobenchdata web generate .
+<details>
+<summary>Example</summary>
+<p>
+
+<!-- copy from './web/public/gobenchdata-web.yml' -->
+
+```yml
+title: gobenchdata web
+description: Benchmarks generated using 'gobenchdata'
+benchmarksFile: benchmarks.json
+chartGroups:
+  - name: Demo Benchmarks
+    description: |
+      This is a demo for gobenchdata, a tool and GitHub action for setting up simple continuous
+      benchmarks to monitor performance improvements and regressions in your Golang benchmarks!
+    charts:
+      - name: specify charts by package
+        package: go.bobheadxi.dev\/gobenchdata\/demo
+      - name: match on specific benchmarks across packages with glob patterns
+        benchmarks: [ 'BenchmarkFib.' ]
+  - name: More Demo Benchmarks
+    description: Create multiple groups of benchmarks
+    charts:
+      - name: match by a combination of package and benchmarks
+        package: go.bobheadxi.dev\/gobenchdata\/.
+        benchmarks: [ 'BenchmarkPizzas.', '.FibSlow.' ]
 ```
 
-TODO - configure:
-* chart groups: group of charts
-* chart: a set of metrics to render (by name), each metric gets its own chart, matching on packages and benchmark names (using regexp)
+</p>
+</details>
+
+You can output the entire web application (to publish to Github pages, for example) using:
+
+```sh
+gobenchdata web generate ./app
+```
 
 <br />
 
-## `gobenchdata` CLI
+## Command Line Interface
 
 `gobenchdata`, which the GitHub Action leverages to manage benchmark data,
 is also available as a CLI:
 
-```
+```sh
 go get -u go.bobheadxi.dev/gobenchdata
 gobenchdata help
 ```
 
 The easiest way to use the CLI is by piping the output of `go test -bench` to
-it:
+it - `gobenchdata` will consume the output and generate a JSON report for you.
 
 ```sh
 go test -bench . -benchmem ./... | gobenchdata --json bench.json
 ```
 
-You can then visualize the benchmark using the built-in web application:
+You can use this report to create your own charts, or just use the [built-in web application](#visualisation):
 
 ```sh
 gobenchdata web serve
 ```
 
-You can further customize the visualization by generating a configuration file:
+`gobenchdata` can also execute checks for you to help you ensure performance
+regressions don't happen:
 
 ```sh
-gobenchdata web generate --web.config .
+gobenchdata checks generate
+gobenchdata checks eval [base benchmarks] [current benchmarks]
 ```
 
-More detailed usage documentation and examples can be found in the
-[godocs](https://godoc.org/go.bobheadxi.dev/gobenchdata) or by running
-`gobenchdata help`.
+For more details on how to use checks, see the [pull request checks documentation](#pull-request-checks).
 
 <br />
 
