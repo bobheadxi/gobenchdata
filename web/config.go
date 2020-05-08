@@ -1,10 +1,11 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"html/template"
 	"io/ioutil"
+
+	"gopkg.in/yaml.v2"
 )
 
 // Config is the configuration template for the web app.
@@ -50,7 +51,7 @@ func OpenConfig(path string) (*Config, error) {
 		return nil, err
 	}
 	var conf Config
-	if err := json.Unmarshal(b, &conf); err != nil {
+	if err := yaml.Unmarshal(b, &conf); err != nil {
 		return nil, fmt.Errorf("could not read config at '%s': %w", path, err)
 	}
 	return &conf, nil

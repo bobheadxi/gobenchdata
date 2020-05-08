@@ -131,7 +131,7 @@ func main() {
 					port = pflag.Args()[2]
 				}
 				addr := "localhost:" + port
-				if existing, err := web.OpenConfig("./gobenchdata-web.json"); err != nil {
+				if existing, err := web.OpenConfig("./gobenchdata-web.yml"); err != nil {
 					if !os.IsNotExist(err) {
 						panic(err)
 					}
