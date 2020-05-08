@@ -31,6 +31,7 @@ var (
 	webIndexTitle = pflag.String("web.title", "gobenchdata web", "header <title> for 'gobenchdata web'")
 	webIndexHead  = pflag.StringArray("web.head", []string{}, "additional <head> elements for 'gobenchdata web'")
 
+	checksPretty     = pflag.Bool("checks.pretty", false, "output report as human-readable format instead of JSON")
 	checksConfigPath = pflag.String("checks.config", "gobenchdata-checks.yml", "path to checks configuraton file")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
@@ -171,22 +172,26 @@ func main() {
 				if err != nil {
 					panic(err)
 				}
-
-				var b []byte
-				if *flat {
-					b, err = json.Marshal(res)
+				if *checksPretty {
+					outputChecksReport(res)
 				} else {
-					b, err = json.MarshalIndent(res, "", "  ")
-				}
-				if err != nil {
-					panic(err)
-				}
-
-				if *jsonOut == "" {
-					println(string(b))
-				} else {
-					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+					var b []byte
+					if *flat {
+						b, err = json.Marshal(res)
+					} else {
+						b, err = json.MarshalIndent(res, "", "  ")
+					}
+					if err != nil {
 						panic(err)
+					}
+
+					if *jsonOut == "" {
+						println(string(b))
+					} else {
+						if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+							panic(err)
+						}
+						fmt.Printf("report output written to %s\n", *jsonOut)
 					}
 				}
 			case "report":
@@ -198,6 +203,8 @@ func main() {
 					panic(err)
 				}
 				outputChecksReport(results)
+
+				// exit with code corresponding to status
 				if results.Status != checks.StatusPass {
 					os.Exit(1)
 				}

@@ -244,7 +244,7 @@ regressions don't happen:
 
 ```sh
 gobenchdata checks generate
-gobenchdata checks eval [base benchmarks] [current benchmarks]
+gobenchdata checks eval ${base benchmarks} ${current benchmarks} --checks.pretty
 ```
 
 For more details on how to use checks, see the [pull request checks documentation](#pull-request-checks).
