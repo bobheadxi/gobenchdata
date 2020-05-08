@@ -12,6 +12,7 @@ jobs:
       with:
         PRUNE_COUNT: 30
         GO_TEST_FLAGS: -cpu 1,2
+        PUBLISH: true
         # TODO: update after release
         PUBLISH_REPO: bobheadxi/gobenchdata-v1-demo
         PUBLISH_BRANCH: master
