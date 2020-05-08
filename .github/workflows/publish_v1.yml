@@ -1,11 +1,10 @@
 name: publish@v1
 on:
-  release:
-    types: [ published ]
+  push:
+    tags: [ 'v1.*' ]
 
 jobs:
   publish_v1:
-    if: github.event_name == 'release' && contains(github.ref, 'v1')
     runs-on: ubuntu-latest
     steps:
     - name: checkout
