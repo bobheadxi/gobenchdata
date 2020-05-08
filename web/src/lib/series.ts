@@ -13,6 +13,7 @@ enum MetricBuiltins {
   NSPEROP = 'NsPerOp',
   MEM_BYPTESPEROP = 'Mem.BytesPerOp',
   MEM_ALLOCSPEROP = 'Mem.AllocsPerOp',
+  MEM_MBPERS = 'Mem.MBPerSec',
 }
 
 type ChartSet = { [metric: string]: ApexAxisChartSeries };
@@ -100,6 +101,9 @@ export function generateSeries(
           break;
         case MetricBuiltins.MEM_BYPTESPEROP:
           series.data.push({ x, y: bench.Mem.BytesPerOp });
+          break;
+        case MetricBuiltins.MEM_MBPERS:
+          series.data.push({ x, y: bench.Mem.MBPerSec });
           break;
         default:
         // assume custom if metric is not a builtin

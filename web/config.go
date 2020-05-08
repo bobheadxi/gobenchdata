@@ -36,7 +36,7 @@ type Chart struct {
 	Benchmarks []string `json:"benchmarks" yaml:"benchmarks"`
 
 	// empty for all, otherwise fill
-	// builtins: 'NsPerOp' | 'Mem.BytesPerOp' | 'Mem.AllocsPerOp'
+	// builtins: 'NsPerOp' | 'Mem.BytesPerOp' | 'Mem.AllocsPerOp' | 'Mem.MBPerSec'
 	// each metric is charted in a separate subchart
 	Metrics map[string]bool `json:"metrics" yaml:"metrics"`
 }
