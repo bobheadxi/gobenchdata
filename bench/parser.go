@@ -10,9 +10,14 @@ import (
 	"go.bobheadxi.dev/gobenchdata/internal"
 )
 
+// LineReader defines the API surface of bufio.Reader used by the parser
+type LineReader interface {
+	ReadLine() (line []byte, isPrefix bool, err error)
+}
+
 // Parser is gobenchdata's benchmark output parser
 type Parser struct {
-	in *bufio.Reader
+	in LineReader
 }
 
 // NewParser instantiates a new benchmark parser that reads from the given buffer
@@ -94,7 +99,7 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 	// runs - doesn't include units
 	tmp, split = internal.Popleft(split)
 	if bench.Runs, err = strconv.Atoi(tmp); err != nil {
-		return nil, fmt.Errorf("%s: could not parse runs: %v", bench.Name, err)
+		return nil, fmt.Errorf("%s: could not parse run: %w (line: %s)", bench.Name, err, line)
 	}
 
 	// parse metrics with units
