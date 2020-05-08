@@ -1,6 +1,7 @@
 package checks
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"sort"
@@ -8,7 +9,6 @@ import (
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
 	"go.bobheadxi.dev/gobenchdata/bench"
-	"gopkg.in/yaml.v2"
 )
 
 // Status describes result of a check
@@ -186,5 +186,5 @@ func LoadReport(path string) (*Report, error) {
 		return nil, fmt.Errorf("failed to open checks result: %w", err)
 	}
 	var res Report
-	return &res, yaml.Unmarshal(b, &res)
+	return &res, json.Unmarshal(b, &res)
 }
