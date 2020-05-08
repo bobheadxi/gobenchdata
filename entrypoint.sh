@@ -14,8 +14,8 @@ INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
 INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
 
 # pull request checks
-INPUT_CHECK="${INPUT_CHECK:-"false"}"
-INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.json"}"
+INPUT_CHECKS="${INPUT_CHECKS:-"false"}"
+INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
@@ -48,16 +48,33 @@ go test \
   | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
-# fetch publish destination
+# fetch published data
 echo
 echo "📚 Checking out ${INPUT_PUBLISH_REPO}@${INPUT_PUBLISH_BRANCH}..."
 cd /tmp/build
 git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_PUBLISH_REPO}.git .
 git checkout ${INPUT_PUBLISH_BRANCH}
-
-# generate output
 echo
-if [[ "${INPUT_CHECK}" == "false" ]]; then
+
+if [[ "${INPUT_CHECKS}" == "true" ]]; then
+
+  # check results against published
+  echo '🔎 Evaluating results against base runs...'
+  CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
+  gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
+    --checks.config "${INPUT_CHECKS_CONFIG}" \
+    --json ${CHECKS_OUTPUT}
+  RESULTS=$(cat results)
+  echo "::set-output name=checks-results::$RESULTS"
+
+  # output results
+  gobenchdata checks report ${CHECKS_OUTPUT}
+
+fi
+
+if [[ "${INPUT_PUBLISH}" == "true" ]]; then
+
+  # merge results with published
   echo '☝️ Updating results...'
   if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
     echo '📈 Existing report found - merging...'
@@ -68,16 +85,15 @@ if [[ "${INPUT_CHECK}" == "false" ]]; then
   else
     cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
   fi
-else
-  echo 'TODO: check against publish data'
-fi
 
-# publish results
-echo
-echo '📷 Committing and pushing new benchmark data...'
-git add .
-git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
-git push -f origin ${INPUT_PUBLISH_BRANCH}
+  # publish results
+  echo
+  echo '📷 Committing and pushing new benchmark data...'
+  git add .
+  git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
+  git push -f origin ${INPUT_PUBLISH_BRANCH}
+
+fi
 
 echo
 echo '🚀 Done!'

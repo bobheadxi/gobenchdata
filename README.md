@@ -74,10 +74,11 @@ The default behaviour of the `gobenchdata` Action is to commit and publish to yo
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
-| `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
-| `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
+| `PUBLISH`            | `false`                   | if `true`, publishes results
 | `PUBLISH_REPO`       |                           | an alternative repository to publish to
 | `PUBLISH_BRANCH`     | `gh-pages`                | branch to publish to
+| `PRUNE_COUNT`        | `0`                       | number of past runs to keep (`0` keeps everything)
+| `GIT_COMMIT_MESSAGE` | `"add new benchmark run"` | the commit message for the benchmark update
 | `BENCHMARKS_OUT`     | `benchmarks.json`         | destination path of benchmark data
 
 ##### Checks
@@ -86,7 +87,7 @@ The following `inputs` are for enabling [Pull Request Checks](#pull-request-chec
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
-| `CHECKS`             | `false`                   | if `true`, disables publishing and runs checks instead
+| `CHECKS`             | `false`                   | if `true`, runs checks and sets JSON results to `checks-results`
 | `CHECKS_CONFIG`      | `gobenchdata-checks.yml`  | path to checks configuration
 | `PUBLISH_REPO`       |                           | repository of benchmark data to check against
 | `PUBLISH_BRANCH`     | `gh-pages`                | branch of benchmark data to check against
