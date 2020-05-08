@@ -118,7 +118,7 @@ func outputChecksReport(r *checks.Report) {
 	}
 
 	meta := newTable(os.Stdout)
-	meta.SetHeader([]string{"", "Base", "Current", "Passed", "Failed", "Total"})
+	meta.SetHeader([]string{"", "Base", "Current", "Passed Checks", "Failed Checks", "Total"})
 	meta.Append([]string{
 		statusEmoji(r.Status), r.Base, r.Current, fmt.Sprintf("%d", checksPassed),
 		fmt.Sprintf("%d", checksFailed), fmt.Sprintf("%d", checksTotal),
