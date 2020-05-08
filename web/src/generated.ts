@@ -121,17 +121,20 @@ class Config {
 class RunSuiteBenchmarkMem {
   BytesPerOp: number;
   AllocsPerOp: number;
+  MBPerSec: number;
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
     this.BytesPerOp = ('BytesPerOp' in d) ? d.BytesPerOp as number : 0;
     this.AllocsPerOp = ('AllocsPerOp' in d) ? d.AllocsPerOp as number : 0;
+    this.MBPerSec = ('MBPerSec' in d) ? d.MBPerSec as number : 0;
   }
 
   toObject(): any {
     const cfg: any = {};
     cfg.BytesPerOp = 'number';
     cfg.AllocsPerOp = 'number';
+    cfg.MBPerSec = 'number';
     return ToObject(this, cfg);
   }
 }

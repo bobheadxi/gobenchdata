@@ -44,7 +44,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import { ApexOptions } from 'apexcharts';
-import { Run, ConfigChartGroupChart } from '@/generated';
+import { Run, ConfigChartGroupChart, ParseDate } from '@/generated';
 import { generateSeries } from '@/lib/series';
 
 export default Vue.extend({
@@ -80,13 +80,38 @@ export default Vue.extend({
             chart: {
               type: 'line',
               height: 500,
-            },
-            markers: {
+              events: {
+                click: (event, chartContext, config) => {
+                  const { dataPointIndex: id } = config;
+                  console.log(id);
+                },
+              },
             },
             dataLabels: {
               enabled: false,
             },
-            xaxis: {},
+            xaxis: {
+              tooltip: { enabled: false },
+              labels: {
+                show: false,
+                formatter: (date): string => {
+                  const d = ParseDate(date);
+                  const r = this.runs.find(r => {
+                    return ParseDate(r.Date).valueOf() === d.valueOf();
+                  });
+                  // Tue May 05 2020 hh:mm
+                  const formatted = `${d.toDateString()} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}`;
+                  return r && r.Version ? `${r.Version} (${formatted})` : formatted;
+                },
+              },
+            },
+            tooltip: {
+              y: {
+                formatter: (value): string => {
+                  return `${value} ${m}`;
+                },
+              },
+            },
             series: seriesByMetric[m],
           },
         }));

@@ -44,6 +44,10 @@ export function iterateBenchmarks(runs: Run[], func: (b: RunSuiteBenchmark, s: R
   });
 }
 
+function benchName(b: string): string {
+  return b.replace(/^(Benchmark)/, '');
+}
+
 /**
  * Generates one set ApexAxisChartSeries per metric for the provided group of pkg, benches
  * 
@@ -78,10 +82,10 @@ export function generateSeries(
       // add benchmark data
       for (let mID = 0; mID < metricKeys.length; mID += 1) {
         const metric = metricKeys[mID];
-        const existingSeries = index[metric].find((v) => v.name === bench.Name);
+        const existingSeries = index[metric].find((v) => v.name === benchName(bench.Name));
         if (!existingSeries) {
           index[metric].push({
-            name: bench.Name,
+            name: benchName(bench.Name),
             data: [],
           });
         }

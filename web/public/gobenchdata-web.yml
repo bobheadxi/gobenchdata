@@ -14,6 +14,9 @@ chartGroups:
   - name: More Demo Benchmarks
     description: Create multiple groups of benchmarks
     charts:
-      - name: match by a combination of package and benchmarks
+      - name: match by a combination of package and benchmarks, and only show specific metrics
         package: go.bobheadxi.dev\/gobenchdata\/.
         benchmarks: [ 'BenchmarkPizzas.', '.FibSlow.' ]
+        metrics:
+          NsPerOp: true
+          pizzas: true
