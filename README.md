@@ -8,8 +8,7 @@
 [![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
 [![Demo Benchmarks](https://github.com/bobheadxi/gobenchdata/workflows/gobenchdata%20demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml)
 
-a tool for inspecting `go test -bench` data, and a
-[GitHub Action](https://github.com/features/actions) for continuous benchmarking.
+`gobenchdata`  is a tool for inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. was inspired by the [deno.land continuous benchmarks](https://deno.land/benchmarks.html), which aims to display performance improvements and regressions on a continuous basis.
 
 > :wave: I am currently working on `gobenchdata@v1`, which will bring significant changes to the GitHub Action and web visualization - if you currently use `gobenchdata`, I'd love to hear from you over at the [`gobenchdata@v1` tracking issue](https://github.com/bobheadxi/gobenchdata/issues/36)!
 
@@ -34,8 +33,7 @@ a tool for inspecting `go test -bench` data, and a
 
 ## About
 
-`gobenchdata` was inspired by the [deno.land continuous benchmarks](https://deno.land/benchmarks.html),
-which aims to display performance improvements and regressions on a continuous basis.
+
 
 It is available as a GitHub action or a command-line application.
 
