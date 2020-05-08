@@ -37,11 +37,11 @@ var (
 
 const helpText = `gobenchdata is a tool for inspecting golang benchmark outputs.
 
-basic usage:
+BASIC USAGE:
 
   go test -bench . -benchmem ./... | gobenchdata [flags]
 
-other commands:
+COMMANDS:
 
   merge [files]                  merge gobenchdata results
 

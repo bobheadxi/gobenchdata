@@ -71,7 +71,7 @@ func load(files ...string) []bench.RunHistory {
 
 func showHelp() {
 	println(helpText)
-	println("flags:")
+	println("FLAGS:\n")
 	pflag.PrintDefaults()
 	println("\nsee https://go.bobheadxi.dev/gobenchdata for more documentation.")
 }
