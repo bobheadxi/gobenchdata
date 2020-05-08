@@ -68,6 +68,8 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   echo "::set-output name=checks-results::$RESULTS"
 
   # output results
+  echo
+  echo '📝 Generating checks report...'
   gobenchdata checks report ${CHECKS_OUTPUT}
 
 fi
