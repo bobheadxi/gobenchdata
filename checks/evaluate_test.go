@@ -101,13 +101,13 @@ func TestEvaluate(t *testing.T) {
 				},
 			}},
 		}, &Report{
-			Failed:  false,
+			Status:  StatusPass,
 			Base:    "base",
 			Current: "current",
 			Checks: map[string]*CheckResult{"C": {
-				Failed: false,
+				Status: StatusPass,
 				Diffs: []DiffResult{{
-					Failed:    false,
+					Status:    StatusPass,
 					Package:   "P",
 					Benchmark: "B",
 					Value:     0,
@@ -138,11 +138,11 @@ func TestEvaluate(t *testing.T) {
 				},
 			}},
 		}, &Report{
-			Failed: false,
+			Status: StatusPass,
 			Checks: map[string]*CheckResult{"C": {
-				Failed: false,
+				Status: StatusPass,
 				Diffs: []DiffResult{{
-					Failed:    false,
+					Status:    StatusPass,
 					Package:   "P",
 					Benchmark: "B",
 					Value:     0,
@@ -173,15 +173,46 @@ func TestEvaluate(t *testing.T) {
 				},
 			}},
 		}, &Report{
-			Failed: true,
+			Status: StatusFail,
 			Checks: map[string]*CheckResult{"C": {
-				Failed: true,
+				Status: StatusFail,
 				Diffs: []DiffResult{{
-					Failed:    true,
+					Status:    StatusFail,
 					Package:   "P",
 					Benchmark: "B",
 					Value:     -3,
 				}},
+				Thresholds: thresholdsSimple,
+			}},
+		}, false},
+		{"not found", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp - 3",
+				Thresholds: thresholdsSimple,
+				Package:    "K",
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Report{
+			Status: StatusNotFound,
+			Checks: map[string]*CheckResult{"C": {
+				Status:     StatusNotFound,
+				Diffs:      []DiffResult{},
 				Thresholds: thresholdsSimple,
 			}},
 		}, false},

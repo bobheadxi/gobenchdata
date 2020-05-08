@@ -11,9 +11,21 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
+// Status describes result of a check
+type Status string
+
+const (
+	// StatusPass is good!
+	StatusPass Status = "pass"
+	// StatusFail is bad
+	StatusFail Status = "fail"
+	// StatusNotFound means no measurements were found
+	StatusNotFound Status = "not-found"
+)
+
 // Report reports the output of Evaluate
 type Report struct {
-	Failed bool
+	Status Status
 
 	Base    string
 	Current string
@@ -23,7 +35,7 @@ type Report struct {
 
 // CheckResult reports the output of a Check
 type CheckResult struct {
-	Failed bool
+	Status Status
 
 	Diffs      []DiffResult
 	Thresholds Thresholds
@@ -31,7 +43,7 @@ type CheckResult struct {
 
 // DiffResult is the result of a diff
 type DiffResult struct {
-	Failed bool
+	Status Status
 
 	Package   string
 	Benchmark string
@@ -79,13 +91,13 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 		Base:    baseRun.Version,
 		Current: currentRun.Version,
 		Checks:  map[string]*CheckResult{},
-		Failed:  false,
+		Status:  StatusNotFound,
 	}
 	for _, c := range checks {
 		results.Checks[c.Name] = &CheckResult{
 			Diffs:      []DiffResult{},
 			Thresholds: c.Thresholds,
-			Failed:     false,
+			Status:     StatusNotFound,
 		}
 	}
 
@@ -116,33 +128,45 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 		// find matching benchmarks
 		for _, bench := range suite.Benchmarks {
 			// find corresponding base benchmark
-			baseBench, ok := baseRun.FindBenchmark(suite.Pkg, bench.Name)
-			if !ok {
-				// TODO: should this fail?
-				fmt.Printf("warn: could not find benchmark '%s.%s' in most recent 'base' run", suite.Pkg, bench.Name)
-				continue
-			}
+			baseBench, baseOK := baseRun.FindBenchmark(suite.Pkg, bench.Name)
 
 			// run all matching checks
 			for _, env := range execChecks {
+				checkRes := results.Checks[env.Check.Name]
 				if match, err := env.Check.matchBenchmark(bench.Name); err != nil {
 					return nil, err
 				} else if match {
+					if !baseOK {
+						checkRes.Status = StatusNotFound
+						continue
+					}
+
 					res, err := env.execute(baseBench, &bench)
 					if err != nil {
 						return nil, err
 					}
 
-					// update result
-					checkRes := results.Checks[env.Check.Name]
+					// update status
+					var status Status
 					failed := (checkRes.Thresholds.Min != nil && res < *checkRes.Thresholds.Min) ||
 						(checkRes.Thresholds.Max != nil && res > *checkRes.Thresholds.Max)
 					if failed {
-						checkRes.Failed = true
-						results.Failed = true
+						status = StatusFail
+						checkRes.Status = StatusFail
+						results.Status = StatusFail
+					} else {
+						status = StatusPass
+						if checkRes.Status == StatusNotFound {
+							checkRes.Status = StatusPass
+						}
+						if results.Status == StatusNotFound {
+							results.Status = StatusPass
+						}
 					}
+
+					// add diff report
 					checkRes.Diffs = append(checkRes.Diffs, DiffResult{
-						Failed:    failed,
+						Status:    status,
 						Package:   suite.Pkg,
 						Benchmark: bench.Name,
 						Value:     res,
