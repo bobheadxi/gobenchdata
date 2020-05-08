@@ -49,8 +49,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
-      uses: actions/checkout@v1
-      with: { fetch-depth: 1 }
+      uses: actions/checkout@v2
     - name: gobenchdata publish
       uses: ./
       with:
