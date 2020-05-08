@@ -168,10 +168,14 @@ func main() {
 					panic("two targets required")
 				}
 				histories := load(args[0], args[1])
-				res, err := checks.Evaluate(cfg.Checks, histories[0], histories[1])
+				res, err := checks.Evaluate(cfg.Checks, histories[0], histories[1], &checks.EvaluateOptions{
+					Debug:       false,
+					MustFindAll: false,
+				})
 				if err != nil {
 					panic(err)
 				}
+				// output report appropriately
 				if *checksPretty {
 					outputChecksReport(res)
 				} else {

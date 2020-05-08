@@ -9,6 +9,7 @@ import (
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/internal"
 )
 
 // Status describes result of a check
@@ -78,13 +79,27 @@ func (e EnvDiffFunc) execute(base, current *bench.Benchmark) (float64, error) {
 	}
 }
 
+// EvaluateOptions declares options for checks evaluation
+type EvaluateOptions struct {
+	Debug       bool
+	MustFindAll bool
+}
+
 // Evaluate checks against benchmark runs
-func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (*Report, error) {
+func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory, opts *EvaluateOptions) (*Report, error) {
+	var debug, mustFindAll bool
+	if opts != nil {
+		debug = opts.Debug
+		mustFindAll = opts.MustFindAll
+	}
+	out := internal.Printer{Debug: debug}
+
 	// put most recent at top
 	sort.Sort(base)
 	sort.Sort(current)
 	baseRun := base[base.Len()-1]
 	currentRun := current[current.Len()-1]
+	out.Printf("comparing versions base='%s', current='%s'", baseRun.Version, currentRun.Version)
 
 	// set up results
 	results := &Report{
@@ -113,14 +128,16 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 				if err != nil {
 					return nil, fmt.Errorf("check '%s': invalid diff function provided: %w", check.Name, err)
 				}
+				c := check
 				execChecks = append(execChecks, &EnvDiffFunc{
-					Check: &check,
+					Check: &c,
 					prog:  prog,
 				})
 			}
 		}
 
 		// skip this suite if there are no checks
+		out.Printf("package %s: matched %d checks", suite.Pkg, len(execChecks))
 		if len(execChecks) == 0 {
 			continue
 		}
@@ -132,12 +149,16 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 
 			// run all matching checks
 			for _, env := range execChecks {
+				out.Printf("check '%s': evaluating benchmark '%s'", env.Check.Name, bench.Name)
 				checkRes := results.Checks[env.Check.Name]
+
 				if match, err := env.Check.matchBenchmark(bench.Name); err != nil {
 					return nil, err
 				} else if match {
 					if !baseOK {
-						checkRes.Status = StatusNotFound
+						if mustFindAll {
+							return nil, fmt.Errorf("check '%s': could not find corresponding benchmark", env.Check.Name)
+						}
 						continue
 					}
 
@@ -155,11 +176,12 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 						checkRes.Status = StatusFail
 						results.Status = StatusFail
 					} else {
+						// only set parents to pass if they are not explicitly failed yet
 						status = StatusPass
-						if checkRes.Status == StatusNotFound {
+						if checkRes.Status != StatusFail {
 							checkRes.Status = StatusPass
 						}
-						if results.Status == StatusNotFound {
+						if results.Status != StatusFail {
 							results.Status = StatusPass
 						}
 					}
@@ -172,6 +194,14 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 						Value:     res,
 					})
 				}
+			}
+		}
+	}
+
+	if mustFindAll {
+		for c, v := range results.Checks {
+			if v.Status == StatusNotFound {
+				return nil, fmt.Errorf("check '%s': got no results from matcher", c)
 			}
 		}
 	}

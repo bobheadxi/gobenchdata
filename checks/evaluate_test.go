@@ -216,16 +216,79 @@ func TestEvaluate(t *testing.T) {
 				Thresholds: thresholdsSimple,
 			}},
 		}, false},
+		{"simple pass with multiple checks", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: thresholdsSimple,
+			}, {
+				Name:       "D",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: thresholdsSimple,
+			}},
+			bench.RunHistory{{
+				Version: "base",
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Version: "current",
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Report{
+			Status:  StatusPass,
+			Base:    "base",
+			Current: "current",
+			Checks: map[string]*CheckResult{
+				"C": {
+					Status: StatusPass,
+					Diffs: []DiffResult{{
+						Status:    StatusPass,
+						Package:   "P",
+						Benchmark: "B",
+						Value:     0,
+					}},
+					Thresholds: thresholdsSimple,
+				},
+				"D": {
+					Status: StatusPass,
+					Diffs: []DiffResult{{
+						Status:    StatusPass,
+						Package:   "P",
+						Benchmark: "B",
+						Value:     0,
+					}},
+					Thresholds: thresholdsSimple,
+				},
+			},
+		}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := Evaluate(tt.args.checks, tt.args.base, tt.args.current)
+			got, err := Evaluate(tt.args.checks, tt.args.base, tt.args.current, &EvaluateOptions{
+				Debug: true,
+			})
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Evaluate() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Evaluate() = %v, want %v", got, tt.want)
+				t.Errorf("Evaluate() = %+v, want %+v", got, tt.want)
+				// report deep diff properly
+				for c, v := range tt.want.Checks {
+					if !reflect.DeepEqual(got.Checks[c], v) {
+						t.Errorf("check %s: got %+v\nwant %+v", c, got.Checks[c], v)
+					}
+				}
 			}
 		})
 	}
