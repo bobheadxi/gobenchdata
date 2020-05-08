@@ -10,7 +10,6 @@ jobs:
     - name: gobenchdata checks
       uses: ./
       with:
-        PRUNE_COUNT: 30
         GO_TEST_FLAGS: -cpu 1,2
         CHECKS: true
         CHECKS_CONFIG: ./demo/gobenchdata-checks.yml
