@@ -4,8 +4,8 @@ LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://go.bobheadxi.dev/gobenchdata"
 LABEL homepage="https://bobheadxi.dev/r/gobenchdata"
 
-# set version to release version
-ENV VERSION=v1
+# label as GitHub Actions gobenchdata@v1
+ENV VERSION=v1.0.0-beta.1
 LABEL version=${VERSION}
 
 # set up gobenchdata
