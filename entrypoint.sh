@@ -62,7 +62,7 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   echo '🔎 Evaluating results against base runs...'
   CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
   gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
-    --checks.config "${INPUT_CHECKS_CONFIG}" \
+    --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
     --json ${CHECKS_OUTPUT}
   RESULTS=$(cat results)
   echo "::set-output name=checks-results::$RESULTS"
