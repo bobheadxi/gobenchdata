@@ -11,27 +11,25 @@ import (
 
 // Results reports the output of Evaluate
 type Results struct {
-	Checks map[string]*CheckResult
-
 	Failed bool
+	Checks map[string]*CheckResult
 }
 
 // CheckResult reports the output of a Check
 type CheckResult struct {
-	Diffs []DiffResult
+	Failed bool
 
+	Diffs      []DiffResult
 	Thresholds Thresholds
-	Required   bool
-	Failed     bool
 }
 
 // DiffResult is the result of a diff
 type DiffResult struct {
+	Failed bool
+
 	Package   string
 	Benchmark string
 	Value     float64
-
-	Failed bool
 }
 
 // EnvDiffFunc describes variables provided to a DiffFunc
@@ -78,7 +76,6 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 		results.Checks[c.Name] = &CheckResult{
 			Diffs:      []DiffResult{},
 			Thresholds: c.Thresholds,
-			Required:   c.Required,
 			Failed:     false,
 		}
 	}
@@ -132,15 +129,13 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 					failed := res < checkRes.Thresholds.Min || res > checkRes.Thresholds.Max
 					if failed {
 						checkRes.Failed = true
-						if checkRes.Required {
-							results.Failed = true
-						}
+						results.Failed = true
 					}
 					checkRes.Diffs = append(checkRes.Diffs, DiffResult{
+						Failed:    failed,
 						Package:   suite.Pkg,
 						Benchmark: bench.Name,
 						Value:     res,
-						Failed:    failed,
 					})
 				}
 			}

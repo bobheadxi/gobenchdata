@@ -36,12 +36,20 @@ type Check struct {
 	Package    string   `yaml:"package"`
 	Benchmarks []string `yaml:"benchmarks"`
 
-	// `antonmedv/expr` expressions: https://github.com/antonmedv/expr
+	// Diff functions are written as `antonmedv/expr` expressions: https://github.com/antonmedv/expr
 	//
-	// two parameters are provided:
+	// Two parameters are provided:
+	//
 	// * `base`: bench.Benchmark
 	// * `current`: bench.Benchmark
-	// return a float32 diff in your results, which is then checked against with Thresholds
+	//
+	// Return a flaot64-castable value. This is then checked against your defined Thresholds
+	//
+	// In general, calibrate your diff to return:
+	//
+	// * negative value for improvement
+	// * positive value for regression
+	//
 	DiffFunc   string     `yaml:"diff"`
 	Thresholds Thresholds `yaml:"thresholds"`
 }

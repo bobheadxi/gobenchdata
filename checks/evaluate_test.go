@@ -1,6 +1,7 @@
 package checks
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/antonmedv/expr"
@@ -55,6 +56,105 @@ func TestEnvDiffFunc_execute(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("EnvDiffFunc.execute() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+var thresholdsSimple = Thresholds{Min: -1, Max: 1}
+
+func TestEvaluate(t *testing.T) {
+	type args struct {
+		checks  []Check
+		base    bench.RunHistory
+		current bench.RunHistory
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *Results
+		wantErr bool
+	}{
+		{"simple pass", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: thresholdsSimple,
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Results{
+			Failed: false,
+			Checks: map[string]*CheckResult{"C": {
+				Failed: false,
+				Diffs: []DiffResult{{
+					Failed:    false,
+					Package:   "P",
+					Benchmark: "B",
+					Value:     0,
+				}},
+				Thresholds: thresholdsSimple,
+			}},
+		}, false},
+		{"simple fail", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp - 3",
+				Thresholds: thresholdsSimple,
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Results{
+			Failed: true,
+			Checks: map[string]*CheckResult{"C": {
+				Failed: true,
+				Diffs: []DiffResult{{
+					Failed:    true,
+					Package:   "P",
+					Benchmark: "B",
+					Value:     -3,
+				}},
+				Thresholds: thresholdsSimple,
+			}},
+		}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := Evaluate(tt.args.checks, tt.args.base, tt.args.current)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Evaluate() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Evaluate() = %v, want %v", got, tt.want)
 			}
 		})
 	}
