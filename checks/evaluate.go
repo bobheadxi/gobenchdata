@@ -2,16 +2,22 @@ package checks
 
 import (
 	"fmt"
+	"io/ioutil"
 	"sort"
 
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"gopkg.in/yaml.v2"
 )
 
 // Results reports the output of Evaluate
 type Results struct {
 	Failed bool
+
+	Base    string
+	Current string
+
 	Checks map[string]*CheckResult
 }
 
@@ -29,7 +35,8 @@ type DiffResult struct {
 
 	Package   string
 	Benchmark string
-	Value     float64
+
+	Value float64
 }
 
 // EnvDiffFunc describes variables provided to a DiffFunc
@@ -69,8 +76,10 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 
 	// set up results
 	results := &Results{
-		Checks: map[string]*CheckResult{},
-		Failed: false,
+		Base:    baseRun.Version,
+		Current: currentRun.Version,
+		Checks:  map[string]*CheckResult{},
+		Failed:  false,
 	}
 	for _, c := range checks {
 		results.Checks[c.Name] = &CheckResult{
@@ -144,4 +153,14 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 	}
 
 	return results, nil
+}
+
+// LoadResult loads checks results from the given path
+func LoadResult(path string) (*CheckResult, error) {
+	b, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, fmt.Errorf("failed to open checks result: %w", err)
+	}
+	var res CheckResult
+	return &res, yaml.Unmarshal(b, &res)
 }

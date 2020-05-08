@@ -83,6 +83,7 @@ func TestEvaluate(t *testing.T) {
 				Thresholds: thresholdsSimple,
 			}},
 			bench.RunHistory{{
+				Version: "base",
 				Suites: []bench.Suite{
 					{Pkg: "P", Benchmarks: []bench.Benchmark{{
 						Name:    "B",
@@ -91,6 +92,7 @@ func TestEvaluate(t *testing.T) {
 				},
 			}},
 			bench.RunHistory{{
+				Version: "current",
 				Suites: []bench.Suite{
 					{Pkg: "P", Benchmarks: []bench.Benchmark{{
 						Name:    "B",
@@ -99,7 +101,9 @@ func TestEvaluate(t *testing.T) {
 				},
 			}},
 		}, &Results{
-			Failed: false,
+			Failed:  false,
+			Base:    "base",
+			Current: "current",
 			Checks: map[string]*CheckResult{"C": {
 				Failed: false,
 				Diffs: []DiffResult{{
