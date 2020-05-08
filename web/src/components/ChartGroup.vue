@@ -4,7 +4,7 @@
     <p>{{ group.description }}</p>
 
     <div v-for="c in group.charts" :key="c.name" class="chart">
-      <Chart :config="c" :runs="runs" />
+      <Chart :config="c" :runs="runs" :repo="repo" />
     </div>
   </div>
 </template>
@@ -31,6 +31,7 @@ export default Vue.extend({
     Chart,
   },
   props: {
+    repo: { type: String, required: true },
     group: {
       type: Object as () => ConfigChartGroup,
       required: true,

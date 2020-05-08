@@ -50,6 +50,7 @@ import { generateSeries } from '@/lib/series';
 export default Vue.extend({
   name: 'Chart',
   props: {
+    repo: { type: String, required: true },
     config: {
       type: Object as PropType<ConfigChartGroupChart>,
       required: true,
@@ -82,8 +83,12 @@ export default Vue.extend({
               height: 500,
               events: {
                 click: (event, chartContext, config) => {
-                  const { dataPointIndex: id } = config;
-                  console.log(id);
+                  const { dataPointIndex: x, seriesIndex: s } = config;
+                  const d = ParseDate(seriesByMetric[m][s].data[x].x);
+                  const r = this.runs.find(r => {
+                    return ParseDate(r.Date).valueOf() === d.valueOf();
+                  });
+                  if (r) window.open(`${this.repo}/commit/${r.Version}`);
                 },
               },
             },
@@ -101,7 +106,7 @@ export default Vue.extend({
                   });
                   // Tue May 05 2020 hh:mm
                   const formatted = `${d.toDateString()} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}`;
-                  return r && r.Version ? `${r.Version} (${formatted})` : formatted;
+                  return r && r.Version ? `${formatted} (${r.Version.substring(0, 9)})` : formatted;
                 },
               },
             },

@@ -10,6 +10,7 @@ import (
 type Config struct {
 	Title          string  `json:"title" yaml:"title"`
 	Description    string  `json:"description" yaml:"description"`
+	Repository     string  `json:"repository" yaml:"repository"`
 	BenchmarksFile *string `json:"benchmarksFile" yaml:"benchmarksFile"`
 
 	// leave blank to generate per-package

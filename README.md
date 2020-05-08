@@ -186,6 +186,7 @@ select which metrics to display using the `metrics` option.
 ```yml
 title: gobenchdata web
 description: Benchmarks generated using 'gobenchdata'
+repository: https://github.com/bobheadxi/gobenchdata
 benchmarksFile: benchmarks.json
 chartGroups:
   - name: Demo Benchmarks

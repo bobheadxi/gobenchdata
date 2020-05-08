@@ -100,6 +100,7 @@ class ConfigChartGroup {
 class Config {
   title: string;
   description: string;
+  repository: string;
   benchmarksFile: string | null;
   chartGroups: ConfigChartGroup[];
 
@@ -107,6 +108,7 @@ class Config {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
     this.title = ('title' in d) ? d.title as string : '';
     this.description = ('description' in d) ? d.description as string : '';
+    this.repository = ('repository' in d) ? d.repository as string : '';
     this.benchmarksFile = ('benchmarksFile' in d) ? d.benchmarksFile as string : null;
     this.chartGroups = Array.isArray(d.chartGroups) ? d.chartGroups.map((v: any) => new ConfigChartGroup(v)) : [];
   }

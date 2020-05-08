@@ -99,6 +99,7 @@ func main() {
 			config := &web.Config{
 				Title:          *webIndexTitle,
 				Description:    "Benchmarks generated using 'gobenchdata'",
+				Repository:     "https://github.com/my/repository",
 				BenchmarksFile: internal.StringP("benchmarks.json"),
 			}
 

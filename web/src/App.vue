@@ -13,7 +13,7 @@
       <h3>{{ config.description }}</h3>
 
       <div v-for="g in chartGroups" :key="g.name">
-        <ChartGroup :group="g" :runs="benchmarks" />
+        <ChartGroup :group="g" :runs="benchmarks" :repo="config.repository" />
       </div>
     </div>
 
