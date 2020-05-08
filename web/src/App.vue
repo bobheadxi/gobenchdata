@@ -12,7 +12,7 @@
       <h1>{{ config.title }}</h1>
       <h3 v-html="config.description"></h3>
 
-      <div v-for="g in chartGroups" :key="g.name">
+      <div v-for="g in groups" :key="g.name">
         <ChartGroup :group="g" :runs="benchmarks" :repo="config.repository" />
       </div>
     </div>
@@ -65,20 +65,22 @@ export default Vue.extend({
     error: undefined,
   }),
   computed: {
-    chartGroups(): ConfigChartGroup[] {
+    groups(): ConfigChartGroup[] {
       if (this.config.chartGroups && this.config.chartGroups.length > 0) return this.config.chartGroups;
 
       // group by package by default
       const suites: { [pkg: string]: boolean } = {};
       iterateSuites(this.benchmarks, (s) => { suites[s.Pkg] = true; });
+      const packages = Object.keys(suites).sort();
+      console.log('no chart groups configured - detected packages', packages);
       return [
         new ConfigChartGroup({
-          Name: 'Benchmarks',
-          Description: 'All detected benchmarks, grouped by Package',
-          Charts: Object.keys(suites).sort().map((pkg) => new ConfigChartGroupChart({
-            Name: pkg,
-            Package: pkg,
-            Benchmarks: ['.'],
+          name: 'Benchmarks by package',
+          description: 'All detected benchmarks, grouped by Package',
+          charts: packages.map((pkg) => new ConfigChartGroupChart({
+            name: pkg,
+            package: `^${pkg}$`,
+            benchmarks: [],
           })),
         }),
       ];
