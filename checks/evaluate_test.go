@@ -6,6 +6,7 @@ import (
 
 	"github.com/antonmedv/expr"
 	"go.bobheadxi.dev/gobenchdata/bench"
+	"go.bobheadxi.dev/gobenchdata/internal"
 )
 
 func TestEnvDiffFunc_execute(t *testing.T) {
@@ -61,7 +62,7 @@ func TestEnvDiffFunc_execute(t *testing.T) {
 	}
 }
 
-var thresholdsSimple = Thresholds{Min: -1, Max: 1}
+var thresholdsSimple = Thresholds{Min: internal.Float64P(-1), Max: internal.Float64P(1)}
 
 func TestEvaluate(t *testing.T) {
 	type args struct {
@@ -108,6 +109,41 @@ func TestEvaluate(t *testing.T) {
 					Value:     0,
 				}},
 				Thresholds: thresholdsSimple,
+			}},
+		}, false},
+		{"simple pass because of no thresholds", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: Thresholds{},
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Results{
+			Failed: false,
+			Checks: map[string]*CheckResult{"C": {
+				Failed: false,
+				Diffs: []DiffResult{{
+					Failed:    false,
+					Package:   "P",
+					Benchmark: "B",
+					Value:     0,
+				}},
+				Thresholds: Thresholds{},
 			}},
 		}, false},
 		{"simple fail", args{

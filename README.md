@@ -86,8 +86,8 @@ The following `inputs` are for enabling [Pull Request Checks](#pull-request-chec
 
 | Variable             | Default                   | Purpose
 | -------------------- | ------------------------- | -------
-| `CHECK`              | `false`                   | if `true`, disables publishing and runs checks instead
-| `CHECKS_CONFIG`      | `gobenchdata-checks.json` | path to checks configuration
+| `CHECKS`             | `false`                   | if `true`, disables publishing and runs checks instead
+| `CHECKS_CONFIG`      | `gobenchdata-checks.yml`  | path to checks configuration
 | `PUBLISH_REPO`       |                           | repository of benchmark data to check against
 | `PUBLISH_BRANCH`     | `gh-pages`                | branch of benchmark data to check against
 | `BENCHMARKS_OUT`     | `benchmarks.json`         | path to benchmark data to check against
@@ -110,9 +110,36 @@ instead.
 ### Pull Request Checks
 
 Instead of publishing results, benchmark output can be used to pass and fail pull requests
-using `CHECKS: true`. To get started, set up a file called `gobenchdata-checks.json`:
+using `CHECKS: true`. To get started, set up the checks configuration:
 
-TODO - configure thresholds for specific benchmarks using regexp
+```sh
+go get -u go.bobheadxi.dev/gobenchdata
+gobenchdata checks generate
+```
+
+This will generate a file, `gobenchdata-checks.yml`, where you can configure what checks are
+executed.
+
+<details>
+<summary>Simple Example</summary>
+<p>
+
+```yml
+checks:
+- name: My Check
+  description: |-
+    Define a check here - in this example, we caculate % difference for NsPerOp in the diff function.
+    diff is a function where you receive two parameters, current and base, and in general this function
+    should return a negative value for an improvement and a positive value for a regression.
+  package: .
+  benchmarks: []
+  diff: (current.NsPerOp - base.NsPerOp) / base.NsPerOp * 100
+  thresholds:
+    max: 10
+```
+
+</p>
+</details>
 
 ### Visualisation
 
@@ -122,7 +149,7 @@ from the JSON benchmarks file, or by using `gobenchdata`. An easy way to get sta
 
 ```sh
 go get -u go.bobheadxi.dev/gobenchdata
-gobenchdata web generate --web.config .
+gobenchdata web generate --web.config-only .
 gobenchdata web serve # opens visualization in browser
 ```
 

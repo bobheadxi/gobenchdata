@@ -126,7 +126,8 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 
 					// update result
 					checkRes := results.Checks[env.Check.Name]
-					failed := res < checkRes.Thresholds.Min || res > checkRes.Thresholds.Max
+					failed := (checkRes.Thresholds.Min != nil && res < *checkRes.Thresholds.Min) ||
+						(checkRes.Thresholds.Max != nil && res > *checkRes.Thresholds.Max)
 					if failed {
 						checkRes.Failed = true
 						results.Failed = true

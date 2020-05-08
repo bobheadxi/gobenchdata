@@ -3,22 +3,19 @@ package checks
 import (
 	"fmt"
 	"io/ioutil"
-	"path"
 	"regexp"
 
 	"gopkg.in/yaml.v2"
 )
-
-func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-checks.yml") }
 
 // Config declares checks configurations
 type Config struct {
 	Checks []Check `yaml:"checks"`
 }
 
-// LoadConfig reads configuration from the given directory
-func LoadConfig(dir string) (*Config, error) {
-	b, err := ioutil.ReadFile(defaultConfigPath(dir))
+// LoadConfig reads configuration from the given path
+func LoadConfig(path string) (*Config, error) {
+	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checks config: %w", err)
 	}
@@ -30,7 +27,6 @@ func LoadConfig(dir string) (*Config, error) {
 type Check struct {
 	Name        string `yaml:"name"`
 	Description string `yaml:"description"`
-	Required    bool   `yaml:"required"`
 
 	// regex matchers
 	Package    string   `yaml:"package"`
@@ -93,6 +89,6 @@ func (c *Check) matchBenchmark(bench string) (bool, error) {
 
 // Thresholds declares values from ChangeFunc to fail
 type Thresholds struct {
-	Min float64 `yaml:"min"`
-	Max float64 `yaml:"max"`
+	Min *float64 `yaml:"min,omitempty"`
+	Max *float64 `yaml:"max,omitempty"`
 }

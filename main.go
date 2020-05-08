@@ -27,9 +27,11 @@ var (
 	noSort    = pflag.Bool("no-sort", false, "disable sorting")
 	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
-	webConfigOnly = pflag.Bool("web.config", false, "only generate configuration for 'gobenchdata web'")
+	webConfigOnly = pflag.Bool("web.config-only", false, "only generate configuration for 'gobenchdata web'")
 	webIndexTitle = pflag.String("web.title", "gobenchdata web", "header <title> for 'gobenchdata web'")
 	webIndexHead  = pflag.StringArray("web.head", []string{}, "additional <head> elements for 'gobenchdata web'")
+
+	checksConfigPath = pflag.String("checks.config", "gobenchdata-checks.yml", "path to checks configuraton file")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
 	tags    = pflag.StringArrayP("tag", "t", nil, "array of tags to include in result")
@@ -151,11 +153,11 @@ func main() {
 			}
 			switch checksCmd := pflag.Args()[1]; checksCmd {
 			case "generate":
-				if err := checks.GenerateConfig("."); err != nil {
+				if err := checks.GenerateConfig(*checksConfigPath); err != nil {
 					panic(err)
 				}
 			case "eval":
-				cfg, err := checks.LoadConfig(".")
+				cfg, err := checks.LoadConfig(*checksConfigPath)
 				if err != nil {
 					panic(err)
 				}
