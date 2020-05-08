@@ -1,9 +1,9 @@
 # Contributing
 
-* [Development](#development)
-  * [GitHub Action](#github-action)
-  * [CLI](#cli)
-  * [Web App](#web-app)
+- [Development](#development)
+  - [GitHub Action](#github-action)
+  - [CLI](#cli)
+  - [Web App](#web-app)
 
 ## Development
 
@@ -18,9 +18,7 @@ continuously tested by the [demo workflow](https://github.com/bobheadxi/gobenchd
 though `VERSION=master` must be set in the [Dockerfile](https://github.com/bobheadxi/gobenchdata/blob/master/Dockerfile#L9).
 This variable is set to specific versions for releases.
 
-[`act`](https://github.com/nektos/act) used to be the tool to test Actions locally,
-but it hasn't been updated to support the new Actions with YML configuration.
-I'm still looking for a replacement.
+[`act`](https://github.com/nektos/act) is a great tool to test Actions locally.
 
 ### CLI
 
@@ -33,38 +31,37 @@ go mod download
 make # install binary
 ```
 
-Utilities like `gobenchdata-web` are developed in subdirectories under [`/x`](./x).
+Code generation tasks should be able to be triggered by [`go generate`](https://blog.golang.org/generate),
+but some tasks don't seem to work with it, so run the following to run all `go generate`
+tasks as well as any other code generation scripts:
 
-Code generation tasks should be able to be triggered by [go generate](https://blog.golang.org/generate):
-
-```
-go generate ./...
+```sh
+make generate
 ```
 
 The example benchmarks can be run using `make bench`.
 
 ### Web App
 
-The web app is in [x/gobenchdata-web/web](./x/gobenchdata-web/web), and the
-generator is in [x/gobenchdata-web](./x/gobenchdata-web). Assets are compiled
+The web app and the web app generator are both in [/web](./web). Assets are compiled
 using [`fileb0x`](https://github.com/UnnoTed/fileb0x) (see previous section).
-
-The web app should remain as simple as possible - right now it only consists of
-3 files (the base HTML, a JavaScript app, and a plain CSS stylesheet), and
-ideally it'll stay that way.
 
 To test the web app, add a `benchmarks.json` (for example, the demo data available
 in [`gh-pages`](https://go.bobheadxi.dev/gobenchdata/blob/gh-pages/benchmarks.json))
-to the `web` directory, and run:
+to the `web/public` directory, and run the following in `web`:
 
+```sh
+npm install
+npm run serve
 ```
-make serve
-```
 
-This requires [serve](https://www.npmjs.com/package/serve) to be installed.
+An example configuration is provided in [`web/public/gobenchdata-web.yml`](./web/public/gobenchdata-web.yml)
+that should allow you to test most of the app's features.
 
-To generate benchmarks for the demo web app, run:
+To generate benchmarks from scratch, run:
 
-```
+```sh
 make demo
 ```
+
+This can be run repeatedly to make very large `benchmark.json` run histories.
