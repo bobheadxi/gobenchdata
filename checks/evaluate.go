@@ -11,8 +11,8 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// Results reports the output of Evaluate
-type Results struct {
+// Report reports the output of Evaluate
+type Report struct {
 	Failed bool
 
 	Base    string
@@ -67,7 +67,7 @@ func (e EnvDiffFunc) execute(base, current *bench.Benchmark) (float64, error) {
 }
 
 // Evaluate checks against benchmark runs
-func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (*Results, error) {
+func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (*Report, error) {
 	// put most recent at top
 	sort.Sort(base)
 	sort.Sort(current)
@@ -75,7 +75,7 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 	currentRun := current[current.Len()-1]
 
 	// set up results
-	results := &Results{
+	results := &Report{
 		Base:    baseRun.Version,
 		Current: currentRun.Version,
 		Checks:  map[string]*CheckResult{},
@@ -155,12 +155,12 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory) (
 	return results, nil
 }
 
-// LoadResult loads checks results from the given path
-func LoadResult(path string) (*CheckResult, error) {
+// LoadReport loads checks results from the given path
+func LoadReport(path string) (*Report, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checks result: %w", err)
 	}
-	var res CheckResult
+	var res Report
 	return &res, yaml.Unmarshal(b, &res)
 }

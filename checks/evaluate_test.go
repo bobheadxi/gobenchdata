@@ -73,7 +73,7 @@ func TestEvaluate(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		want    *Results
+		want    *Report
 		wantErr bool
 	}{
 		{"simple pass", args{
@@ -100,7 +100,7 @@ func TestEvaluate(t *testing.T) {
 					}}},
 				},
 			}},
-		}, &Results{
+		}, &Report{
 			Failed:  false,
 			Base:    "base",
 			Current: "current",
@@ -137,7 +137,7 @@ func TestEvaluate(t *testing.T) {
 					}}},
 				},
 			}},
-		}, &Results{
+		}, &Report{
 			Failed: false,
 			Checks: map[string]*CheckResult{"C": {
 				Failed: false,
@@ -172,7 +172,7 @@ func TestEvaluate(t *testing.T) {
 					}}},
 				},
 			}},
-		}, &Results{
+		}, &Report{
 			Failed: true,
 			Checks: map[string]*CheckResult{"C": {
 				Failed: true,
