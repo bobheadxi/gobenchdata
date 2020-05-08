@@ -4,6 +4,8 @@ report.json
 tmp
 gobenchdata
 dist
+/gobenchdata-web.yml
+/gobenchdata-checks.yml
 
 # dependencies
 vendor
