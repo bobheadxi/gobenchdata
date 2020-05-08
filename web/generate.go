@@ -57,8 +57,8 @@ func GenerateConfig(dir string, defaultConfig Config, override bool) error {
 
 	// check for existing
 	if !override {
-		if _, err := os.Stat(appConfigPath); os.IsExist(err) {
-			return fmt.Errorf("found existing configuration: %w", err)
+		if _, err := os.Stat(appConfigPath); err == nil {
+			return fmt.Errorf("found existing configuration: %w", os.ErrExist)
 		}
 	} else {
 		os.Remove(appConfigPath)

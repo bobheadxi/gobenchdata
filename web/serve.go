@@ -1,11 +1,12 @@
 package web
 
 import (
-	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 // ListenAndServe serves the web app on the given address
@@ -15,11 +16,11 @@ func ListenAndServe(addr string, config Config, it TemplateIndexHTML) error {
 	}
 
 	// generate configuration in virtual filesystem
-	f, err := FS.OpenFile(CTX, "/gobenchdata-web.json", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
+	f, err := FS.OpenFile(CTX, "/gobenchdata-web.yml", os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0777)
 	if err != nil {
 		return fmt.Errorf("failed to add config to virtual filesystem: %w", err)
 	}
-	b, _ := json.MarshalIndent(&config, "", "  ")
+	b, _ := yaml.Marshal(&config)
 	if _, err = f.Write(b); err != nil {
 		return fmt.Errorf("failed to add config to virtual filesystem: %w", err)
 	}

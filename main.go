@@ -117,11 +117,11 @@ func main() {
 				}
 				// only override if we are generating config only
 				if err := web.GenerateConfig(dir, *config, *webConfigOnly); err != nil {
-					if !*webConfigOnly && errors.Is(err, os.ErrExist) {
+					if errors.Is(err, os.ErrExist) {
 						println("found existing web app configuration")
-					} else {
-						panic(err)
+						return
 					}
+					panic(err)
 				}
 				println("web application configuration generated!")
 

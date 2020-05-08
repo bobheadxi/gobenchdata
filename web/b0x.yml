@@ -18,4 +18,4 @@ debug: false
 custom:
   - files: [ ./dist ]
     base: 'dist'
-    exclude: [ '**/*.json' ]
+    exclude: [ '**/*.json', '**/*.yml' ]
