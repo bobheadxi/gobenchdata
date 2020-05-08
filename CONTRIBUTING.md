@@ -14,9 +14,7 @@
 ### GitHub Action
 
 The code for the Action is in the `Dockerfile` and `entrypoint.sh`. It is
-continuously tested by the [demo workflow](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml),
-though `VERSION=master` must be set in the [Dockerfile](https://github.com/bobheadxi/gobenchdata/blob/master/Dockerfile#L9).
-This variable is set to specific versions for releases.
+continuously tested by the [demo workflow](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml).
 
 [`act`](https://github.com/nektos/act) is a great tool to test Actions locally.
 
