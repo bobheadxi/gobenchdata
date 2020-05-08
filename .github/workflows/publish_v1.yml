@@ -6,6 +6,7 @@ on:
 jobs:
   publish_v1:
     if: github.event_name == 'release' && contains(github.ref, 'v1')
+    runs-on: ubuntu-latest
     steps:
     - name: checkout
       uses: actions/checkout@v1
