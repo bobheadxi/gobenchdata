@@ -23,7 +23,7 @@ var Version string
 var (
 	jsonOut   = pflag.String("json", "", "output as json to file")
 	appendOut = pflag.BoolP("append", "a", false, "append to output file")
-	flat      = pflag.BoolP("flat", "f", false, "flatten JSON output into one run per line")
+	flat      = pflag.BoolP("flat", "f", false, "flatten JSON output")
 	noSort    = pflag.Bool("no-sort", false, "disable sorting")
 	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
@@ -52,6 +52,7 @@ COMMANDS:
 
   checks generate                generate checks configuration
   checks eval [base] [current]   evaluate checks defined in './gobenchdata-checks.yml'
+  checks report [report]         prints a simple report and exits with status 1 if a check failed
 
   version                        show gobenchdata version
   help                           show help text
@@ -171,16 +172,34 @@ func main() {
 					panic(err)
 				}
 
-				b, err := json.MarshalIndent(res, "", "  ")
+				var b []byte
+				if *flat {
+					b, err = json.Marshal(res)
+				} else {
+					b, err = json.MarshalIndent(res, "", "  ")
+				}
 				if err != nil {
 					panic(err)
 				}
+
 				if *jsonOut == "" {
 					println(string(b))
 				} else {
 					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
 						panic(err)
 					}
+				}
+			case "report":
+				if len(pflag.Args()) < 3 {
+					panic("no report provided")
+				}
+				results, err := checks.LoadReport(pflag.Args()[2])
+				if err != nil {
+					panic(err)
+				}
+				outputChecksReport(results)
+				if results.Status != checks.StatusPass {
+					os.Exit(1)
 				}
 			default:
 				showHelp()

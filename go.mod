@@ -13,6 +13,7 @@ require (
 	github.com/labstack/gommon v0.2.9 // indirect
 	github.com/mattn/go-isatty v0.0.9 // indirect
 	github.com/nsf/termbox-go v0.0.0-20190325093121-288510b9734e // indirect
+	github.com/olekukonko/tablewriter v0.0.4
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422
