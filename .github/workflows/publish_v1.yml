@@ -1,4 +1,4 @@
-name: Publish v1
+name: publish@v1
 on:
   release:
     types: [ published ]
