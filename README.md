@@ -2,15 +2,13 @@
 
 > This is a work-in-progress branch for `bobheadxi/gobenchdata@v1`
 
-[![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
 [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
-[![GoDoc](https://img.shields.io/badge/go.pkg.dev-reference-5272B4)](https://pkg.go.dev/go.bobheadxi.dev/gobenchdata)
+[![publish@v1](https://github.com/bobheadxi/gobenchdata/workflows/publish@v1/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=publish%40v1)
+[![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
+[![demo](https://github.com/bobheadxi/gobenchdata/workflows/demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=demo)
 [![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
-[![Demo Benchmarks](https://github.com/bobheadxi/gobenchdata/workflows/gobenchdata%20demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml)
 
 `gobenchdata`  is a tool for inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. was inspired by the [deno.land continuous benchmarks](https://deno.land/benchmarks.html), which aims to display performance improvements and regressions on a continuous basis.
-
-> :wave: I am currently working on `gobenchdata@v1`, which will bring significant changes to the GitHub Action and web visualization - if you currently use `gobenchdata`, I'd love to hear from you over at the [`gobenchdata@v1` tracking issue](https://github.com/bobheadxi/gobenchdata/issues/36)!
 
 <a href="https://gobenchdata.bobheadxi.dev/" target="_blank">
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
