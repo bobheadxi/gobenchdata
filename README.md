@@ -245,6 +245,32 @@ gobenchdata checks generate
 gobenchdata checks eval ${base benchmarks} ${current benchmarks} --checks.pretty
 ```
 
+<details>
+<summary>Example Report</summary>
+<p>
+
+|    |                   BASE                   |                 CURRENT                  | PASSED CHECKS | FAILED CHECKS | TOTAL |
+|----|------------------------------------------|------------------------------------------|---------------|---------------|-------|
+| ✅ | 5aa9b7f901e770f1364bfc849aaba0cc06066336 | abfdd5c29b1aff48cb22e0cbb6f4f7526ad85604 |             2 |             0 |     2 |
+
+|    |             CHECK              |              PACKAGE              |             BENCHMARK             | DIFF  | COMMENT |
+|----|--------------------------------|-----------------------------------|-----------------------------------|-------|---------|
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkFib10/Fib()              | -2.61 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkFib10/Fib()-2            | -2.85 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkFib10/FibSlow()          | -2.47 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkFib10/FibSlow()-2        | -2.19 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/Pizzas()          | -1.85 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/Pizzas()-2        | -2.45 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/PizzasSquared()   | -5.71 |         |
+| ✅ | An example NsPerOp check       | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/PizzasSquared()-2 | -3.03 |         |
+| ✅ | An example custom metric check | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/Pizzas()          |  8.00 |         |
+| ✅ | An example custom metric check | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/Pizzas()-2        |  4.00 |         |
+| ✅ | An example custom metric check | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/PizzasSquared()   |  4.00 |         |
+| ✅ | An example custom metric check | go.bobheadxi.dev/gobenchdata/demo | BenchmarkPizzas/PizzasSquared()-2 |  1.00 |         |
+
+</p>
+</details>
+
 For more details on how to use checks, see the [pull request checks documentation](#pull-request-checks).
 
 <br />
