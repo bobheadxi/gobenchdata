@@ -92,15 +92,9 @@ func main() {
 				showHelp()
 				os.Exit(1)
 			}
-			it := web.TemplateIndexHTML{
+			flags := web.Flags{
 				Title:   *webIndexTitle,
 				Headers: *webIndexHead,
-			}
-			config := &web.Config{
-				Title:          *webIndexTitle,
-				Description:    "Benchmarks generated using 'gobenchdata'",
-				Repository:     "https://github.com/my/repository",
-				BenchmarksFile: internal.StringP("benchmarks.json"),
 			}
 
 			switch webCmd := pflag.Args()[1]; webCmd {
@@ -108,9 +102,12 @@ func main() {
 				if len(pflag.Args()) < 3 {
 					panic("no output directory provided")
 				}
+
 				dir := pflag.Args()[2]
+				config, it := web.LoadDefaults(dir, flags)
+
 				if !*webConfigOnly {
-					if err := web.GenerateApp(dir, it); err != nil {
+					if err := web.GenerateApp(dir, *it); err != nil {
 						panic(err)
 					}
 					println("web application generated!")
@@ -130,17 +127,11 @@ func main() {
 				if len(pflag.Args()) == 3 {
 					port = pflag.Args()[2]
 				}
+				config, it := web.LoadDefaults(".", flags)
 				addr := "localhost:" + port
-				if existing, err := web.OpenConfig("./gobenchdata-web.yml"); err != nil {
-					if !os.IsNotExist(err) {
-						panic(err)
-					}
-				} else if existing != nil {
-					config = existing
-				}
 				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)
 				go internal.OpenBrowser("http://" + addr)
-				if err := web.ListenAndServe(addr, *config, it); err != nil {
+				if err := web.ListenAndServe(addr, *config, *it); err != nil {
 					panic(err)
 				}
 			default:

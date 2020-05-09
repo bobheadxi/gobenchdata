@@ -12,7 +12,8 @@ import (
 //go:generate npm run build
 //go:generate go run github.com/UnnoTed/fileb0x b0x.yml
 
-func defaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.yml") }
+// DefaultConfigPath generates the gobenchdata-web configuration path
+func DefaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-web.yml") }
 
 // GenerateApp dumps the web app template into the provided directory
 func GenerateApp(dir string, it TemplateIndexHTML) error {
@@ -53,7 +54,7 @@ func GenerateApp(dir string, it TemplateIndexHTML) error {
 
 // GenerateConfig generates configuration for the web app
 func GenerateConfig(dir string, defaultConfig Config, override bool) error {
-	appConfigPath := defaultConfigPath(dir)
+	appConfigPath := DefaultConfigPath(dir)
 
 	// check for existing
 	if !override {

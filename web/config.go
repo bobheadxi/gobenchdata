@@ -5,6 +5,7 @@ import (
 	"html/template"
 	"io/ioutil"
 
+	"go.bobheadxi.dev/gobenchdata/internal"
 	"gopkg.in/yaml.v2"
 )
 
@@ -44,8 +45,8 @@ type Chart struct {
 	Metrics map[string]bool `json:"metrics" yaml:"metrics"`
 }
 
-// OpenConfig loads up gobenchdata-web configuration
-func OpenConfig(path string) (*Config, error) {
+// LoadConfig loads up gobenchdata-web configuration
+func LoadConfig(path string) (*Config, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
 		return nil, err
@@ -55,4 +56,29 @@ func OpenConfig(path string) (*Config, error) {
 		return nil, fmt.Errorf("could not read config at '%s': %w", path, err)
 	}
 	return &conf, nil
+}
+
+// Flags come from the CLI
+type Flags struct {
+	Title   string
+	Headers []string
+}
+
+// LoadDefaults loads reasonable defaults from a combination of flags and existing configuration
+func LoadDefaults(dir string, flags Flags) (*Config, *TemplateIndexHTML) {
+	// initialize default configuration
+	config, _ := LoadConfig(DefaultConfigPath(dir))
+	if config == nil {
+		config = &Config{
+			Title:          flags.Title,
+			Description:    "Benchmarks generated using 'gobenchdata'",
+			Repository:     "https://github.com/my/repository",
+			BenchmarksFile: internal.StringP("benchmarks.json"),
+		}
+	}
+	it := TemplateIndexHTML{
+		Title:   config.Title,
+		Headers: flags.Headers,
+	}
+	return config, &it
 }
