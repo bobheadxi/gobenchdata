@@ -8,16 +8,17 @@ chartGroups:
       This is a demo for gobenchdata, a tool and GitHub action for setting up simple continuous
       benchmarks to monitor performance improvements and regressions in your Golang benchmarks!
     charts:
-      - name: specify charts by package
-        package: ^go.bobheadxi.dev/gobenchdata/demo$
-      - name: match on specific benchmarks across packages
+      - name: specify charts by package, and only show specific metrics
+        package: go.bobheadxi.dev\/gobenchdata\/demo
+        metrics:
+          NsPerOp: true
+          Mem.BytesPerOp: true
+          pizzas: true
+      - name: match on specific benchmarks across packages with glob patterns
         benchmarks: [ 'BenchmarkFib.' ]
   - name: More Demo Benchmarks
     description: Create multiple groups of benchmarks
     charts:
-      - name: match by a combination of package and benchmarks, and only show specific metrics
-        package: go.bobheadxi.dev/gobenchdata/.
+      - name: match by a combination of package and benchmarks
+        package: go.bobheadxi.dev\/gobenchdata\/.
         benchmarks: [ 'BenchmarkPizzas.', '.FibSlow.' ]
-        metrics:
-          NsPerOp: true
-          pizzas: true

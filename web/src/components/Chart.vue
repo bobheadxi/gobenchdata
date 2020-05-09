@@ -69,9 +69,10 @@ export default Vue.extend({
         const pkgMatcher = new RegExp(this.config.package || '.');
         const benchMatchers = this.config.benchmarks.map((b) => new RegExp(b || '.'));
         if (benchMatchers.length === 0) benchMatchers.push(new RegExp('.'));
-        const seriesByMetric = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.metrics);
+        const series = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.metrics);
+        console.log(`chart ${this.config.name}`, series);
 
-        const generatedCharts = Object.keys(seriesByMetric).map((m): { metric: string; options: ApexOptions } => ({
+        return Object.keys(series.charts).map((m): { metric: string; options: ApexOptions } => ({
           metric: m,
           options: {
             chart: {
@@ -79,9 +80,8 @@ export default Vue.extend({
               height: 700,
               events: {
                 click: (event, chartContext, config) => {
-                  console.log(config);
-                  const { dataPointIndex: x, seriesIndex: s } = config;
-                  const d = ParseDate(seriesByMetric[m][s].data[x].x);
+                  const { dataPointIndex: x } = config;
+                  const d = ParseDate(series.xaxis[m][x]);
                   const r = this.runs.find(r => {
                     return ParseDate(r.Date).valueOf() === d.valueOf();
                   });
@@ -108,6 +108,7 @@ export default Vue.extend({
             },
             xaxis: {
               type: 'category',
+              categories: series.xaxis[m],
               sorted: true,
               tooltip: { enabled: false },
               labels: {
@@ -134,11 +135,13 @@ export default Vue.extend({
                 position: 'topLeft',
               },
             },
-            series: seriesByMetric[m],
+            // flatten since we are using categories
+            series: series.charts[m].map((s) => {
+              s.data = s.data.map(p => p.y) as any;
+              return s;
+            }),
           },
-        }));
-        console.log(`chart ${this.config.name}`, generatedCharts);
-        return generatedCharts || [];
+        })) || [];
       } catch (err) {
         console.error(`chart ${this.config.name}`, this.config, err);
         this.error = err;

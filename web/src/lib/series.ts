@@ -4,7 +4,7 @@ import { Run, RunSuiteBenchmark, RunSuite } from '@/generated';
 type ApexAxisChartSingleSeries = {
   name?: string;
   type?: string;
-  data: { x: any; y: any; fillColor?: string; strokeColor?: string }[];
+  data: { x: number; y: number | null }[];
 };
 
 type ApexAxisChartSeries = ApexAxisChartSingleSeries[];
@@ -59,7 +59,10 @@ function benchName(b: string): string {
  */
 export function generateSeries(
   runs: Run[], pkg: RegExp, benches: RegExp[], metrics: { [metric: string]: boolean } = defaultMetrics,
-): ChartSet {
+): {
+  charts: ChartSet;
+  xaxis: { [metric: string]: number[] };
+} {
   // by default, include all builtins
   if (Object.keys(metrics).length === 0) {
     metrics = defaultMetrics;
@@ -101,7 +104,7 @@ export function generateSeries(
         const series = existingSeries || index[metric][index[metric].length-1];
 
         // add appropriate value
-        const push = (y: any) => {
+        const push = (y: number) => {
           series.data.push({ x: run.Date, y });
           xaxis[metric][run.Date] = true;
         };
@@ -119,8 +122,8 @@ export function generateSeries(
           push(bench.Mem.MBPerSec);
           break;
         default:
-        // assume custom if metric is not a builtin
-          if (bench.Custom && bench.Custom[metric]) {
+          // assume custom if metric is not a builtin
+          if (bench.Custom && metric in bench.Custom) {
             push(bench.Custom[metric]);
           }
         }
@@ -128,26 +131,40 @@ export function generateSeries(
     }
   }, pkg);
 
+  // sort out x axis values for each metric
+  const xaxisArrays: { [metric: string]: number[] } = {};
+  metricKeys.forEach((metric) => {
+    xaxisArrays[metric] = Object.keys(xaxis[metric]).map(k => parseInt(k));
+    xaxisArrays[metric].sort();
+  });
+
   // fill missing data for each metric
   metricKeys.forEach((metric) => {
-    const seriesNames: string[] = [];
+    // index the points each series has data for
     const seriesX = index[metric].reduce((acc: { [s: string]: { [x: number]: boolean } }, series) => {
       acc[series.name || '?'] = series.data.reduce((acc2: { [x: number]: boolean }, point) => {
         acc2[point.x] = true;
         return acc2;
       }, {});
-      seriesNames.push(series.name || '?');
       return acc;
     }, {});
-    Object.keys(xaxis[metric]).forEach((key) => {
-      const x = parseInt(key);
+    // generate missing data
+    const seriesNames = Object.keys(seriesX);
+    xaxisArrays[metric].forEach((x) => {
       seriesNames.forEach(s => {
         if (!seriesX[s][x]) {
-          index[metric].find((series) => series.name == s)?.data.push({ x, y: null });
+          index[metric].find((series) => series.name === s)?.data.push({ x, y: null });
         }
       });
     });
+    // sort
+    index[metric].forEach(s => {
+      s.data.sort((p1, p2) => (p1.x < p2.x) ? -1 : 1);
+    });
   });
 
-  return index;
+  return {
+    charts: index,
+    xaxis: xaxisArrays,
+  };
 }
