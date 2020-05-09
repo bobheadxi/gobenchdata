@@ -74,6 +74,12 @@ export function generateSeries(
     return acc;
   }, {});
 
+  // we need to pad data, so track x axis of each metric
+  const xaxis = metricKeys.reduce((acc: { [metric: string]: { [x: number]: boolean } }, cur) => {
+    acc[cur] = {};
+    return acc;
+  }, {});
+
   // check each run for suites
   iterateBenchmarks(runs, (bench, _, run) => {
     for (let i = 0; i < benches.length; i += 1) {
@@ -93,29 +99,55 @@ export function generateSeries(
 
         // get existing series or get the one we just made
         const series = existingSeries || index[metric][index[metric].length-1];
-        const x = run.Date;
+
+        // add appropriate value
+        const push = (y: any) => {
+          series.data.push({ x: run.Date, y });
+          xaxis[metric][run.Date] = true;
+        };
         switch (metric) {
         case MetricBuiltins.NSPEROP:
-          series.data.push({ x, y: bench.NsPerOp });
+          push(bench.NsPerOp);
           break;
         case MetricBuiltins.MEM_ALLOCSPEROP:
-          series.data.push({ x, y: bench.Mem.AllocsPerOp });
+          push(bench.Mem.AllocsPerOp);
           break;
         case MetricBuiltins.MEM_BYPTESPEROP:
-          series.data.push({ x, y: bench.Mem.BytesPerOp });
+          push(bench.Mem.BytesPerOp);
           break;
         case MetricBuiltins.MEM_MBPERS:
-          series.data.push({ x, y: bench.Mem.MBPerSec });
+          push(bench.Mem.MBPerSec);
           break;
         default:
         // assume custom if metric is not a builtin
           if (bench.Custom && bench.Custom[metric]) {
-            series.data.push({ x, y: bench.Custom[metric] });
+            push(bench.Custom[metric]);
           }
         }
       }
     }
   }, pkg);
+
+  // fill missing data for each metric
+  metricKeys.forEach((metric) => {
+    const seriesNames: string[] = [];
+    const seriesX = index[metric].reduce((acc: { [s: string]: { [x: number]: boolean } }, series) => {
+      acc[series.name || '?'] = series.data.reduce((acc2: { [x: number]: boolean }, point) => {
+        acc2[point.x] = true;
+        return acc2;
+      }, {});
+      seriesNames.push(series.name || '?');
+      return acc;
+    }, {});
+    Object.keys(xaxis[metric]).forEach((key) => {
+      const x = parseInt(key);
+      seriesNames.forEach(s => {
+        if (!seriesX[s][x]) {
+          index[metric].find((series) => series.name == s)?.data.push({ x, y: null });
+        }
+      });
+    });
+  });
 
   return index;
 }

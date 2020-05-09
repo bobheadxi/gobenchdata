@@ -83,6 +83,7 @@ export default Vue.extend({
               height: 500,
               events: {
                 click: (event, chartContext, config) => {
+                  console.log(config);
                   const { dataPointIndex: x, seriesIndex: s } = config;
                   const d = ParseDate(seriesByMetric[m][s].data[x].x);
                   const r = this.runs.find(r => {
@@ -91,12 +92,18 @@ export default Vue.extend({
                   if (r) window.open(`${this.repo}/commit/${r.Version}`);
                 },
               },
+              toolbar: {
+                tools: {
+                  zoom: false,
+                  selection: false,
+                },
+              },
             },
             dataLabels: {
               enabled: false,
             },
             xaxis: {
-              type: 'datetime',
+              type: 'category',
               sorted: true,
               tooltip: { enabled: false },
               labels: {
@@ -115,14 +122,12 @@ export default Vue.extend({
             tooltip: {
               enabled: true,
               shared: true,
-              theme: 'dark',
-              y: {
-                formatter: (value): string => {
-                  return `${value} ${m}`;
-                },
-              },
               onDatasetHover: {
                 highlightDataSeries: true,
+              },
+              fixed: {
+                enabled: true,
+                position: 'topLeft',
               },
             },
             series: seriesByMetric[m],
