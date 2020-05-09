@@ -1,4 +1,4 @@
-import { Run, ParseDate, RunSuiteBenchmark, RunSuite } from '@/generated';
+import { Run, RunSuiteBenchmark, RunSuite } from '@/generated';
 
 // copied from 'apexcharts.ApexAxisChartSeries'
 type ApexAxisChartSingleSeries = {
@@ -90,8 +90,10 @@ export function generateSeries(
             data: [],
           });
         }
+
+        // get existing series or get the one we just made
         const series = existingSeries || index[metric][index[metric].length-1];
-        const x = ParseDate(run.Date);
+        const x = run.Date;
         switch (metric) {
         case MetricBuiltins.NSPEROP:
           series.data.push({ x, y: bench.NsPerOp });

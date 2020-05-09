@@ -96,6 +96,8 @@ export default Vue.extend({
               enabled: false,
             },
             xaxis: {
+              type: 'datetime',
+              sorted: true,
               tooltip: { enabled: false },
               labels: {
                 show: false,
@@ -111,10 +113,16 @@ export default Vue.extend({
               },
             },
             tooltip: {
+              enabled: true,
+              shared: true,
+              theme: 'dark',
               y: {
                 formatter: (value): string => {
                   return `${value} ${m}`;
                 },
+              },
+              onDatasetHover: {
+                highlightDataSeries: true,
               },
             },
             series: seriesByMetric[m],
