@@ -32,10 +32,6 @@
       @media (max-width: $touch) {
         width: 100%
       }
-
-      .chart-container {
-        height: 520px;
-      }
     }
   }
 }
@@ -80,7 +76,7 @@ export default Vue.extend({
           options: {
             chart: {
               type: 'line',
-              height: 500,
+              height: 700,
               events: {
                 click: (event, chartContext, config) => {
                   console.log(config);
@@ -99,6 +95,14 @@ export default Vue.extend({
                 },
               },
             },
+            responsive: [{
+              breakpoint: 769, // "tablet"
+              options: {
+                chart: {
+                  height: 300,
+                },
+              },
+            }],
             dataLabels: {
               enabled: false,
             },
