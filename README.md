@@ -33,7 +33,7 @@ JSON to `gh-pages` and visualizing it with a generated web app or your own web a
 
 ### Setup
 
-For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions):
+For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions), a simple benchmark [run and publish workflow](#publishing) would look like:
 
 ```yml
 name: gobenchdata publish
