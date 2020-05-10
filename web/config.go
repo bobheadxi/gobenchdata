@@ -43,6 +43,13 @@ type Chart struct {
 	// builtins: 'NsPerOp' | 'Mem.BytesPerOp' | 'Mem.AllocsPerOp' | 'Mem.MBPerSec'
 	// each metric is charted in a separate subchart
 	Metrics map[string]bool `json:"metrics" yaml:"metrics"`
+
+	Display *ChartDisplay `json:"display" yaml:"display"`
+}
+
+// ChartDisplay configures how the charts are rendered
+type ChartDisplay struct {
+	FullWidth bool `json:"fullWidth" yaml:"fullWidth"`
 }
 
 // LoadConfig loads up gobenchdata-web configuration

@@ -4,12 +4,16 @@
     <p v-html="description"></p>
     <div v-if="error">{{ error }}</div>
     <div v-else class="chart-set">
-      <div v-for="c in generateCharts()" :key="c.metric" class="metric">
+      <div v-for="c in generateCharts()"
+        class="metric"
+        :key="c.metric"
+        :class="{ 'full-width': config.display && config.display.fullWidth }">
         <h5>{{ c.metric }}</h5>
         <div class="chart-container">
           <apexchart
             :options="c.options"
             :series="c.options.series"
+            :height="config.display && config.display.fullWidth ? 300 : 'auto'"
           ></apexchart>
         </div>
       </div>
@@ -27,10 +31,17 @@
     .metric {
       width: 33%;
       @media (max-width: $desktop) {
-        width: 50%
+        width: 50%;
       }
       @media (max-width: $touch) {
-        width: 100%
+        width: 100%;
+      }
+
+      &.full-width {
+        width: 80%;
+        @media (max-width: $touch) {
+          width: 100%;
+        }
       }
     }
   }
@@ -77,7 +88,6 @@ export default Vue.extend({
           options: {
             chart: {
               type: 'line',
-              height: 700,
               events: {
                 markerClick: (event, chartContext, config) => {
                   if (!this.repo) return;

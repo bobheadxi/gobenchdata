@@ -54,6 +54,21 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 }
 
 // classes
+// struct2ts:go.bobheadxi.dev/gobenchdata/web.ConfigChartGroupChartChartDisplay
+class ConfigChartGroupChartChartDisplay {
+  fullWidth: boolean;
+
+  constructor(data?: any) {
+    const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
+    this.fullWidth = ('fullWidth' in d) ? d.fullWidth as boolean : false;
+  }
+
+  toObject(): any {
+    const cfg: any = {};
+    return ToObject(this, cfg);
+  }
+}
+
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.ConfigChartGroupChart
 class ConfigChartGroupChart {
   name: string;
@@ -61,6 +76,7 @@ class ConfigChartGroupChart {
   package: string;
   benchmarks: string[];
   metrics: { [key: string]: boolean };
+  display: ConfigChartGroupChartChartDisplay | null;
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
@@ -69,6 +85,7 @@ class ConfigChartGroupChart {
     this.package = ('package' in d) ? d.package as string : '';
     this.benchmarks = ('benchmarks' in d) ? d.benchmarks as string[] : [];
     this.metrics = ('metrics' in d) ? d.metrics as { [key: string]: boolean } : {};
+    this.display = ('display' in d) ? new ConfigChartGroupChartChartDisplay(d.display) : null;
   }
 
   toObject(): any {
@@ -211,6 +228,7 @@ class Run {
 
 // exports
 export {
+  ConfigChartGroupChartChartDisplay,
   ConfigChartGroupChart,
   ConfigChartGroup,
   Config,

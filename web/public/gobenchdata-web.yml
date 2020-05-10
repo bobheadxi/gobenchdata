@@ -22,3 +22,5 @@ chartGroups:
       - name: match by a combination of package and benchmarks
         package: go.bobheadxi.dev\/gobenchdata\/.
         benchmarks: [ 'BenchmarkPizzas.', '.FibSlow.' ]
+        display:
+          fullWidth: true
