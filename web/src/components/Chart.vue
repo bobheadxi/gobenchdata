@@ -79,7 +79,8 @@ export default Vue.extend({
               type: 'line',
               height: 700,
               events: {
-                click: (event, chartContext, config) => {
+                markerClick: (event, chartContext, config) => {
+                  if (!this.repo) return;
                   const { dataPointIndex: x } = config;
                   const d = ParseDate(series.xaxis[m][x]);
                   const r = this.runs.find(r => {
