@@ -1,15 +1,21 @@
 name: Continuous Benchmarking for Go
 author: Robert Lin <robert@bobheadxi.dev>
-description: Runs your Go benchmarks and publishes the results to a JSON file in your gh-pages branch.
+description: Run your Go benchmarks, publish results to an interactive web applciation, and check for performance regressions in your pull requests!
 branding:
   icon: activity
   color: white
+runs:
+  using: docker
+  image: Dockerfile
+
+# see https://github.com/bobheadxi/gobenchdata#github-action for more details
 inputs:
+  # shared
   SUBDIRECTORY:
     description: subdirectory of project to run commands from
     default: '.'
   GO_BENCHMARKS:
-    description: enchmarks to run (argument for `-bench`)
+    description: benchmarks to run (argument for `-bench`)
     default: '.'
   GO_TEST_FLAGS:
     description: additional flags for `go test`
@@ -19,11 +25,24 @@ inputs:
   BENCHMARKS_OUT:
     description: destination path of benchmark data
     default: 'benchmarks.json'
+  PUBLISH_REPO:
+    description: repository base branch results are published to
+  PUBLISH_BRANCH:
+    default: 'gh-pages'
+    description: branch results are published to
+  # publishing
+  PUBLISH:
+    default: false
+    description: enable publishing of benchmark results
   PRUNE_COUNT:
     description: number of past runs to keep (`0` keeps everything)
     default: 0
   GIT_COMMIT_MESSAGE:
     description: the commit message for the benchmark update
-runs:
-  using: docker
-  image: Dockerfile
+  # checks
+  CHECKS:
+    default: false
+    description: enable checks on benchmark results
+  CHECKS_CONFIG:
+    default: 'gobenchdata-checks.yml'
+    description: path to checks configuration

@@ -1,6 +1,4 @@
-# gobenchdata
-
-> This is a work-in-progress branch for `bobheadxi/gobenchdata@v1`
+# 📉 gobenchdata
 
 [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
 [![publish@v1](https://github.com/bobheadxi/gobenchdata/workflows/publish@v1/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=publish%40v1)
@@ -8,7 +6,7 @@
 [![demo](https://github.com/bobheadxi/gobenchdata/workflows/demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=demo)
 [![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
 
-`gobenchdata`  is a tool for inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. was inspired by the [deno.land continuous benchmarks](https://deno.land/benchmarks.html), which aims to display performance improvements and regressions on a continuous basis.
+`gobenchdata` is a tool for parsing and inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. It was inspired by the [`deno.land` continuous benchmarks](https://deno.land/benchmarks.html), which aims to display performance improvements and regressions on a continuous basis.
 
 <a href="https://gobenchdata.bobheadxi.dev/" target="_blank">
   <img align="right" width="500" src="./.static/demo-chart.png" alt="example">
@@ -24,9 +22,7 @@
   - [Pull Request Checks](#pull-request-checks)
   - [Visualisation](#visualisation)
 - [Command Line Interface](#command-line-interface)
-- [Development and Contributions](#development-and-contributions)
-
-<br />
+- [Contributions](#contributions)
 
 <br />
 
@@ -49,7 +45,7 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - name: gobenchdata publish
-      uses: ./
+      uses: bobheadxi/gobenchdata@v1
       with:
         PRUNE_COUNT: 30
         GO_TEST_FLAGS: -cpu 1,2
@@ -275,7 +271,7 @@ For more details on how to use checks, see the [pull request checks documentatio
 
 <br />
 
-## Development and Contributions
+## Contributions
 
 Please report bugs and requests in the [repository issues](https://go.bobheadxi.dev/gobenchdata)!
 
