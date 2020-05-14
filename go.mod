@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/OneOfOne/struct2ts v1.0.4
 	github.com/UnnoTed/fileb0x v1.1.4
-	github.com/antonmedv/expr v1.8.4
+	github.com/antonmedv/expr v1.8.5
 	github.com/bmatcuk/doublestar v1.1.5 // indirect
 	github.com/karrick/godirwalk v1.8.2 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
@@ -18,8 +18,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422
-	golang.org/x/net v0.0.0-20200506145744-7e3656a0809f
+	golang.org/x/net v0.0.0-20200513185701-a91f0712d120
 	golang.org/x/tools v0.0.0-20190503185657-3b6f9c0030f7 // indirect
 	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
-	gopkg.in/yaml.v2 v2.2.8
+	gopkg.in/yaml.v2 v2.3.0
 )
