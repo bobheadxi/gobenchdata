@@ -1,5 +1,5 @@
 {
 	"eslint.workingDirectories": [
-		"x/gobenchdata-web/web"
+		"web"
 	]
 }

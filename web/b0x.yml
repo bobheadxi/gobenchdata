@@ -1,0 +1,21 @@
+# package
+pkg: web
+
+# destination
+dest: "."
+
+# gofmt
+fmt: true
+
+# output file
+output: "app.go"
+noprefix: true
+
+# debug mode where the files are read directly from the filesytem
+debug: false
+
+# files
+custom:
+  - files: [ ./dist ]
+    base: 'dist'
+    exclude: [ '**/*.json', '**/*.yml' ]

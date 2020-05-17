@@ -1,13 +1,21 @@
 #!/bin/bash
 set -e
 
-# generate some defaults
+# core configuration
 INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
 INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
 INPUT_GO_TEST_PKGS="${INPUT_GO_TEST_PKGS:-"./..."}"
 INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
 INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
+
+# publishing configuration
+INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
+INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
+
+# pull request checks
+INPUT_CHECKS="${INPUT_CHECKS:-"false"}"
+INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
@@ -40,32 +48,55 @@ go test \
   | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
-# fetch github pages branch
+# fetch published data
 echo
-echo '📚 Checking out gh-pages...'
+echo "📚 Checking out ${INPUT_PUBLISH_REPO}@${INPUT_PUBLISH_BRANCH}..."
 cd /tmp/build
-git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git .
-git checkout gh-pages
-
-# generate output
+git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_PUBLISH_REPO}.git .
+git checkout ${INPUT_PUBLISH_BRANCH}
 echo
-echo '☝️ Updating results...'
-if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
-  echo '📈 Existing report found - merging...'
-  gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
-    --flat \
-    --prune "${INPUT_PRUNE_COUNT}" \
-    --json "${INPUT_BENCHMARKS_OUT}"
-else
-  cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+
+if [[ "${INPUT_CHECKS}" == "true" ]]; then
+
+  # check results against published
+  echo '🔎 Evaluating results against base runs...'
+  CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
+  gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
+    --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
+    --json ${CHECKS_OUTPUT} \
+    --flat
+  RESULTS=$(cat ${CHECKS_OUTPUT})
+  echo "::set-output name=checks-results::$RESULTS"
+
+  # output results
+  echo
+  echo '📝 Generating checks report...'
+  gobenchdata checks report ${CHECKS_OUTPUT}
+
 fi
 
-# publish results
-echo
-echo '📷 Committing and pushing new benchmark data...'
-git add .
-git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
-git push -f origin gh-pages
+if [[ "${INPUT_PUBLISH}" == "true" ]]; then
+
+  # merge results with published
+  echo '☝️ Updating results...'
+  if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
+    echo '📈 Existing report found - merging...'
+    gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
+      --prune "${INPUT_PRUNE_COUNT}" \
+      --json "${INPUT_BENCHMARKS_OUT}" \
+      --flat
+  else
+    cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+  fi
+
+  # publish results
+  echo
+  echo '📷 Committing and pushing new benchmark data...'
+  git add .
+  git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
+  git push -f origin ${INPUT_PUBLISH_BRANCH}
+
+fi
 
 echo
 echo '🚀 Done!'

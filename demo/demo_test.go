@@ -1,6 +1,7 @@
 package demo
 
 import (
+	"math/rand"
 	"testing"
 )
 
@@ -33,6 +34,19 @@ func BenchmarkFib10(b *testing.B) {
 	b.Run("FibSlow()", func(b *testing.B) {
 		for n := 0; n < b.N; n++ {
 			FibSlow(10)
+		}
+	})
+}
+
+func BenchmarkPizzas(b *testing.B) {
+	b.Run("Pizzas()", func(b *testing.B) {
+		for n := 0; n < b.N; n++ {
+			b.ReportMetric(float64(rand.Intn(10)), "pizzas")
+		}
+	})
+	b.Run("PizzasSquared()", func(b *testing.B) {
+		for n := 0; n < b.N; n++ {
+			b.ReportMetric(float64(rand.Intn(10)^2), "pizzas")
 		}
 	})
 }

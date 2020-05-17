@@ -1,9 +1,16 @@
 benchmarks.json
 bench.json
+report.json
 tmp
 gobenchdata
+dist
+/gobenchdata-web.yml
+/gobenchdata-checks.yml
 
 # dependencies
 vendor
 node_modules
 package-lock.json
+
+# misc
+.DS_Store
