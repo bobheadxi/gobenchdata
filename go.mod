@@ -5,7 +5,7 @@ go 1.12
 require (
 	github.com/OneOfOne/struct2ts v1.0.4
 	github.com/UnnoTed/fileb0x v1.1.4
-	github.com/antonmedv/expr v1.8.5
+	github.com/antonmedv/expr v1.8.6
 	github.com/bmatcuk/doublestar v1.1.5 // indirect
 	github.com/karrick/godirwalk v1.8.2 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
