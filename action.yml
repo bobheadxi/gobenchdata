@@ -1,6 +1,6 @@
 name: Continuous Benchmarking for Go
 author: Robert Lin <robert@bobheadxi.dev>
-description: Run your Go benchmarks, publish results to an interactive web applciation, and check for performance regressions in your pull requests!
+description: Run Go benchmarks, publish results to an interactive web app, and check for performance regressions in your pull requests!
 branding:
   icon: activity
   color: white
