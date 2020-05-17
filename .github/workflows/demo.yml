@@ -13,9 +13,7 @@ jobs:
         GO_TEST_FLAGS: -cpu 1,2
         CHECKS: true
         CHECKS_CONFIG: ./demo/gobenchdata-checks.yml
-        # TODO: update after release
-        PUBLISH_REPO: bobheadxi/gobenchdata-v1-demo
-        PUBLISH_BRANCH: master
+        PUBLISH_BRANCH: gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
@@ -31,8 +29,6 @@ jobs:
         PRUNE_COUNT: 30
         GO_TEST_FLAGS: -cpu 1,2
         PUBLISH: true
-        # TODO: update after release
-        PUBLISH_REPO: bobheadxi/gobenchdata-v1-demo
-        PUBLISH_BRANCH: master
+        PUBLISH_BRANCH: gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
