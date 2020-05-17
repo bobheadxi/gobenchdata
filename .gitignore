@@ -1,1 +1,8 @@
 x
+node_modules
+.DS_Store
+.static/
+gobenchdata-checks.yml
+web/
+tmp/
+report.json
