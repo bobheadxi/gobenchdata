@@ -1,77 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
-    <link rel="stylesheet" href="style.css" />
-    <meta name="theme-color" content="#000000" />
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
-
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="favicon.ico">
     <title>gobenchdata continuous benchmark demo</title>
-  </head>
 
+    
+
+    <link rel="stylesheet" type="text/css" href="overrides.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="css/app.3fb7d538.css" rel="preload" as="style"><link href="js/app.a7eb1589.js" rel="preload" as="script"><link href="js/chunk-vendors.bdca3c73.js" rel="preload" as="script"><link href="css/app.3fb7d538.css" rel="stylesheet"></head>
   <body>
+    <noscript>
+      <strong>We're sorry but gobenchdata continuous benchmark demo doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
     
-    <div id="benchmarks-path" hidden>benchmarks.json</div>
-    <div id="source" hidden>github.com/bobheadxi/gobenchdata</div>
-    <div id="canonical-import" hidden>go.bobheadxi.dev/gobenchdata</div>
-    <div id="charts-types" hidden>bytes/op,allocs/op</div>
-    <div id="perBenchmark" hidden>false</div>
-
-    
-    <div class="header">
-      <h1>gobenchdata continuous benchmark demo</h1>
-      <h4>
-        generated with
-        <a href="https://bobheadxi.dev/r/gobenchdata" target="_blank">
-          gobenchdata
-        </a>
-      </h4>
-      <p>This is a demo for gobenchdata, a tool and GitHub action for setting up simple continuous benchmarks to monitor performance improvements and regressions in your Golang benchmarks!</p>
-    </div>
-
-    <hr />
-
-    
-    <div class="main">
-      <div id="charts"></div>
-    </div>
-
-    
-    <div class="footer">
-      <a href="https://bobheadxi.dev/r/gobenchdata">
-        <img alt="View Action in the GitHub Marketplace" src="https://img.shields.io/badge/view-github%20action-yellow.svg" />
-      </a>
-    </div>
-
-    
-    <script type="module">
-      import { generateCharts } from './app.js';
-
-      const getVariable = (key, def='') => {
-        const v = document.getElementById(key).innerText;
-        
-        return (v && v.startsWith('{') && v.endsWith('}')) ? def : v;
-      }
-
-      const chartsTypes = getVariable('charts-types');
-      window.onload = generateCharts({
-        div: document.getElementById('charts'),
-
-        json: getVariable('benchmarks-path', 'benchmarks.json'),
-        source: getVariable('source'),
-        canonicalImport: getVariable('canonical-import'),
-
-        chartsTypes: chartsTypes ? chartsTypes.split(',') : ['bytes/op', 'allocs/op'],
-        perBenchmark: (getVariable('perBenchmark') == 'true'),
-      }).finally(console.log('charts loaded!'));
-    </script>
-  </body>
+  <script type="text/javascript" src="js/chunk-vendors.bdca3c73.js"></script><script type="text/javascript" src="js/app.a7eb1589.js"></script></body>
 </html>
