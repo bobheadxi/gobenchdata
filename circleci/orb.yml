@@ -1,0 +1,50 @@
+version: "2.1"
+description: "enables convenient usage of gobenchdata via circleci"
+display:
+    home_url: https://github.com/bobheadxi/gobenchdata/
+    source_url: https://github.com/bobheadxi/gobenchdata/blob/master/circleci/orb.yml
+commands:
+    execute:
+        parameters:
+            count:
+                description: Number of benchmark iterations to run
+                type: string
+                default: "1000x"
+            match:
+                description: Name to match for determining benchmarks to run
+                type: string
+                default: "."
+            path:
+                description: Path to benchmarks to run
+                type: string
+                default: ""
+            options:
+                description: Options to pass into the `go test` command
+                type: string
+                default: "-benchmem"
+            output:
+                description: Path to output results to
+                type: string
+                default: "bench.txt"
+            timeout:
+                description: Test timeout in time.Duration values
+                type: string
+                default: "600s"
+        steps:
+            - run:
+                name: "Run Benchmarks And Store Results"
+                command: go test -timeout="<< parameters.timeout >>" -bench="<< parameters.match >>" --benchtime "<< parameters.count >>" "<< parameters.path >>" "<< parameters.options >>" > "<< parameters.output >>"
+    parse:
+        parameters:
+            file:
+                description: File containing benchmark samples
+                type: string
+                default: "bench.txt"
+            output:
+                description: File to store parsed data into
+                type: string
+                default: "gobenchdata_output.json"
+        steps:
+            - run:
+                name: "Parse Benchmark Results And Generate GoBenchData Output"
+                command: cat "<< parameters.file >>" | gobenchdata --json "<< parameters.output >>"
