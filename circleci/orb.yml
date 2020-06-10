@@ -46,5 +46,5 @@ commands:
                 default: "gobenchdata_output.json"
         steps:
             - run:
-                name: "Parse Benchmark Results And Generate GoBenchData Output"
+                name: "Parse Benchmark Results And Generate gobenchdata Output"
                 command: cat "<< parameters.file >>" | gobenchdata --json "<< parameters.output >>"
