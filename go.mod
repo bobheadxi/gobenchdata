@@ -7,6 +7,7 @@ require (
 	github.com/UnnoTed/fileb0x v1.1.4
 	github.com/antonmedv/expr v1.8.6
 	github.com/bmatcuk/doublestar v1.1.5 // indirect
+	github.com/google/go-cmp v0.5.0
 	github.com/karrick/godirwalk v1.8.2 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/labstack/echo v3.3.10+incompatible // indirect
