@@ -18,7 +18,7 @@
     </div>
 
     <div class="footer">
-      <p>generated using <a href="https://bobheadxi.dev/gobenchdata">gobenchdata</a></p>
+      <p>generated using <a href="https://bobheadxi.dev/r/gobenchdata">gobenchdata</a></p>
     </div>
   </div>
 </template>
