@@ -1,24 +1,22 @@
 # Contributing
 
-- [Development](#development)
-  - [GitHub Action](#github-action)
-  - [CLI](#cli)
-  - [Web App](#web-app)
-
-## Development
-
-[![Build Status](https://dev.azure.com/bobheadxi/bobheadxi/_apis/build/status/bobheadxi.gobenchdata?branchName=master)](https://dev.azure.com/bobheadxi/bobheadxi/_build/latest?definitionId=7&branchName=master)
+[![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
 [![codecov](https://codecov.io/gh/bobheadxi/gobenchdata/branch/master/graph/badge.svg)](https://codecov.io/gh/bobheadxi/gobenchdata)
+[![pkg.go.dev](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/go.bobheadxi.dev/gobenchdata?tab=doc)
 [![Go Report Card](https://goreportcard.com/badge/go.bobheadxi.dev/gobenchdata)](https://goreportcard.com/report/go.bobheadxi.dev/gobenchdata)
 
-### GitHub Action
+- [Action](#action)
+- [CLI](#cli)
+- [Web](#web)
+
+## Action
 
 The code for the Action is in the `Dockerfile` and `entrypoint.sh`. It is
 continuously tested by the [demo workflow](https://github.com/bobheadxi/gobenchdata/blob/master/.github/workflows/push.yml).
 
 [`act`](https://github.com/nektos/act) is a great tool to test Actions locally.
 
-### CLI
+## CLI
 
 The `gobenchdata` CLI and its associated utilities are written in [Golang](https://golang.org/).
 To get started, clone the repository and enable [Go Modules](https://github.com/golang/go/wiki/Modules):
@@ -39,10 +37,10 @@ make generate
 
 The example benchmarks can be run using `make bench`.
 
-### Web App
+## Web
 
 The web app and the web app generator are both in [/web](./web). Assets are compiled
-using [`fileb0x`](https://github.com/UnnoTed/fileb0x) (see previous section).
+using [`fileb0x`](https://github.com/UnnoTed/fileb0x) (see previous section). The app is built using [Vue.js](https://vuejs.org/).
 
 To test the web app, add a `benchmarks.json` (for example, the demo data available
 in [`gh-pages`](https://go.bobheadxi.dev/gobenchdata/blob/gh-pages/benchmarks.json))
