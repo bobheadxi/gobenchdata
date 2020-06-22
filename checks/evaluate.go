@@ -94,11 +94,20 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory, o
 	}
 	out := internal.Printer{Debug: debug}
 
-	// put most recent at top
-	sort.Sort(base)
 	sort.Sort(current)
-	baseRun := base[base.Len()-1]
 	currentRun := current[current.Len()-1]
+
+	if base.Len() == 0 {
+		out.Print("base benchmarks has no runs - passing automatically")
+		return &Report{
+			Status:  StatusPass,
+			Base:    "",
+			Current: currentRun.Version,
+			Checks:  nil,
+		}, nil
+	}
+	sort.Sort(base)
+	baseRun := base[base.Len()-1]
 	out.Printf("comparing versions base='%s', current='%s'", baseRun.Version, currentRun.Version)
 
 	// set up results

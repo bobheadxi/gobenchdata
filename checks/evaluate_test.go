@@ -76,6 +76,28 @@ func TestEvaluate(t *testing.T) {
 		want    *Report
 		wantErr bool
 	}{
+		{"pass on nil base", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: thresholdsSimple,
+			}},
+			bench.RunHistory{},
+			bench.RunHistory{{
+				Version: "current",
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Report{
+			Status:  StatusPass,
+			Base:    "",
+			Current: "current",
+			Checks:  nil,
+		}, false},
 		{"simple pass", args{
 			[]Check{{
 				Name:       "C",
