@@ -14,35 +14,47 @@ inputs:
   SUBDIRECTORY:
     description: subdirectory of project to run commands from
     default: '.'
+    required: false
   GO_BENCHMARKS:
     description: benchmarks to run (argument for `-bench`)
     default: '.'
+    required: false
   GO_TEST_FLAGS:
     description: additional flags for `go test`
+    required: false
   GO_TEST_PKGS:
     description: packages to test (argument for `go test`)
     default: './...'
+    required: false
   BENCHMARKS_OUT:
     description: destination path of benchmark data
     default: 'benchmarks.json'
+    required: false
   PUBLISH_REPO:
     description: repository base branch results are published to
+    required: false
   PUBLISH_BRANCH:
     default: 'gh-pages'
     description: branch results are published to
+    required: false
   # publishing
   PUBLISH:
-    default: false
+    default: "false"
     description: enable publishing of benchmark results
+    required: false
   PRUNE_COUNT:
     description: number of past runs to keep (`0` keeps everything)
-    default: 0
+    default: "0"
+    required: false
   GIT_COMMIT_MESSAGE:
     description: the commit message for the benchmark update
+    required: false
   # checks
   CHECKS:
-    default: false
     description: enable checks on benchmark results
+    default: "false"
+    required: false
   CHECKS_CONFIG:
     default: 'gobenchdata-checks.yml'
     description: path to checks configuration
+    required: false
