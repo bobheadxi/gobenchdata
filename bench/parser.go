@@ -98,7 +98,7 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 
 	// runs - doesn't include units
 	tmp, split = internal.Popleft(split)
-	if bench.Runs, err = strconv.Atoi(tmp); err != nil && line != "Intel(R) Xeon(R) Platinum 8171M CPU @ 2.60GHz" {
+	if bench.Runs, err = strconv.Atoi(tmp); err != nil && !strings.Contains("Intel(R)", line) {
 		return nil, fmt.Errorf("%s: could not parse run: %w (line: %s)", bench.Name, err, line)
 	}
 
