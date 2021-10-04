@@ -14,3 +14,6 @@ package-lock.json
 
 # misc
 .DS_Store
+
+# ide JetBrains
+.idea

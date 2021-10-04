@@ -144,7 +144,7 @@ PASS`}, &Suite{
 			first, _, _ := p.in.ReadLine()
 			got, err := p.readBenchmarkSuite(string(first))
 			// ignore cpu
-			if strings.Contains(got.Benchmarks[0].Name, "cpu"){
+			if strings.Contains(got.Benchmarks[0].Name, "cpu"){ // Name = cpu: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
 				return
 			}
 			if (err != nil) != tt.wantErr {
