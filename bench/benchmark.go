@@ -40,6 +40,7 @@ type Suite struct {
 	Goos       string
 	Goarch     string
 	Pkg        string
+	Cpu        string
 	Benchmarks []Benchmark
 }
 

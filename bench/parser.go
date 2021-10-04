@@ -69,6 +69,9 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 		} else if strings.HasPrefix(line, "pkg:") {
 			split = strings.Split(line, ": ")
 			suite.Pkg = split[1]
+		}else if strings.HasPrefix(line, "cpu:"){
+			split = strings.Split(line, ": ")
+			suite.Cpu = split[1]
 		} else {
 			bench, err := p.readBenchmark(line)
 			if err != nil {
@@ -99,7 +102,7 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 	// runs - doesn't include units
 	tmp, split = internal.Popleft(split)
     // Ignore CPU information for now, until we support parsing it: https://github.com/bobheadxi/gobenchdata/issues/47
-	if bench.Runs, err = strconv.Atoi(tmp); err != nil && !strings.Contains(line, "cpu:") {
+	if bench.Runs, err = strconv.Atoi(tmp); err != nil {
 		return nil, fmt.Errorf("%s: could not parse run: %w (line: %s)", bench.Name, err, line)
 	}
 

@@ -107,6 +107,7 @@ PASS`,
 			Goos:   "darwin",
 			Goarch: "amd64",
 			Pkg:    "go.bobheadxi.dev/gobenchdata/demo",
+			Cpu:    "Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz",
 			Benchmarks: []Benchmark{
 				{
 					Name: "BenchmarkFib10/Fib()-12", Runs: 3293298, NsPerOp: 330,
@@ -119,13 +120,14 @@ PASS`,
 		{"go test -bench . -benchmem ./...", fields{`goos: darwin
 goarch: amd64
 pkg: go.bobheadxi.dev/gobenchdata/demo
-cpu: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
+cpu: AMD Ryzen 5 4500U with Radeon Graphics
 BenchmarkFib10/FibSlow()-12	3033732	358 ns/op	16 B/op	1 allocs/op
 BenchmarkPizzas/Pizzas()-12	22866814	46.3 ns/op	9.00 pizzas	0 B/op	0 allocs/op
 PASS`}, &Suite{
 			Goos:   "darwin",
 			Goarch: "amd64",
 			Pkg:    "go.bobheadxi.dev/gobenchdata/demo",
+			Cpu:    "AMD Ryzen 5 4500U with Radeon Graphics",
 			Benchmarks: []Benchmark{
 				{
 					Name: "BenchmarkFib10/FibSlow()-12", Runs: 3033732, NsPerOp: 358, Mem: Mem{BytesPerOp: 16, AllocsPerOp: 1},
@@ -143,10 +145,6 @@ PASS`}, &Suite{
 			}
 			first, _, _ := p.in.ReadLine()
 			got, err := p.readBenchmarkSuite(string(first))
-			// ignore cpu
-			if strings.Contains(got.Benchmarks[0].Name, "cpu"){ // Name = cpu: Intel(R) Core(TM) i5-9400F CPU @ 2.90GHz
-				return
-			}
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Parser.readBenchmarkSuite() error = %v, wantErr %v", err, tt.wantErr)
 				return
