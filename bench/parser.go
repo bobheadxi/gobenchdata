@@ -99,7 +99,7 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 	// runs - doesn't include units
 	tmp, split = internal.Popleft(split)
     // Ignore CPU information for now, until we support parsing it: https://github.com/bobheadxi/gobenchdata/issues/47
-	if bench.Runs, err = strconv.Atoi(tmp); err != nil && !strings.Contains(line, "cpu: ") {
+	if bench.Runs, err = strconv.Atoi(tmp); err != nil && !strings.Contains(line, "cpu:") {
 		return nil, fmt.Errorf("%s: could not parse run: %w (line: %s)", bench.Name, err, line)
 	}
 
