@@ -26,3 +26,4 @@ jobs:
       run: |
         echo ${{ secrets.ACCESS_TOKEN }} | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
         docker push ghcr.io/bobheadxi/gobenchdata:$(git describe --tags)
+        docker push -f ghcr.io/bobheadxi/gobenchdata:v1
