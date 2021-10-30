@@ -20,9 +20,9 @@ jobs:
     steps:
     - name: checkout
       uses: actions/checkout@v2
-    - name: docker build 
-      run: docker build -t ghcr.io/bobheadxi/gobenchdata:$(git describe --tags)
+    - name: docker build
+      run: docker build -t ghcr.io/bobheadxi/gobenchdata:$(git describe --tags) .
     - name: Publish to GitHub Container Registry
       run: |
         echo ${{ secrets.ACCESS_TOKEN }} | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
-        docker push ghcr.io/gobenchdata/gobenchdata:$(git describe --tags)
+        docker push ghcr.io/bobheadxi/gobenchdata:$(git describe --tags)
