@@ -34,6 +34,7 @@ func TestParser_readBenchmarkSuite(t *testing.T) {
 		{"go test -bench . ./...", fields{`goos: darwin
 goarch: amd64
 pkg: go.bobheadxi.dev/gobenchdata/demo
+cpu: Intel AMD Xeon Phenom
 BenchmarkFib10/Fib()-12	3293298	330 ns/op
 BenchmarkPizzas/Pizzas()-12	25820055	50.0 ns/op	3.00 pizzas
 PASS`,
