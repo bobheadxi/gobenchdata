@@ -1,4 +1,4 @@
-FROM golang:1.16
+FROM golang:1.17
 
 LABEL maintainer="Robert Lin <robert@bobheadxi.dev>"
 LABEL repository="https://go.bobheadxi.dev/gobenchdata"
