@@ -4,7 +4,7 @@ on:
     tags: [ 'v1.*' ]
 
 jobs:
-  publish:
+  tag:
     runs-on: ubuntu-latest
     steps:
     - name: checkout
@@ -15,3 +15,14 @@ jobs:
         git config --global user.name "${GITHUB_ACTOR}"
         git tag -fa v1 -m "update v1 tag"
         git push origin v1 --force
+  image:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - name: docker build 
+      run: docker build -t ghcr.io/bobheadxi/gobenchdata:$(git describe --tags)
+    - name: Publish to GitHub Container Registry
+      run: |
+        echo ${{ secrets.ACCESS_TOKEN }} | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
+        docker push ghcr.io/gobenchdata/gobenchdata:$(git describe --tags)
