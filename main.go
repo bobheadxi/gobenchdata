@@ -82,7 +82,8 @@ func main() {
 		case "merge":
 			args := pflag.Args()[1:]
 			if len(args) < 1 {
-				panic("no merge targets provided")
+				println("no merge targets provided")
+				os.Exit(1)
 			}
 			merge(args...)
 
@@ -100,7 +101,8 @@ func main() {
 			switch webCmd := pflag.Args()[1]; webCmd {
 			case "generate":
 				if len(pflag.Args()) < 3 {
-					panic("no output directory provided")
+					println("no output directory provided")
+					os.Exit(1)
 				}
 
 				dir := pflag.Args()[2]
@@ -108,7 +110,8 @@ func main() {
 
 				if !*webConfigOnly {
 					if err := web.GenerateApp(dir, *it); err != nil {
-						panic(err)
+						println(err.Error())
+						os.Exit(1)
 					}
 					println("web application generated!")
 				}
@@ -118,7 +121,8 @@ func main() {
 						println("found existing web app configuration")
 						return
 					}
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 				println("web application configuration generated!")
 
@@ -132,7 +136,8 @@ func main() {
 				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)
 				go internal.OpenBrowser("http://" + addr)
 				if err := web.ListenAndServe(addr, *config, *it); err != nil {
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 			default:
 				showHelp()
@@ -148,16 +153,19 @@ func main() {
 			switch checksCmd := pflag.Args()[1]; checksCmd {
 			case "generate":
 				if err := checks.GenerateConfig(*checksConfigPath); err != nil {
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 			case "eval":
 				cfg, err := checks.LoadConfig(*checksConfigPath)
 				if err != nil {
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 				args := pflag.Args()[2:]
 				if len(args) != 2 {
-					panic("two targets required")
+					println("two targets required")
+					os.Exit(1)
 				}
 				histories := load(args[0], args[1])
 				res, err := checks.Evaluate(cfg.Checks, histories[0], histories[1], &checks.EvaluateOptions{
@@ -165,7 +173,8 @@ func main() {
 					MustFindAll: false,
 				})
 				if err != nil {
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 				// output report appropriately
 				if *checksPretty {
@@ -178,25 +187,29 @@ func main() {
 						b, err = json.MarshalIndent(res, "", "  ")
 					}
 					if err != nil {
-						panic(err)
+						println(err.Error())
+						os.Exit(1)
 					}
 
 					if *jsonOut == "" {
 						println(string(b))
 					} else {
 						if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
-							panic(err)
+							println(err.Error())
+							os.Exit(1)
 						}
 						fmt.Printf("report output written to %s\n", *jsonOut)
 					}
 				}
 			case "report":
 				if len(pflag.Args()) < 3 {
-					panic("no report provided")
+					println("no report provided")
+					os.Exit(1)
 				}
 				results, err := checks.LoadReport(pflag.Args()[2])
 				if err != nil {
-					panic(err)
+					println(err.Error())
+					os.Exit(1)
 				}
 				outputChecksReport(results)
 
@@ -219,15 +232,18 @@ func main() {
 	// default behaviour
 	fi, err := os.Stdin.Stat()
 	if err != nil {
-		panic(err)
+		println(err.Error())
+		os.Exit(1)
 	} else if fi.Mode()&os.ModeNamedPipe == 0 {
-		panic("gobenchdata should be used with a pipe - see 'gobenchdata help'")
+		println("gobenchdata should be used with a pipe - see 'gobenchdata help'")
+		os.Exit(1)
 	}
 
 	parser := bench.NewParser(bufio.NewReader(os.Stdin))
 	suites, err := parser.Read()
 	if err != nil {
-		panic(err)
+		println(err.Error())
+		os.Exit(1)
 	}
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
 
@@ -240,15 +256,18 @@ func main() {
 	}}
 	if *appendOut {
 		if *jsonOut == "" {
-			panic("file output needs to be set (try '--json')")
+			println("file output needs to be set (try '--json')")
+			os.Exit(1)
 		}
 		b, err := ioutil.ReadFile(*jsonOut)
 		if err != nil && !os.IsNotExist(err) {
-			panic(err)
+			println(err.Error())
+			os.Exit(1)
 		} else if !os.IsNotExist(err) {
 			var runs []bench.Run
 			if err := json.Unmarshal(b, &runs); err != nil {
-				panic(err)
+				println(err.Error())
+				os.Exit(1)
 			}
 			results = append(results, runs...)
 		} else {

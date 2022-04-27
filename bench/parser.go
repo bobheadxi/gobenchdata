@@ -50,11 +50,13 @@ func (p *Parser) Read() ([]Suite, error) {
 
 func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 	var (
-		suite = Suite{Benchmarks: make([]Benchmark, 0)}
-		split []string
+		split = strings.Split(first, ": ")
+		suite = Suite{
+			Goos:       split[1],
+			Benchmarks: make([]Benchmark, 0),
+		}
 	)
-	split = strings.Split(first, ": ")
-	suite.Goos = split[1]
+
 	for {
 		l, _, err := p.in.ReadLine()
 		if err != nil {
@@ -72,7 +74,7 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 		} else if strings.HasPrefix(line, "Benchmark") {
 			bench, err := p.readBenchmark(line)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("%w: %q", err, line)
 			}
 			suite.Benchmarks = append(suite.Benchmarks, *bench)
 		}
