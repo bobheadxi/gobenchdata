@@ -4,10 +4,12 @@
     <p v-html="description"></p>
     <div v-if="error">{{ error }}</div>
     <div v-else class="chart-set">
-      <div v-for="c in generateCharts()"
+      <div
+        v-for="c in generateCharts()"
         class="metric"
         :key="c.metric"
-        :class="{ 'full-width': config.display && config.display.fullWidth }">
+        :class="{ 'full-width': config.display && config.display.fullWidth }"
+      >
         <h5>{{ c.metric }}</h5>
         <div class="chart-container">
           <apexchart
@@ -49,17 +51,17 @@
 </style>
 
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import { ApexOptions } from 'apexcharts';
-import { Run, ConfigChartGroupChart, ParseDate } from '@/generated';
-import { generateSeries } from '@/lib/series';
+import { defineComponent, PropType } from "vue";
+import { ApexOptions } from "apexcharts";
+import { Run, Chart as ConfigChart, ParseDate } from "@/generated";
+import { generateSeries } from "@/lib/series";
 
-export default Vue.extend({
-  name: 'Chart',
+export default defineComponent({
+  name: "LineChart",
   props: {
     repo: { type: String, required: true },
     config: {
-      type: Object as PropType<ConfigChartGroupChart>,
+      type: Object as PropType<ConfigChart>,
       required: true,
     },
     runs: {
@@ -70,92 +72,112 @@ export default Vue.extend({
   data: () => ({ error: undefined }),
   computed: {
     description(): string {
-      return this.config.description
-        || `"Package": "${this.config.package}", "Benchmarks": ${JSON.stringify(this.config.benchmarks)}`;
+      return (
+        this.config.description ||
+        `"Package": "${this.config.package}", "Benchmarks": ${JSON.stringify(
+          this.config.benchmarks
+        )}`
+      );
     },
   },
   methods: {
     generateCharts(): { metric: string; options: ApexOptions }[] {
       try {
-        const pkgMatcher = new RegExp(this.config.package || '.');
-        const benchMatchers = this.config.benchmarks.map((b) => new RegExp(b || '.'));
-        if (benchMatchers.length === 0) benchMatchers.push(new RegExp('.'));
-        const series = generateSeries(this.runs, pkgMatcher, benchMatchers, this.config.metrics);
+        const pkgMatcher = new RegExp(this.config.package || ".");
+        const benchMatchers =
+          this.config.benchmarks?.map((b) => new RegExp(b || ".")) || [];
+        if (benchMatchers.length === 0) benchMatchers.push(new RegExp("."));
+        const series = generateSeries(
+          this.runs,
+          pkgMatcher,
+          benchMatchers,
+          this.config.metrics
+        );
         console.log(`chart ${this.config.name}`, series);
 
-        return Object.keys(series.charts).map((m): { metric: string; options: ApexOptions } => ({
-          metric: m,
-          options: {
-            chart: {
-              type: 'line',
-              events: {
-                markerClick: (event, chartContext, config) => {
-                  if (!this.repo) return;
-                  const { dataPointIndex: x } = config;
-                  const d = ParseDate(series.xaxis[m][x]);
-                  const r = this.runs.find(r => {
-                    return ParseDate(r.Date).valueOf() === d.valueOf();
-                  });
-                  if (r) window.open(`${this.repo}/commit/${r.Version}`);
-                },
-              },
-              toolbar: {
-                tools: {
-                  zoom: false,
-                  selection: false,
-                },
-              },
-            },
-            responsive: [{
-              breakpoint: 769, // "tablet"
+        return (
+          Object.keys(series.charts).map(
+            (m): { metric: string; options: ApexOptions } => ({
+              metric: m,
               options: {
                 chart: {
-                  height: 300,
+                  type: "line",
+                  events: {
+                    markerClick: (event, chartContext, config) => {
+                      if (!this.repo) return;
+                      const { dataPointIndex: x } = config;
+                      const d = ParseDate(series.xaxis[m][x]);
+                      const r = this.runs.find((r) => {
+                        return ParseDate(r.Date).valueOf() === d.valueOf();
+                      });
+                      if (r) window.open(`${this.repo}/commit/${r.Version}`);
+                    },
+                  },
+                  toolbar: {
+                    tools: {
+                      zoom: false,
+                      selection: false,
+                    },
+                  },
                 },
-              },
-            }],
-            dataLabels: {
-              enabled: false,
-            },
-            xaxis: {
-              type: 'category',
-              categories: series.xaxis[m],
-              sorted: true,
-              tooltip: { enabled: false },
-              labels: {
-                show: false,
-                formatter: (date): string => {
-                  const d = ParseDate(date);
-                  const r = this.runs.find(r => {
-                    return ParseDate(r.Date).valueOf() === d.valueOf();
-                  });
-                  // Tue May 05 2020 hh:mm
-                  const formatted = `${d.toDateString()} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}`;
-                  return r && r.Version ? `${formatted} (${r.Version.substring(0, 9)})` : formatted;
+                responsive: [
+                  {
+                    breakpoint: 769, // "tablet"
+                    options: {
+                      chart: {
+                        height: 300,
+                      },
+                    },
+                  },
+                ],
+                dataLabels: {
+                  enabled: false,
                 },
+                xaxis: {
+                  type: "category",
+                  categories: series.xaxis[m],
+                  sorted: true,
+                  tooltip: { enabled: false },
+                  labels: {
+                    show: false,
+                    formatter: (date): string => {
+                      const d = ParseDate(date);
+                      const r = this.runs.find((r) => {
+                        return ParseDate(r.Date).valueOf() === d.valueOf();
+                      });
+                      // Tue May 05 2020 hh:mm
+                      const formatted = `${d.toDateString()} ${(
+                        "0" + d.getHours()
+                      ).slice(-2)}:${("0" + d.getMinutes()).slice(-2)}`;
+                      return r && r.Version
+                        ? `${formatted} (${r.Version.substring(0, 9)})`
+                        : formatted;
+                    },
+                  },
+                },
+                tooltip: {
+                  enabled: true,
+                  shared: true,
+                  onDatasetHover: {
+                    highlightDataSeries: true,
+                  },
+                  fixed: {
+                    enabled: true,
+                    position: "topLeft",
+                  },
+                },
+                // flatten since we are using categories
+                series: series.charts[m].map((s) => {
+                  // TODO remove eslint disable, I forget why we do this
+                  s.data = s.data.map((p) => p.y) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+                  return s;
+                }),
               },
-            },
-            tooltip: {
-              enabled: true,
-              shared: true,
-              onDatasetHover: {
-                highlightDataSeries: true,
-              },
-              fixed: {
-                enabled: true,
-                position: 'topLeft',
-              },
-            },
-            // flatten since we are using categories
-            series: series.charts[m].map((s) => {
-              s.data = s.data.map(p => p.y) as any;
-              return s;
-            }),
-          },
-        })) || [];
+            })
+          ) || []
+        );
       } catch (err) {
         console.error(`chart ${this.config.name}`, this.config, err);
-        this.error = err;
         return [];
       }
     },

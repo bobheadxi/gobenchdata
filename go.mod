@@ -16,6 +16,8 @@ require (
 
 require (
 	github.com/BurntSushi/toml v0.3.1 // indirect
+	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc // indirect
+	github.com/alecthomas/units v0.0.0-20151022065526-2efee857e7cf // indirect
 	github.com/bmatcuk/doublestar v1.1.1 // indirect
 	github.com/gizak/termui/v3 v3.1.0 // indirect
 	github.com/karrick/godirwalk v1.7.8 // indirect
@@ -34,4 +36,5 @@ require (
 	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/tools v0.0.0-20200130002326-2f3ba24bd6e7 // indirect
+	gopkg.in/alecthomas/kingpin.v2 v2.2.6 // indirect
 )
