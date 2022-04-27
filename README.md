@@ -119,7 +119,7 @@ Instead of publishing results, benchmark output can be used to pass and fail pul
 using `CHECKS: true`. To get started, set up the checks configuration:
 
 ```sh
-go get -u go.bobheadxi.dev/gobenchdata
+go install go.bobheadxi.dev/gobenchdata@latest
 gobenchdata checks generate
 ```
 
@@ -157,7 +157,7 @@ You can visualize these continuous benchmarks by creating a web app that reads
 from the JSON benchmarks file, or by using `gobenchdata`. An easy way to get started is:
 
 ```sh
-go get -u go.bobheadxi.dev/gobenchdata
+go install go.bobheadxi.dev/gobenchdata@latest
 gobenchdata web generate --web.config-only .
 gobenchdata web serve # opens visualization in browser
 ```
@@ -216,7 +216,7 @@ gobenchdata web generate ./app
 is also available as a CLI:
 
 ```sh
-go get -u go.bobheadxi.dev/gobenchdata
+go install go.bobheadxi.dev/gobenchdata@latest
 gobenchdata help
 ```
 
