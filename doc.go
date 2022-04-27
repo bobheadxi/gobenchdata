@@ -26,7 +26,7 @@ Visualize the results:
 Compare results:
 
 	gobenchdata checks generate # generates config file to define checks
-	gobenchdata checks eval base-benchmarks.json current-benchmarks.json --checks.pretty
+	gobenchdata checks eval base-benchmarks.json current-benchmarks.json
 
 Learn more in the repository README: https://github.com/bobheadxi/gobenchdata
 */

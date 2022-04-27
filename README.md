@@ -238,7 +238,7 @@ regressions don't happen:
 
 ```sh
 gobenchdata checks generate
-gobenchdata checks eval ${base benchmarks} ${current benchmarks} --checks.pretty
+gobenchdata checks eval ${base benchmarks} ${current benchmarks}
 ```
 
 <details>
