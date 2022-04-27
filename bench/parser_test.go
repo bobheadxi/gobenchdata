@@ -69,6 +69,16 @@ PASS`}, &Suite{
 				},
 			},
 		}, false},
+		{"test panics", fields{`goos: linux
+goarch: amd64
+pkg: github.com/hashicorp/terraform-ls/internal/langserver/handlers
+cpu: Intel(R) Xeon(R) Platinum 8272CL CPU @ 2.60GHz
+BenchmarkInitializeFolder_basic/k8s-metrics-server-2                      	      56	1301099738 ns/op	60277646 B/op	  378735 allocs/op
+BenchmarkInitializeFolder_basic/k8s-dashboard-2                           	SIGQUIT: quit
+PC=0x46ae5c m=0 sigcode=0
+
+goroutine 181042 [running]:
+runtime.memclrNoHeapPointers()`}, nil, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
