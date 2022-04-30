@@ -81,8 +81,10 @@ func (e EnvDiffFunc) execute(base, current *bench.Benchmark) (float64, error) {
 
 // EvaluateOptions declares options for checks evaluation
 type EvaluateOptions struct {
-	Debug       bool
+	// MustFindAll enforces that all checks must exist in both base and current.
 	MustFindAll bool
+	// Debug enables debug output.
+	Debug bool
 }
 
 // Evaluate checks against benchmark runs

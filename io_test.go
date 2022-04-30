@@ -8,11 +8,11 @@ import (
 	"go.bobheadxi.dev/gobenchdata/bench"
 )
 
-func Test_showHelp(t *testing.T) {
+func TestShowHelp(t *testing.T) {
 	showHelp()
 }
 
-func Test_load(t *testing.T) {
+func TestLoad(t *testing.T) {
 	type args struct {
 		files []string
 	}
@@ -35,7 +35,7 @@ func Test_load(t *testing.T) {
 						Pkg:    "go.bobheadxi.dev/gobenchdata/demo",
 						Benchmarks: []bench.Benchmark{
 							{Name: "BenchmarkFib10/Fib()", Runs: 2819560, NsPerOp: 419, Mem: bench.Mem{BytesPerOp: 0, AllocsPerOp: 0, MBPerSec: 0}, Custom: nil},
-							{Name: "BenchmarkFib10/Fib()-2", Runs: 2991747, NsPerOp: 412, Mem: bench.Mem{BytesPerOp: 0, AllocsPerOp: 0, MBPerSec: 0}, Custom: nil},
+							{Name: "BenchmarkFib10/Fib()-2", Runs: 2991747, NsPerOp: 412, Mem: bench.Mem{BytesPerOp: 12, AllocsPerOp: 14, MBPerSec: 15}, Custom: nil},
 						},
 					},
 				},

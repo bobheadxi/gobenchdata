@@ -43,7 +43,10 @@ type Suite struct {
 	Benchmarks []Benchmark
 }
 
-// Benchmark is an individual run
+// Benchmark is an individual run. Note that all metrics in here must be represented as
+// a float type, even if Go only emits integer values, so that in checks we can correctly
+// evaluate divisions so that results come out as floats instead of being truncated to
+// integers.
 type Benchmark struct {
 	Name string
 	Runs int
@@ -55,7 +58,7 @@ type Benchmark struct {
 
 // Mem is memory allocation information about a run
 type Mem struct {
-	BytesPerOp  int
-	AllocsPerOp int
+	BytesPerOp  float64
+	AllocsPerOp float64
 	MBPerSec    float64
 }

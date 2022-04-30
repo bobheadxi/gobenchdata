@@ -25,19 +25,37 @@ func TestEnvDiffFunc_execute(t *testing.T) {
 		wantErr bool
 	}{
 		{"return base", fields{"base.NsPerOp"}, args{
-			&bench.Benchmark{NsPerOp: 10},
-			&bench.Benchmark{NsPerOp: 20},
+			base:    &bench.Benchmark{NsPerOp: 10},
+			current: &bench.Benchmark{NsPerOp: 20},
 		}, 10, false},
 		{"return current", fields{"current.NsPerOp"}, args{
-			&bench.Benchmark{NsPerOp: 10},
-			&bench.Benchmark{NsPerOp: 20},
+			base:    &bench.Benchmark{NsPerOp: 10},
+			current: &bench.Benchmark{NsPerOp: 20},
 		}, 20, false},
 		{"basic arithmetic", fields{
 			"base.NsPerOp / current.NsPerOp * 100",
 		}, args{
-			&bench.Benchmark{NsPerOp: 10},
-			&bench.Benchmark{NsPerOp: 20},
+			base:    &bench.Benchmark{NsPerOp: 10},
+			current: &bench.Benchmark{NsPerOp: 20},
 		}, 50, false},
+		{"nested field basic arithmetic", fields{
+			"current.Mem.BytesPerOp - base.Mem.BytesPerOp",
+		}, args{
+			base:    &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 10}},
+			current: &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 16}},
+		}, 6, false},
+		{"nested field basic division", fields{
+			"current.Mem.BytesPerOp / base.Mem.BytesPerOp",
+		}, args{
+			base:    &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 10}},
+			current: &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 16}},
+		}, 1.6, false},
+		{"nested field division", fields{
+			"(current.Mem.BytesPerOp - base.Mem.BytesPerOp) / base.Mem.BytesPerOp * 100",
+		}, args{
+			base:    &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 10}},
+			current: &bench.Benchmark{Mem: bench.Mem{BytesPerOp: 16}},
+		}, 60, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
