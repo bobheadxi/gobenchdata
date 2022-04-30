@@ -21,19 +21,19 @@
 </style>
 
 <script lang="ts">
-import Vue from 'vue';
-import Chart from '@/components/Chart.vue';
-import { Run, ConfigChartGroup } from '@/generated';
+import { defineComponent } from "vue";
+import Chart from "@/components/Chart.vue";
+import { Run, ChartGroup } from "@/generated";
 
-export default Vue.extend({
-  name: 'ChartGroup',
+export default defineComponent({
+  name: "ChartGroup",
   components: {
     Chart,
   },
   props: {
     repo: { type: String, required: true },
     group: {
-      type: Object as () => ConfigChartGroup,
+      type: Object as () => ChartGroup,
       required: true,
     },
     runs: {

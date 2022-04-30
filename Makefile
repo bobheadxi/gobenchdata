@@ -19,6 +19,7 @@ cli:
 .PHONY: deps
 deps:
 	go mod download
+	go install
 	( cd web ; npm install )
 
 .PHONY: check

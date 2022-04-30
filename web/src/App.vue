@@ -1,8 +1,6 @@
 <template>
   <div class="app">
-    <div v-if="loading">
-      loading...
-    </div>
+    <div v-if="loading">loading...</div>
     <div v-if="error">
       {{ error }}
     </div>
@@ -18,7 +16,10 @@
     </div>
 
     <div class="footer">
-      <p>generated using <a href="https://bobheadxi.dev/r/gobenchdata">gobenchdata</a></p>
+      <p>
+        generated using
+        <a href="https://bobheadxi.dev/r/gobenchdata">gobenchdata</a>
+      </p>
     </div>
   </div>
 </template>
@@ -28,7 +29,7 @@
   padding-left: $gap;
   padding-right: $gap;
 
-  font-family: 'Fira Code', monospace;
+  font-family: "Fira Code", monospace;
   text-align: center;
 
   .footer {
@@ -39,22 +40,27 @@
 </style>
 
 <script lang="ts">
-import Vue from 'vue';
-import yaml from 'yaml';
-import ChartGroup from '@/components/ChartGroup.vue';
+import { defineComponent } from "vue";
+import { parse } from "yaml";
+import ChartGroup from "@/components/ChartGroup.vue";
 
-import { iterateSuites } from '@/lib/series';
-import { Config, Run, ConfigChartGroup, ConfigChartGroupChart } from '@/generated';
+import { iterateSuites } from "@/lib/series";
+import {
+  Config,
+  Run,
+  ChartGroup as ConfigChartGroup,
+  Chart,
+} from "@/generated";
 
 type AppState = {
   loading: boolean;
   config: Config;
   benchmarks: Run[];
-  error: any;
-}
+  error: unknown;
+};
 
-export default Vue.extend({
-  name: 'App',
+export default defineComponent({
+  name: "App",
   components: {
     ChartGroup,
   },
@@ -66,22 +72,28 @@ export default Vue.extend({
   }),
   computed: {
     groups(): ConfigChartGroup[] {
-      if (this.config.chartGroups && this.config.chartGroups.length > 0) return this.config.chartGroups;
+      if (this.config.chartGroups && this.config.chartGroups.length > 0)
+        return this.config.chartGroups;
 
       // group by package by default
       const suites: { [pkg: string]: boolean } = {};
-      iterateSuites(this.benchmarks, (s) => { suites[s.Pkg] = true; });
+      iterateSuites(this.benchmarks, (s) => {
+        suites[s.Pkg] = true;
+      });
       const packages = Object.keys(suites).sort();
-      console.log('no chart groups configured - detected packages', packages);
+      console.log("no chart groups configured - detected packages", packages);
       return [
         new ConfigChartGroup({
-          name: 'Benchmarks by package',
-          description: 'All detected benchmarks, grouped by Package',
-          charts: packages.map((pkg) => new ConfigChartGroupChart({
-            name: pkg,
-            package: `^${pkg}$`,
-            benchmarks: [],
-          })),
+          name: "Benchmarks by package",
+          description: "All detected benchmarks, grouped by Package",
+          charts: packages.map(
+            (pkg) =>
+              new Chart({
+                name: pkg,
+                package: `^${pkg}$`,
+                benchmarks: [],
+              })
+          ),
         }),
       ];
     },
@@ -93,27 +105,31 @@ export default Vue.extend({
     async load() {
       try {
         // load config
-        const configResp = await fetch('./gobenchdata-web.yml');
+        const configResp = await fetch("./gobenchdata-web.yml");
         if (configResp.status > 400) {
           console.error(configResp);
           throw new Error(`${configResp.status}: failed to load config`);
         }
         const raw = await configResp.text();
         console.log(raw);
-        const config = new Config(yaml.parse(raw));
+        const config = new Config(parse(raw));
 
         // load benchmark runs
-        const benchmarksResp = await fetch(`./${config.benchmarksFile || 'benchmarks.json'}`);
+        const benchmarksResp = await fetch(
+          `./${config.benchmarksFile || "benchmarks.json"}`
+        );
         if (benchmarksResp.status > 400) {
           console.error(benchmarksResp);
-          throw new Error(`${benchmarksResp.status}: failed to load benchmarks`);
+          throw new Error(
+            `${benchmarksResp.status}: failed to load benchmarks`
+          );
         }
         const runs = await benchmarksResp.json();
 
         // update state
-        this.benchmarks = runs.map((r: any) => new Run(r));
+        this.benchmarks = runs.map((r: unknown) => new Run(r));
         this.config = config;
-        console.log('data loaded', { config, runs: this.benchmarks.length });
+        console.log("data loaded", { config, runs: this.benchmarks.length });
       } catch (err) {
         this.error = err;
       }

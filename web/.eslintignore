@@ -1,1 +1,3 @@
-generated.ts
+src/generated.ts
+dist
+babel.config.js
