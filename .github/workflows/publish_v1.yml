@@ -21,7 +21,10 @@ jobs:
     - name: checkout
       uses: actions/checkout@v2
     - name: docker build
-      run: docker build -t ghcr.io/bobheadxi/gobenchdata:$(git describe --tags) .
+      run: |
+        docker build -t ghcr.io/bobheadxi/gobenchdata:latest .
+        docker tag ghcr.io/bobheadxi/gobenchdata:latest ghcr.io/bobheadxi/gobenchdata:$(git describe --tags)
+        docker tag ghcr.io/bobheadxi/gobenchdata:latest ghcr.io/bobheadxi/gobenchdata:v1
     - name: Publish to GitHub Container Registry
       run: |
         echo ${{ secrets.ACCESS_TOKEN }} | docker login ghcr.io --username $GITHUB_ACTOR --password-stdin
