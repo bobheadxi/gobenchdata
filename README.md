@@ -1,5 +1,7 @@
 # 📉 gobenchdata
 
+> **⚠️ WARNING:** The `master` branch is still on `v1.0.4`, with the `main` branch being the new development branch. This branch is only retained for backwards compatibility.
+
 [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
 [![publish@v1](https://github.com/bobheadxi/gobenchdata/workflows/publish@v1/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=publish%40v1)
 [![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
