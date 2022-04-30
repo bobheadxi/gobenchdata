@@ -117,9 +117,9 @@ func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 		case "ns/op":
 			bench.NsPerOp, err = strconv.ParseFloat(value, 64)
 		case "B/op":
-			bench.Mem.BytesPerOp, err = strconv.Atoi(value)
+			bench.Mem.BytesPerOp, err = strconv.ParseFloat(value, 64)
 		case "allocs/op":
-			bench.Mem.AllocsPerOp, err = strconv.Atoi(value)
+			bench.Mem.AllocsPerOp, err = strconv.ParseFloat(value, 64)
 		case "MB/s":
 			bench.Mem.MBPerSec, err = strconv.ParseFloat(value, 64)
 		default:
