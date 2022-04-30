@@ -1,3 +1,3 @@
 [
-    {"Version":"a3b33d25b34e359f022b5a3dfc3607369143e74d","Date":1589695147,"Tags":["ref=refs/tags/v1.0.0"],"Suites":[{"Goos":"linux","Goarch":"amd64","Pkg":"go.bobheadxi.dev/gobenchdata/demo","Benchmarks":[{"Name":"BenchmarkFib10/Fib()","Runs":2819560,"NsPerOp":419,"Mem":{"BytesPerOp":0,"AllocsPerOp":0,"MBPerSec":0}},{"Name":"BenchmarkFib10/Fib()-2","Runs":2991747,"NsPerOp":412,"Mem":{"BytesPerOp":0,"AllocsPerOp":0,"MBPerSec":0}}]}]}
+    {"Version":"a3b33d25b34e359f022b5a3dfc3607369143e74d","Date":1589695147,"Tags":["ref=refs/tags/v1.0.0"],"Suites":[{"Goos":"linux","Goarch":"amd64","Pkg":"go.bobheadxi.dev/gobenchdata/demo","Benchmarks":[{"Name":"BenchmarkFib10/Fib()","Runs":2819560,"NsPerOp":419,"Mem":{"BytesPerOp":0,"AllocsPerOp":0,"MBPerSec":0}},{"Name":"BenchmarkFib10/Fib()-2","Runs":2991747,"NsPerOp":412,"Mem":{"BytesPerOp":12,"AllocsPerOp":14,"MBPerSec":15}}]}]}
 ]
