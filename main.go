@@ -31,7 +31,6 @@ var (
 	webIndexTitle = pflag.String("web.title", "gobenchdata web", "header <title> for 'gobenchdata web'")
 	webIndexHead  = pflag.StringArray("web.head", []string{}, "additional <head> elements for 'gobenchdata web'")
 
-	checksPretty     = pflag.Bool("checks.pretty", false, "output report as human-readable format instead of JSON")
 	checksConfigPath = pflag.String("checks.config", "gobenchdata-checks.yml", "path to checks configuraton file")
 
 	version = pflag.StringP("version", "v", "", "version to tag in your benchmark output")
@@ -53,7 +52,7 @@ COMMANDS:
 
   checks generate                generate checks configuration
   checks eval [base] [current]   evaluate checks defined in './gobenchdata-checks.yml'
-  checks report [report]         prints a simple report and exits with status 1 if a check failed
+  checks report [report]         print a simple report and exits with status 1 if a check failed
 
   version                        show gobenchdata version
   help                           show help text
@@ -168,7 +167,7 @@ func main() {
 					os.Exit(1)
 				}
 				histories := load(args[0], args[1])
-				res, err := checks.Evaluate(cfg.Checks, histories[0], histories[1], &checks.EvaluateOptions{
+				results, err := checks.Evaluate(cfg.Checks, histories[0], histories[1], &checks.EvaluateOptions{
 					Debug:       false,
 					MustFindAll: false,
 				})
@@ -176,31 +175,29 @@ func main() {
 					println(err.Error())
 					os.Exit(1)
 				}
-				// output report appropriately
-				if *checksPretty {
-					outputChecksReport(res)
+
+				if *jsonOut == "" {
+					// If we aren't outputting to JSON, output pretty results instead
+					outputChecksReport(results)
 				} else {
 					var b []byte
 					if *flat {
-						b, err = json.Marshal(res)
+						b, err = json.Marshal(results)
 					} else {
-						b, err = json.MarshalIndent(res, "", "  ")
+						b, err = json.MarshalIndent(results, "", "  ")
 					}
 					if err != nil {
 						println(err.Error())
 						os.Exit(1)
 					}
 
-					if *jsonOut == "" {
-						println(string(b))
-					} else {
-						if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
-							println(err.Error())
-							os.Exit(1)
-						}
-						fmt.Printf("report output written to %s\n", *jsonOut)
+					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+						println(err.Error())
+						os.Exit(1)
 					}
+					fmt.Printf("report output written to %s\n", *jsonOut)
 				}
+
 			case "report":
 				if len(pflag.Args()) < 3 {
 					println("no report provided")
@@ -217,6 +214,7 @@ func main() {
 				if results.Status != checks.StatusPass {
 					os.Exit(1)
 				}
+
 			default:
 				showHelp()
 				os.Exit(1)
