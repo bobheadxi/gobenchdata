@@ -2,7 +2,7 @@
 set -e
 
 # core configuration
-export GO_BINARY="${GO_PATH:-"go"}"
+export GO_BINARY="${GO_BINARY:-"go"}"
 export GOBENCHDATA_BINARY="${GOBENCHDATA_BINARY:-"gobenchdata"}"
 export INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 export INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
