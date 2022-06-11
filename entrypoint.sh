@@ -2,21 +2,21 @@
 set -e
 
 # core configuration
-GOBENCHDATA="${GOBENCHDATA:-"gobenchdata"}"
-INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
-INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
-INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
-INPUT_GO_TEST_PKGS="${INPUT_GO_TEST_PKGS:-"./..."}"
-INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
-INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
+export GOBENCHDATA="${GOBENCHDATA:-"gobenchdata"}"
+export INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
+export INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
+export INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
+export INPUT_GO_TEST_PKGS="${INPUT_GO_TEST_PKGS:-"./..."}"
+export INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
+export INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
 
 # publishing configuration
-INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
-INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
+export INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
+export INPUT_PUBLISH_BRANCH="${INPUT_PUBLISH_BRANCH:-"gh-pages"}"
 
 # pull request checks
-INPUT_CHECKS="${INPUT_CHECKS:-"false"}"
-INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
+export INPUT_CHECKS="${INPUT_CHECKS:-"false"}"
+export INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
@@ -51,53 +51,55 @@ go test \
 cd "${GITHUB_WORKSPACE}"
 
 # fetch published data
-echo
-echo "📚 Checking out ${INPUT_PUBLISH_REPO}@${INPUT_PUBLISH_BRANCH}..."
-cd /tmp/build
-git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_PUBLISH_REPO}.git .
-git checkout ${INPUT_PUBLISH_BRANCH}
-echo
-
-if [[ "${INPUT_CHECKS}" == "true" ]]; then
-
-  # check results against published
-  echo '🔎 Evaluating results against base runs...'
-  CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
-  ${GOBENCHDATA} checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
-    --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
-    --json ${CHECKS_OUTPUT} \
-    --flat
-  RESULTS=$(cat ${CHECKS_OUTPUT})
-  echo "::set-output name=checks-results::$RESULTS"
-
-  # output results
+if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
   echo
-  echo '📝 Generating checks report...'
-  ${GOBENCHDATA} checks report ${CHECKS_OUTPUT}
+  echo "📚 Checking out ${INPUT_PUBLISH_REPO}@${INPUT_PUBLISH_BRANCH}..."
+  cd /tmp/build
+  git clone https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_PUBLISH_REPO}.git .
+  git checkout ${INPUT_PUBLISH_BRANCH}
+  echo
 
-fi
+  if [[ "${INPUT_CHECKS}" == "true" ]]; then
 
-if [[ "${INPUT_PUBLISH}" == "true" ]]; then
-
-  # merge results with published
-  echo '☝️ Updating results...'
-  if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
-    echo '📈 Existing report found - merging...'
-    ${GOBENCHDATA} merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
-      --prune "${INPUT_PRUNE_COUNT}" \
-      --json "${INPUT_BENCHMARKS_OUT}" \
+    # check results against published
+    echo '🔎 Evaluating results against base runs...'
+    CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
+    ${GOBENCHDATA} checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
+      --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
+      --json ${CHECKS_OUTPUT} \
       --flat
-  else
-    cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+    RESULTS=$(cat ${CHECKS_OUTPUT})
+    echo "::set-output name=checks-results::$RESULTS"
+
+    # output results
+    echo
+    echo '📝 Generating checks report...'
+    ${GOBENCHDATA} checks report ${CHECKS_OUTPUT}
+
   fi
 
-  # publish results
-  echo
-  echo '📷 Committing and pushing new benchmark data...'
-  git add .
-  git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
-  git push -f origin ${INPUT_PUBLISH_BRANCH}
+  if [[ "${INPUT_PUBLISH}" == "true" ]]; then
 
+    # merge results with published
+    echo '☝️ Updating results...'
+    if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
+      echo '📈 Existing report found - merging...'
+      ${GOBENCHDATA} merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
+        --prune "${INPUT_PRUNE_COUNT}" \
+        --json "${INPUT_BENCHMARKS_OUT}" \
+        --flat
+    else
+      cp "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}"
+    fi
+
+    # publish results
+    echo
+    echo '📷 Committing and pushing new benchmark data...'
+    git add .
+    git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
+    git push -f origin ${INPUT_PUBLISH_BRANCH}
+
+  fi
 fi
 
 echo
