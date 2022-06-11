@@ -18,4 +18,5 @@ RUN go build -ldflags "-X main.Version=$(git describe --tags)" -o /bin/gobenchda
 RUN rm -rf /tmp/build
 
 # init entrypoint
+WORKDIR /workdir
 ENTRYPOINT ["/bin/gobenchdata", "action"]
