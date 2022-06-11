@@ -20,7 +20,7 @@ export INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
-command -v ${GOBENCHDATA}
+go version
 ${GOBENCHDATA} version
 echo "👨‍⚕️ Checking configuration..."
 env | grep 'INPUT_'
