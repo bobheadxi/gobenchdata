@@ -37,6 +37,9 @@ inputs:
     default: 'gh-pages'
     description: branch results are published to
     required: false
+  GOBENCHDATA_PARSE_FLAGS:
+    description: additional flags to pass to gobenchdata when parsing benchmark data
+    required: false
   # publishing
   PUBLISH:
     default: "false"
