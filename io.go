@@ -72,7 +72,7 @@ func output(results []bench.Run) {
 		}
 		fmt.Printf("successfully output results as json to '%s'\n", *jsonOut)
 	} else {
-		println(string(b))
+		fmt.Println(string(b))
 	}
 }
 
@@ -126,9 +126,9 @@ func outputChecksReport(r *checks.Report) {
 
 	// output results to stdout
 	meta.Render()
-	println()
+	fmt.Println()
 	results.Render()
-	println()
+	fmt.Println()
 }
 
 func load(files ...string) []bench.RunHistory {
@@ -148,8 +148,10 @@ func load(files ...string) []bench.RunHistory {
 }
 
 func showHelp() {
-	println(helpText)
-	println("FLAGS:\n")
+	fmt.Println(helpText)
+	fmt.Println()
+	fmt.Println("FLAGS:")
+	fmt.Println()
 	pflag.PrintDefaults()
-	println("\nsee https://go.bobheadxi.dev/gobenchdata for more documentation.")
+	fmt.Println("\nSee https://github.com/bobheadxi/gobenchdata for more documentation.")
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -54,9 +55,10 @@ COMMANDS:
   checks eval [base] [current]   evaluate checks defined in './gobenchdata-checks.yml'
   checks report [report]         print a simple report and exits with status 1 if a check failed
 
+  action                         executes the same behaviour as the Docker container action
+
   version                        show gobenchdata version
-  help                           show help text
-`
+  help                           show help text`
 
 func main() {
 	pflag.Parse()
@@ -67,10 +69,11 @@ func main() {
 		// gobenchdata version
 		case "version":
 			if Version == "" {
-				println("gobenchdata version unknown")
+				fmt.Println("gobenchdata version unknown")
 			} else {
-				println("gobenchdata " + Version)
+				fmt.Println("gobenchdata " + Version)
 			}
+			os.Exit(0)
 
 		// gobenchdata help
 		case "help":
@@ -81,7 +84,7 @@ func main() {
 		case "merge":
 			args := pflag.Args()[1:]
 			if len(args) < 1 {
-				println("no merge targets provided")
+				fmt.Println("no merge targets provided")
 				os.Exit(1)
 			}
 			merge(args...)
@@ -100,7 +103,7 @@ func main() {
 			switch webCmd := pflag.Args()[1]; webCmd {
 			case "generate":
 				if len(pflag.Args()) < 3 {
-					println("no output directory provided")
+					fmt.Println("no output directory provided")
 					os.Exit(1)
 				}
 
@@ -109,21 +112,21 @@ func main() {
 
 				if !*webConfigOnly {
 					if err := web.GenerateApp(dir, *it); err != nil {
-						println(err.Error())
+						fmt.Println(err.Error())
 						os.Exit(1)
 					}
-					println("web application generated!")
+					fmt.Println("web application generated!")
 				}
 				// only override if we are generating config only
 				if err := web.GenerateConfig(dir, *config, *webConfigOnly); err != nil {
 					if errors.Is(err, os.ErrExist) {
-						println("found existing web app configuration")
+						fmt.Println("found existing web app configuration")
 						return
 					}
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
-				println("web application configuration generated!")
+				fmt.Println("web application configuration generated!")
 
 			case "serve":
 				port := "8080"
@@ -135,7 +138,7 @@ func main() {
 				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)
 				go internal.OpenBrowser("http://" + addr)
 				if err := web.ListenAndServe(addr, *config, *it); err != nil {
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
 			default:
@@ -152,18 +155,18 @@ func main() {
 			switch checksCmd := pflag.Args()[1]; checksCmd {
 			case "generate":
 				if err := checks.GenerateConfig(*checksConfigPath); err != nil {
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
 			case "eval":
 				cfg, err := checks.LoadConfig(*checksConfigPath)
 				if err != nil {
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
 				args := pflag.Args()[2:]
 				if len(args) != 2 {
-					println("two targets required")
+					fmt.Println("two targets required")
 					os.Exit(1)
 				}
 				histories := load(args[0], args[1])
@@ -172,7 +175,7 @@ func main() {
 					MustFindAll: false,
 				})
 				if err != nil {
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
 
@@ -187,12 +190,12 @@ func main() {
 						b, err = json.MarshalIndent(results, "", "  ")
 					}
 					if err != nil {
-						println(err.Error())
+						fmt.Println(err.Error())
 						os.Exit(1)
 					}
 
 					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
-						println(err.Error())
+						fmt.Println(err.Error())
 						os.Exit(1)
 					}
 					fmt.Printf("report output written to %s\n", *jsonOut)
@@ -200,12 +203,12 @@ func main() {
 
 			case "report":
 				if len(pflag.Args()) < 3 {
-					println("no report provided")
+					fmt.Println("no report provided")
 					os.Exit(1)
 				}
 				results, err := checks.LoadReport(pflag.Args()[2])
 				if err != nil {
-					println(err.Error())
+					fmt.Println(err.Error())
 					os.Exit(1)
 				}
 				outputChecksReport(results)
@@ -220,6 +223,12 @@ func main() {
 				os.Exit(1)
 			}
 
+		case "action":
+			if err := runEmbeddedAction(context.Background()); err != nil {
+				fmt.Println(err.Error())
+				os.Exit(1)
+			}
+
 		default:
 			showHelp()
 			os.Exit(1)
@@ -230,17 +239,17 @@ func main() {
 	// default behaviour
 	fi, err := os.Stdin.Stat()
 	if err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		os.Exit(1)
 	} else if fi.Mode()&os.ModeNamedPipe == 0 {
-		println("gobenchdata should be used with a pipe - see 'gobenchdata help'")
+		fmt.Println("gobenchdata should be used with a pipe - see 'gobenchdata help'")
 		os.Exit(1)
 	}
 
 	parser := bench.NewParser(bufio.NewReader(os.Stdin))
 	suites, err := parser.Read()
 	if err != nil {
-		println(err.Error())
+		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
@@ -254,17 +263,17 @@ func main() {
 	}}
 	if *appendOut {
 		if *jsonOut == "" {
-			println("file output needs to be set (try '--json')")
+			fmt.Println("file output needs to be set (try '--json')")
 			os.Exit(1)
 		}
 		b, err := ioutil.ReadFile(*jsonOut)
 		if err != nil && !os.IsNotExist(err) {
-			println(err.Error())
+			fmt.Println(err.Error())
 			os.Exit(1)
 		} else if !os.IsNotExist(err) {
 			var runs []bench.Run
 			if err := json.Unmarshal(b, &runs); err != nil {
-				println(err.Error())
+				fmt.Println(err.Error())
 				os.Exit(1)
 			}
 			results = append(results, runs...)
