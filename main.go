@@ -58,8 +58,7 @@ COMMANDS:
   action                         executes the same behaviour as the Docker container action
 
   version                        show gobenchdata version
-  help                           show help text
-`
+  help                           show help text`
 
 func main() {
 	pflag.Parse()
