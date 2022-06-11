@@ -2,6 +2,7 @@
 set -e
 
 # core configuration
+export GO="${GO:-"go"}"
 export GOBENCHDATA="${GOBENCHDATA:-"gobenchdata"}"
 export INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 export INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
@@ -20,9 +21,9 @@ export INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
-go version
-${GOBENCHDATA} version
 echo "👨‍⚕️ Checking configuration..."
+${GO} version
+${GOBENCHDATA} version
 env | grep 'INPUT_'
 echo "GITHUB_ACTOR=${GITHUB_ACTOR}"
 echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE}"
@@ -44,7 +45,7 @@ echo '📊 Running benchmarks...'
 RUN_OUTPUT="/tmp/gobenchdata/benchmarks.json"
 cd "${GITHUB_WORKSPACE}"
 cd "${INPUT_SUBDIRECTORY}"
-go test \
+${GO} test \
   -bench "${INPUT_GO_BENCHMARKS}" \
   -benchmem \
   ${INPUT_GO_TEST_FLAGS} \
