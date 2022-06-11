@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -54,6 +55,8 @@ COMMANDS:
   checks eval [base] [current]   evaluate checks defined in './gobenchdata-checks.yml'
   checks report [report]         print a simple report and exits with status 1 if a check failed
 
+  action                         executes the same behaviour as the Docker container action
+
   version                        show gobenchdata version
   help                           show help text
 `
@@ -71,6 +74,7 @@ func main() {
 			} else {
 				println("gobenchdata " + Version)
 			}
+			os.Exit(0)
 
 		// gobenchdata help
 		case "help":
@@ -217,6 +221,12 @@ func main() {
 
 			default:
 				showHelp()
+				os.Exit(1)
+			}
+
+		case "action":
+			if err := runEmbeddedAction(context.Background()); err != nil {
+				println(err.Error())
 				os.Exit(1)
 			}
 

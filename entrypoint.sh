@@ -2,6 +2,7 @@
 set -e
 
 # core configuration
+GOBENCHDATA="${GOBENCHDATA:-"gobenchdata"}"
 INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
 INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
@@ -19,8 +20,9 @@ INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 
 # output build data
 echo '========================'
-command -v gobenchdata
-gobenchdata version
+command -v ${GOBENCHDATA}
+${GOBENCHDATA} version
+echo "👨‍⚕️ Checking configuration..."
 env | grep 'INPUT_'
 echo "GITHUB_ACTOR=${GITHUB_ACTOR}"
 echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE}"
@@ -44,8 +46,8 @@ go test \
   -bench "${INPUT_GO_BENCHMARKS}" \
   -benchmem \
   ${INPUT_GO_TEST_FLAGS} \
-  ${INPUT_GO_TEST_PKGS} \
-  | gobenchdata --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
+  ${INPUT_GO_TEST_PKGS} |
+  ${GOBENCHDATA} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
 # fetch published data
@@ -61,7 +63,7 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   # check results against published
   echo '🔎 Evaluating results against base runs...'
   CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
-  gobenchdata checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
+  ${GOBENCHDATA} checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
     --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
     --json ${CHECKS_OUTPUT} \
     --flat
@@ -71,7 +73,7 @@ if [[ "${INPUT_CHECKS}" == "true" ]]; then
   # output results
   echo
   echo '📝 Generating checks report...'
-  gobenchdata checks report ${CHECKS_OUTPUT}
+  ${GOBENCHDATA} checks report ${CHECKS_OUTPUT}
 
 fi
 
@@ -81,7 +83,7 @@ if [[ "${INPUT_PUBLISH}" == "true" ]]; then
   echo '☝️ Updating results...'
   if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
     echo '📈 Existing report found - merging...'
-    gobenchdata merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
+    ${GOBENCHDATA} merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
       --prune "${INPUT_PRUNE_COUNT}" \
       --json "${INPUT_BENCHMARKS_OUT}" \
       --flat

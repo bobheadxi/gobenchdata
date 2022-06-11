@@ -18,7 +18,4 @@ RUN go build -ldflags "-X main.Version=$(git describe --tags)" -o /bin/gobenchda
 RUN rm -rf /tmp/build
 
 # init entrypoint
-WORKDIR /tmp/entrypoint
-ADD entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/bin/gobenchdata", "action"]

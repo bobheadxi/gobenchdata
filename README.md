@@ -33,6 +33,14 @@ JSON to `gh-pages` and visualizing it with a generated web app or your own web a
 
 ### Setup
 
+The default action, `uses: bobheadxi/gobenchdata@v1`, is distributed as a [Docker container action](https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action).
+This means that the Go version benchmarks are run with are tied to the version of Go that ships with the `gobenchdata` action.
+For greater flexibility, such as to use custom Go versions, see [custom setup](#custom-setup).
+
+Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
+
+#### Docker container action
+
 For example, in `.github/workflows/push.yml`, using [the new YAML syntax for workflows](https://help.github.com/en/articles/workflow-syntax-for-github-actions), a simple benchmark [run and publish workflow](#publishing) would look like:
 
 ```yml
@@ -55,7 +63,36 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 ```
 
-Learn more about GitHub Actions in the [official documentation](https://github.com/features/actions).
+#### Custom setup
+
+For greater flexibility and the ability to target custom Go versions, you can either:
+
+- directly use the [`entrypoint.sh`](entrypoint.sh) script, or some variant of it
+- run `gobenchdata action`, which replicates the behaviour of the GitHub Action
+
+Using `gobenchdata action` to replicate the [Docker container action](#docker-container-action) would look like:
+
+```yml
+name: gobenchdata publish
+on: push
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout
+      uses: actions/checkout@v2
+    - uses: actions/setup-go@v2
+      with: { go-version: "1.18" }
+    - name: gobenchdata publish
+      run: go run go.bobheadxi.dev/gobenchdata@v1 action
+      with:
+        PRUNE_COUNT: 30
+        GO_TEST_FLAGS: -cpu 1,2
+        PUBLISH: true
+        PUBLISH_BRANCH: gh-pages
+      env:
+        GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+```
 
 ### Configuration
 
