@@ -28,6 +28,8 @@ var (
 	noSort    = pflag.Bool("no-sort", false, "disable sorting")
 	prune     = pflag.Int("prune", 0, "number of runs to keep (default: keep all)")
 
+	requireBenchmarks = pflag.Bool("require-benchmarks", false, "fail if no benchmarks detected")
+
 	webConfigOnly = pflag.Bool("web.config-only", false, "only generate configuration for 'gobenchdata web'")
 	webIndexTitle = pflag.String("web.title", "gobenchdata web", "header <title> for 'gobenchdata web'")
 	webIndexHead  = pflag.StringArray("web.head", []string{}, "additional <head> elements for 'gobenchdata web'")
@@ -112,7 +114,7 @@ func main() {
 
 				if !*webConfigOnly {
 					if err := web.GenerateApp(dir, *it); err != nil {
-						fmt.Println(err.Error())
+						println(err.Error())
 						os.Exit(1)
 					}
 					fmt.Println("web application generated!")
@@ -123,7 +125,7 @@ func main() {
 						fmt.Println("found existing web app configuration")
 						return
 					}
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 				fmt.Println("web application configuration generated!")
@@ -138,7 +140,7 @@ func main() {
 				fmt.Printf("serving './benchmarks.json' on '%s'\n", addr)
 				go internal.OpenBrowser("http://" + addr)
 				if err := web.ListenAndServe(addr, *config, *it); err != nil {
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 			default:
@@ -155,13 +157,13 @@ func main() {
 			switch checksCmd := pflag.Args()[1]; checksCmd {
 			case "generate":
 				if err := checks.GenerateConfig(*checksConfigPath); err != nil {
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 			case "eval":
 				cfg, err := checks.LoadConfig(*checksConfigPath)
 				if err != nil {
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 				args := pflag.Args()[2:]
@@ -175,7 +177,7 @@ func main() {
 					MustFindAll: false,
 				})
 				if err != nil {
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 
@@ -190,12 +192,12 @@ func main() {
 						b, err = json.MarshalIndent(results, "", "  ")
 					}
 					if err != nil {
-						fmt.Println(err.Error())
+						println(err.Error())
 						os.Exit(1)
 					}
 
 					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
-						fmt.Println(err.Error())
+						println(err.Error())
 						os.Exit(1)
 					}
 					fmt.Printf("report output written to %s\n", *jsonOut)
@@ -208,7 +210,7 @@ func main() {
 				}
 				results, err := checks.LoadReport(pflag.Args()[2])
 				if err != nil {
-					fmt.Println(err.Error())
+					println(err.Error())
 					os.Exit(1)
 				}
 				outputChecksReport(results)
@@ -225,7 +227,7 @@ func main() {
 
 		case "action":
 			if err := runEmbeddedAction(context.Background()); err != nil {
-				fmt.Println(err.Error())
+				println(err.Error())
 				os.Exit(1)
 			}
 
@@ -239,7 +241,7 @@ func main() {
 	// default behaviour
 	fi, err := os.Stdin.Stat()
 	if err != nil {
-		fmt.Println(err.Error())
+		println(err.Error())
 		os.Exit(1)
 	} else if fi.Mode()&os.ModeNamedPipe == 0 {
 		fmt.Println("gobenchdata should be used with a pipe - see 'gobenchdata help'")
@@ -249,10 +251,14 @@ func main() {
 	parser := bench.NewParser(bufio.NewReader(os.Stdin))
 	suites, err := parser.Read()
 	if err != nil {
-		fmt.Println(err.Error())
+		println(err.Error())
 		os.Exit(1)
 	}
 	fmt.Printf("detected %d benchmark suites\n", len(suites))
+	if *requireBenchmarks && len(suites) == 0 {
+		println("expected benchmarks suites to be detected, found none")
+		os.Exit(1)
+	}
 
 	// set up results
 	results := []bench.Run{{
@@ -268,12 +274,12 @@ func main() {
 		}
 		b, err := ioutil.ReadFile(*jsonOut)
 		if err != nil && !os.IsNotExist(err) {
-			fmt.Println(err.Error())
+			println(err.Error())
 			os.Exit(1)
 		} else if !os.IsNotExist(err) {
 			var runs []bench.Run
 			if err := json.Unmarshal(b, &runs); err != nil {
-				fmt.Println(err.Error())
+				println(err.Error())
 				os.Exit(1)
 			}
 			results = append(results, runs...)
