@@ -2,8 +2,8 @@
 set -e
 
 # core configuration
-export GO="${GO:-"go"}"
-export GOBENCHDATA="${GOBENCHDATA:-"gobenchdata"}"
+export GO_BINARY="${GO_PATH:-"go"}"
+export GOBENCHDATA_BINARY="${GOBENCHDATA_BINARY:-"gobenchdata"}"
 export INPUT_SUBDIRECTORY="${INPUT_SUBDIRECTORY:-"."}"
 export INPUT_PRUNE_COUNT="${INPUT_PRUNE_COUNT:-"0"}"
 export INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
@@ -23,10 +23,10 @@ export INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 # output build data
 echo '========================'
 echo "👨‍⚕️ Checking configuration..."
-echo "GO=${GO}"
-${GO} version
-echo "GOBENCHDATA=${GOBENCHDATA}"
-${GOBENCHDATA} version
+echo "GO_BINARY=${GO_BINARY}"
+${GO_BINARY} version
+echo "GOBENCHDATA_BINARY=${GOBENCHDATA_BINARY}"
+${GOBENCHDATA_BINARY} version
 env | grep 'INPUT_'
 echo "GITHUB_ACTOR=${GITHUB_ACTOR}"
 echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE}"
@@ -48,12 +48,12 @@ echo '📊 Running benchmarks...'
 RUN_OUTPUT="/tmp/gobenchdata/benchmarks.json"
 cd "${GITHUB_WORKSPACE}"
 cd "${INPUT_SUBDIRECTORY}"
-${GO} test \
+${GO_BINARY} test \
   -bench "${INPUT_GO_BENCHMARKS}" \
   -benchmem \
   ${INPUT_GO_TEST_FLAGS} \
   ${INPUT_GO_TEST_PKGS} |
-  ${GOBENCHDATA} ${INPUT_GOBENCHDATA_PARSE_FLAGS} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
+  ${GOBENCHDATA_BINARY} ${INPUT_GOBENCHDATA_PARSE_FLAGS} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
 # fetch published data
@@ -70,7 +70,7 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
     # check results against published
     echo '🔎 Evaluating results against base runs...'
     CHECKS_OUTPUT="/tmp/gobenchdata/checks-results.json"
-    ${GOBENCHDATA} checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
+    ${GOBENCHDATA_BINARY} checks eval "${INPUT_BENCHMARKS_OUT}" "${RUN_OUTPUT}" \
       --checks.config "${GITHUB_WORKSPACE}/${INPUT_CHECKS_CONFIG}" \
       --json ${CHECKS_OUTPUT} \
       --flat
@@ -80,7 +80,7 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
     # output results
     echo
     echo '📝 Generating checks report...'
-    ${GOBENCHDATA} checks report ${CHECKS_OUTPUT}
+    ${GOBENCHDATA_BINARY} checks report ${CHECKS_OUTPUT}
 
   fi
 
@@ -90,7 +90,7 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
     echo '☝️ Updating results...'
     if [[ -f "${INPUT_BENCHMARKS_OUT}" ]]; then
       echo '📈 Existing report found - merging...'
-      ${GOBENCHDATA} merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
+      ${GOBENCHDATA_BINARY} merge "${RUN_OUTPUT}" "${INPUT_BENCHMARKS_OUT}" \
         --prune "${INPUT_PRUNE_COUNT}" \
         --json "${INPUT_BENCHMARKS_OUT}" \
         --flat

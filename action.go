@@ -21,7 +21,7 @@ func runEmbeddedAction(ctx context.Context) error {
 	if executable, err := os.Executable(); err == nil {
 		cmd = cmd.Env(map[string]string{
 			// point to self
-			"GOBENCHDATA": executable,
+			"GOBENCHDATA_BINARY": executable,
 		})
 	}
 
