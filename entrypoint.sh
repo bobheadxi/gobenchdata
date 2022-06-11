@@ -33,8 +33,10 @@ echo '========================'
 
 # setup
 mkdir -p /tmp/{gobenchdata,build}
-git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-git config --global user.name "${GITHUB_ACTOR}"
+if [[ "${SET_GIT_USER}" != "false" ]]; then
+  git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+  git config user.name "${GITHUB_ACTOR}"
+fi
 
 # run benchmarks from configured directory
 echo
