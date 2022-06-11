@@ -20,4 +20,4 @@ RUN rm -rf /tmp/build
 # init entrypoint
 RUN GO=/usr/local/go/bin/go
 WORKDIR /workdir
-ENTRYPOINT ["/bin/gobenchdata", "action"]
+ENTRYPOINT ["/bin/bash", "-c", "/bin/gobenchdata action"]
