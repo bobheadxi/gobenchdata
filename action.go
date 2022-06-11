@@ -16,6 +16,7 @@ var entrypointScript string
 func runEmbeddedAction(ctx context.Context) error {
 	cmd := run.Cmd(ctx, "bash").
 		Input(strings.NewReader(entrypointScript)).
+		Environ(os.Environ()).
 		StdOut()
 
 	if executable, err := os.Executable(); err == nil {

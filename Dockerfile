@@ -18,6 +18,5 @@ RUN go build -ldflags "-X main.Version=$(git describe --tags)" -o /bin/gobenchda
 RUN rm -rf /tmp/build
 
 # init entrypoint
-ENV GO_BINARY=/usr/local/go/bin/go
 WORKDIR /workdir
-ENTRYPOINT ["/bin/bash", "-c", "/bin/gobenchdata action"]
+ENTRYPOINT ["/bin/bash", "-c", "export GO_BINARY=/usr/local/go/bin/go && /bin/gobenchdata action"]
