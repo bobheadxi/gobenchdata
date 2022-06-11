@@ -49,7 +49,7 @@ go test \
   -benchmem \
   ${INPUT_GO_TEST_FLAGS} \
   ${INPUT_GO_TEST_PKGS} |
-  ${GOBENCHDATA} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}" ${GOBENCHDATA_PARSE_FLAGS:-""}
+  ${GOBENCHDATA} ${GOBENCHDATA_PARSE_FLAGS:-""} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
 # fetch published data

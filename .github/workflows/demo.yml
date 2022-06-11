@@ -14,7 +14,7 @@ jobs:
         CHECKS: true
         CHECKS_CONFIG: ./demo/gobenchdata-checks.yml
         PUBLISH_BRANCH: gh-pages
-        GOBENCHDATA_PARSE_FLAGS: -require-benchmarks
+        GOBENCHDATA_PARSE_FLAGS: --require-benchmarks
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
