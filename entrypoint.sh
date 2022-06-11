@@ -37,10 +37,6 @@ echo '========================'
 
 # setup
 mkdir -p /tmp/{gobenchdata,build}
-if [[ "${SET_GIT_USER}" != "false" ]]; then
-  git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-  git config user.name "${GITHUB_ACTOR}"
-fi
 
 # run benchmarks from configured directory
 echo
@@ -101,6 +97,10 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
     # publish results
     echo
     echo '📷 Committing and pushing new benchmark data...'
+    if [[ "${SET_GIT_USER}" != "false" ]]; then
+      git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      git config --local user.name "${GITHUB_ACTOR}"
+    fi
     git add .
     git commit -m "${INPUT_GIT_COMMIT_MESSAGE}"
     git push -f origin ${INPUT_PUBLISH_BRANCH}
