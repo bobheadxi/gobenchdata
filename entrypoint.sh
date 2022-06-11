@@ -22,7 +22,9 @@ export INPUT_CHECKS_CONFIG="${INPUT_CHECKS_CONFIG:-"gobenchdata-checks.yml"}"
 # output build data
 echo '========================'
 echo "👨‍⚕️ Checking configuration..."
+echo "GO=${GOBENCHDATA}"
 ${GO} version
+echo "GOBENCHDATA=${GOBENCHDATA}"
 ${GOBENCHDATA} version
 env | grep 'INPUT_'
 echo "GITHUB_ACTOR=${GITHUB_ACTOR}"
