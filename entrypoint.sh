@@ -10,6 +10,7 @@ export INPUT_BENCHMARKS_OUT="${INPUT_BENCHMARKS_OUT:-"benchmarks.json"}"
 export INPUT_GO_TEST_PKGS="${INPUT_GO_TEST_PKGS:-"./..."}"
 export INPUT_GO_BENCHMARKS="${INPUT_GO_BENCHMARKS:-"."}"
 export INPUT_GIT_COMMIT_MESSAGE="${INPUT_GIT_COMMIT_MESSAGE:-"add benchmark run for ${GITHUB_SHA}"}"
+export INPUT_GOBENCHDATA_PARSE_FLAGS="${INPUT_GOBENCHDATA_PARSE_FLAGS:-""}"
 
 # publishing configuration
 export INPUT_PUBLISH_REPO="${INPUT_PUBLISH_REPO:-${GITHUB_REPOSITORY}}"
@@ -52,7 +53,7 @@ ${GO} test \
   -benchmem \
   ${INPUT_GO_TEST_FLAGS} \
   ${INPUT_GO_TEST_PKGS} |
-  ${GOBENCHDATA} ${GOBENCHDATA_PARSE_FLAGS:-""} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
+  ${GOBENCHDATA} ${INPUT_GOBENCHDATA_PARSE_FLAGS} --json "${RUN_OUTPUT}" -v "${GITHUB_SHA}" -t "ref=${GITHUB_REF}"
 cd "${GITHUB_WORKSPACE}"
 
 # fetch published data
