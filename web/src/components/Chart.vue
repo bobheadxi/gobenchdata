@@ -105,7 +105,6 @@ export default defineComponent({
                   type: "line",
                   events: {
                     markerClick: (event, chartContext, { dataPointIndex }) => {
-                      console.log("foobar");
                       if (!this.repo) return;
                       const d = ParseDate(series.xaxis[m][dataPointIndex]);
                       const r = this.runs.find((r) => {
