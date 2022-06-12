@@ -16,6 +16,7 @@
             :options="c.options"
             :series="c.options.series"
             :height="config.display && config.display.fullWidth ? 300 : 'auto'"
+            @markerClick="c.options.chart.events.markerClick"
           ></apexchart>
         </div>
       </div>
@@ -103,10 +104,10 @@ export default defineComponent({
                 chart: {
                   type: "line",
                   events: {
-                    markerClick: (event, chartContext, config) => {
+                    markerClick: (event, chartContext, { dataPointIndex }) => {
+                      console.log("foobar");
                       if (!this.repo) return;
-                      const { dataPointIndex: x } = config;
-                      const d = ParseDate(series.xaxis[m][x]);
+                      const d = ParseDate(series.xaxis[m][dataPointIndex]);
                       const r = this.runs.find((r) => {
                         return ParseDate(r.Date).valueOf() === d.valueOf();
                       });
