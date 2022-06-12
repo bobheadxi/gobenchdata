@@ -1,13 +1,12 @@
-import { Run, RunSuiteBenchmark, RunSuite } from "@/generated";
+import { Run, Benchmark, Suite } from "../generated";
 
-// copied from 'apexcharts.ApexAxisChartSeries'
-type ApexAxisChartSingleSeries = {
+type Series = {
   name?: string;
   type?: string;
   data: { x: number; y: number | null }[];
 };
 
-type ApexAxisChartSeries = ApexAxisChartSingleSeries[];
+type MultiSeries = Series[];
 
 enum MetricBuiltins {
   NSPEROP = "NsPerOp",
@@ -16,7 +15,7 @@ enum MetricBuiltins {
   MEM_MBPERS = "Mem.MBPerSec",
 }
 
-type ChartSet = { [metric: string]: ApexAxisChartSeries };
+type ChartSet = { [metric: string]: MultiSeries };
 
 const defaultMetrics = {
   [MetricBuiltins.NSPEROP]: true,
@@ -24,10 +23,7 @@ const defaultMetrics = {
   [MetricBuiltins.MEM_ALLOCSPEROP]: true,
 };
 
-export function iterateSuites(
-  runs: Run[],
-  func: (s: RunSuite, r: Run) => void
-) {
+export function iterateSuites(runs: Run[], func: (s: Suite, r: Run) => void) {
   for (let rID = 0; rID < runs.length; rID += 1) {
     const run = runs[rID];
     // iterate suites in each run
@@ -39,10 +35,10 @@ export function iterateSuites(
 
 export function iterateBenchmarks(
   runs: Run[],
-  func: (b: RunSuiteBenchmark, s: RunSuite, r: Run) => void,
+  func: (b: Benchmark, s: Suite, r: Run) => void,
   pkg?: RegExp
 ) {
-  iterateSuites(runs, (suite: RunSuite, run: Run) => {
+  iterateSuites(runs, (suite: Suite, run: Run) => {
     if (pkg && !pkg.test(suite.Pkg)) return;
 
     // iterate benchmarks

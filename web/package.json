@@ -10,11 +10,10 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix"
   },
   "dependencies": {
-    "apexcharts": "^3.35.0",
-    "core-js": "^3.22.2",
-    "vue": "^3.2.33",
-    "vue3-apexcharts": "^1.4.1",
-    "yaml": "^2.0.1"
+    "echarts": "^5.3.2",
+    "vue": "^3.2.37",
+    "vue-echarts": "^6.0.3",
+    "yaml": "^2.1.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",

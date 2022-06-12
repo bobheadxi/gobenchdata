@@ -12,11 +12,12 @@
       >
         <h5>{{ c.metric }}</h5>
         <div class="chart-container">
-          <apexchart
-            :options="c.options"
-            :series="c.options.series"
+          <v-chart
+            class="chart"
+            :option="c.options"
+            :autoresize="true"
             :height="config.display && config.display.fullWidth ? 300 : 'auto'"
-          ></apexchart>
+          />
         </div>
       </div>
     </div>
@@ -51,10 +52,20 @@
 </style>
 
 <script lang="ts">
-import { defineComponent, PropType } from "vue";
-import { ApexOptions } from "apexcharts";
-import { Run, Chart as ConfigChart, ParseDate } from "@/generated";
-import { generateSeries } from "@/lib/series";
+import { defineComponent, PropType, ref, Ref } from "vue";
+import type { ECBasicOption } from "echarts/types/dist/shared";
+import VChart, { THEME_KEY } from "vue-echarts";
+
+import { ParseDate } from "../generated";
+import type { Run, Chart as ConfigChart } from "../generated";
+import { generateSeries } from "../lib/series";
+
+type ChartOption = { metric: string; options: ECBasicOption };
+
+type LineSeries = {
+  name: string;
+  coords: number[][];
+};
 
 export default defineComponent({
   name: "LineChart",
@@ -69,6 +80,12 @@ export default defineComponent({
       required: true,
     },
   },
+  components: {
+    VChart,
+  },
+  provide: {
+    [THEME_KEY]: "dark",
+  },
   data: () => ({ error: undefined }),
   computed: {
     description(): string {
@@ -81,7 +98,7 @@ export default defineComponent({
     },
   },
   methods: {
-    generateCharts(): { metric: string; options: ApexOptions }[] {
+    generateCharts(): ChartOption[] {
       try {
         const pkgMatcher = new RegExp(this.config.package || ".");
         const benchMatchers =
@@ -95,11 +112,30 @@ export default defineComponent({
         );
         console.log(`chart ${this.config.name}`, series);
 
-        return (
-          Object.keys(series.charts).map(
-            (m): { metric: string; options: ApexOptions } => ({
-              metric: m,
-              options: {
+        return Object.keys(series.charts).map(
+          (m): ChartOption => ({
+            metric: m,
+            options: {
+              series: series.charts[m].map((s) => {
+                return {
+                  type: "line",
+                  name: s.name || "",
+                  data: s.data,
+                };
+              }),
+            },
+          })
+        );
+      } catch (err) {
+        console.error(`chart ${this.config.name}`, this.config, err);
+        return [];
+      }
+    },
+  },
+});
+</script>
+
+<!-- {
                 chart: {
                   type: "line",
                   events: {
@@ -172,15 +208,4 @@ export default defineComponent({
                   s.data = s.data.map((p) => p.y) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
                   return s;
                 }),
-              },
-            })
-          ) || []
-        );
-      } catch (err) {
-        console.error(`chart ${this.config.name}`, this.config, err);
-        return [];
-      }
-    },
-  },
-});
-</script>
+              } -->

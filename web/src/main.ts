@@ -1,7 +1,15 @@
 import { createApp } from "vue";
-import VueApexCharts from "vue3-apexcharts";
+
+import ECharts from "vue-echarts";
+import { use } from "echarts/core";
+import { CanvasRenderer } from "echarts/renderers";
+import { LinesChart } from "echarts/charts";
+import { GridComponent, TooltipComponent } from "echarts/components";
+
 import App from "./App.vue";
 
+use([CanvasRenderer, LinesChart, GridComponent, TooltipComponent]);
+
 const app = createApp(App);
-app.use(VueApexCharts);
+app.component("v-chart", ECharts);
 app.mount("#app");

@@ -42,15 +42,15 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import { parse } from "yaml";
-import ChartGroup from "@/components/ChartGroup.vue";
+import ChartGroup from "./components/ChartGroup.vue";
 
-import { iterateSuites } from "@/lib/series";
+import { iterateSuites } from "./lib/series";
 import {
   Config,
   Run,
   ChartGroup as ConfigChartGroup,
   Chart,
-} from "@/generated";
+} from "./generated";
 
 type AppState = {
   loading: boolean;
