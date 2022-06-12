@@ -6,3 +6,4 @@ gobenchdata-checks.yml
 web/
 tmp/
 report.json
+gobenchdata
