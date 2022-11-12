@@ -1,6 +1,7 @@
 # 📉 gobenchdata
 
 [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
+[![go-recipes](https://raw.githubusercontent.com/nikolaydubina/go-recipes/main/badge.svg?raw=true)](https://github.com/nikolaydubina/go-recipes)
 [![publish@v1](https://github.com/bobheadxi/gobenchdata/workflows/publish@v1/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=publish%40v1)
 [![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
 [![demo](https://github.com/bobheadxi/gobenchdata/workflows/demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=demo)
