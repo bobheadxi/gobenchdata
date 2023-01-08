@@ -85,13 +85,14 @@ jobs:
       with: { go-version: "1.18" }
     - name: gobenchdata publish
       run: go run go.bobheadxi.dev/gobenchdata@v1 action
-      with:
-        PRUNE_COUNT: 30
-        GO_TEST_FLAGS: -cpu 1,2
-        PUBLISH: true
-        PUBLISH_BRANCH: gh-pages
       env:
         GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        # Instead of 'with: ...', provide environment variables and
+        # prefix each input variable with 'INPUT'
+        INPUT_PRUNE_COUNT: 30
+        INPUT_GO_TEST_FLAGS: -cpu 1,2
+        INPUT_PUBLISH: true
+        INPUT_PUBLISH_BRANCH: gh-pages
 ```
 
 ### Configuration
@@ -305,6 +306,8 @@ gobenchdata checks eval ${base benchmarks} ${current benchmarks}
 </details>
 
 For more details on how to use checks, see the [pull request checks documentation](#pull-request-checks).
+
+The CLI also embeds the same script that the GitHub Action offers - see [custom setup](#custom-setup) for more details.
 
 <br />
 
