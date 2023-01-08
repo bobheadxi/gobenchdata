@@ -1,10 +1,8 @@
-# 📉 gobenchdata
+# 📉 gobenchdata [![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata) [![demo website](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo%20website&up_message=live)](https://gobenchdata.bobheadxi.dev/)
 
-[![View Action](https://img.shields.io/badge/view-github%20action-yellow.svg)](https://bobheadxi.dev/r/gobenchdata)
 [![publish@v1](https://github.com/bobheadxi/gobenchdata/workflows/publish@v1/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=publish%40v1)
 [![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
 [![demo](https://github.com/bobheadxi/gobenchdata/workflows/demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=demo)
-[![Demo](https://img.shields.io/website/https/gobenchdata.bobheadxi.dev.svg?down_color=grey&down_message=offline&label=demo&up_message=live)](https://gobenchdata.bobheadxi.dev/)
 [![Go Reference](https://pkg.go.dev/badge/go.bobheadxi.dev/gobenchdata.svg)](https://pkg.go.dev/go.bobheadxi.dev/gobenchdata)
 
 `gobenchdata` is a tool for parsing and inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. It was inspired by the [`deno.land` continuous benchmarks](https://deno.land/benchmarks), which aims to display performance improvements and regressions on a continuous basis.
