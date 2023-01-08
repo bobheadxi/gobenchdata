@@ -4,6 +4,7 @@
 [![pipeline](https://github.com/bobheadxi/gobenchdata/workflows/pipeline/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=pipeline)
 [![demo](https://github.com/bobheadxi/gobenchdata/workflows/demo/badge.svg)](https://github.com/bobheadxi/gobenchdata/actions?workflow=demo)
 [![Go Reference](https://pkg.go.dev/badge/go.bobheadxi.dev/gobenchdata.svg)](https://pkg.go.dev/go.bobheadxi.dev/gobenchdata)
+[![go-recipes](https://raw.githubusercontent.com/nikolaydubina/go-recipes/main/badge.svg?raw=true)](https://github.com/nikolaydubina/go-recipes#-continuous-benchmarking-with-gobenchdata)
 
 `gobenchdata` is a tool for parsing and inspecting `go test -bench` data, and a [GitHub Action](https://github.com/features/actions) for continuous benchmarking. It was inspired by the [`deno.land` continuous benchmarks](https://deno.land/benchmarks), which aims to display performance improvements and regressions on a continuous basis.
 
