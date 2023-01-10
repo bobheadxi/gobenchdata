@@ -71,7 +71,7 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
       --json ${CHECKS_OUTPUT} \
       --flat
     RESULTS=$(cat ${CHECKS_OUTPUT})
-    echo "::set-output name=checks-results::$RESULTS"
+    echo "checks-results=$RESULTS" >> ${GITHUB_OUTPUT}
 
     # output results
     echo
