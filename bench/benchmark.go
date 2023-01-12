@@ -1,5 +1,9 @@
 package bench
 
+import (
+	"sort"
+)
+
 // RunHistory is a sort.Interface that sorts the most recent run first
 type RunHistory []Run
 
@@ -11,6 +15,11 @@ func (r RunHistory) Swap(i, j int) {
 	tmp := r[i]
 	r[i] = r[j]
 	r[j] = tmp
+}
+
+func (r RunHistory) Latest() Run {
+	sort.Sort(r)
+	return r[0]
 }
 
 // Run denotes one run of gobenchdata, useful for grouping benchmark records
