@@ -4,9 +4,11 @@ import (
 	"sort"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func TestRunHistory_Sort(t *testing.T) {
+func TestRunHistorySort(t *testing.T) {
 	hist := RunHistory{
 		{Date: time.Now().Add(-5 * time.Minute).Unix()},
 		{Date: time.Now().Add(5 * time.Minute).Unix()},
@@ -17,4 +19,15 @@ func TestRunHistory_Sort(t *testing.T) {
 		t.Error("expected most recent (largest date) to come first")
 		t.Fail()
 	}
+}
+
+func TestRunHistoryLatest(t *testing.T) {
+	ts := time.Now().Add(5 * time.Minute).Unix()
+	hist := RunHistory{
+		{Date: time.Now().Add(-5 * time.Minute).Unix()},
+		{Date: time.Now().Unix()},
+		{Date: ts},
+	}
+	latest := hist.Latest()
+	assert.Equal(t, ts, latest.Date)
 }

@@ -2,9 +2,9 @@ package checks
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
-	"sort"
 
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
@@ -96,8 +96,10 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory, o
 	}
 	out := internal.Printer{Debug: debug}
 
-	sort.Sort(current)
-	currentRun := current[current.Len()-1]
+	if current.Len() == 0 {
+		return nil, errors.New("no benchmark runs in current")
+	}
+	currentRun := current.Latest()
 
 	if base.Len() == 0 {
 		out.Print("base benchmarks has no runs - passing automatically")
@@ -108,8 +110,8 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory, o
 			Checks:  nil,
 		}, nil
 	}
-	sort.Sort(base)
-	baseRun := base[base.Len()-1]
+	baseRun := base.Latest()
+
 	out.Printf("comparing versions base='%s', current='%s'", baseRun.Version, currentRun.Version)
 
 	// set up results

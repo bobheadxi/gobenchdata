@@ -1,10 +1,13 @@
 package checks
 
 import (
-	"reflect"
 	"testing"
+	"time"
 
 	"github.com/antonmedv/expr"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"go.bobheadxi.dev/gobenchdata/bench"
 	"go.bobheadxi.dev/gobenchdata/internal"
 )
@@ -128,6 +131,65 @@ func TestEvaluate(t *testing.T) {
 					{Pkg: "P", Benchmarks: []bench.Benchmark{{
 						Name:    "B",
 						NsPerOp: 1,
+					}}},
+				},
+			}},
+			bench.RunHistory{{
+				Version: "current",
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}},
+		}, &Report{
+			Status:  StatusPass,
+			Base:    "base",
+			Current: "current",
+			Checks: map[string]*CheckResult{"C": {
+				Status: StatusPass,
+				Diffs: []DiffResult{{
+					Status:    StatusPass,
+					Package:   "P",
+					Benchmark: "B",
+					Value:     0,
+				}},
+				Thresholds: thresholdsSimple,
+			}},
+		}, false},
+		{"simple pass on latest", args{
+			[]Check{{
+				Name:       "C",
+				DiffFunc:   "base.NsPerOp - current.NsPerOp",
+				Thresholds: thresholdsSimple,
+			}},
+			bench.RunHistory{{
+				Version: "base-old",
+				Date:    time.Now().Add(-5 * time.Minute).Unix(),
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 999,
+					}}},
+				},
+			}, {
+				// This is the run we want
+				Version: "base",
+				Date:    time.Now().Unix(),
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 1,
+					}}},
+				},
+			}, {
+				Version: "base-older",
+				Date:    time.Now().Add(-10 * time.Minute).Unix(),
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 999,
 					}}},
 				},
 			}},
@@ -317,19 +379,9 @@ func TestEvaluate(t *testing.T) {
 			got, err := Evaluate(tt.args.checks, tt.args.base, tt.args.current, &EvaluateOptions{
 				Debug: true,
 			})
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Evaluate() error = %v, wantErr %v", err, tt.wantErr)
-				return
-			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Evaluate() = %+v, want %+v", got, tt.want)
-				// report deep diff properly
-				for c, v := range tt.want.Checks {
-					if !reflect.DeepEqual(got.Checks[c], v) {
-						t.Errorf("check %s: got %+v\nwant %+v", c, got.Checks[c], v)
-					}
-				}
-			}
+			require.NoError(t, err)
+
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }
