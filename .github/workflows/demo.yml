@@ -20,7 +20,7 @@ jobs:
 
   gobenchdata-publish:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: contains('main', github.ref)
     steps:
     - name: checkout
       uses: actions/checkout@v2
