@@ -174,12 +174,22 @@ func TestEvaluate(t *testing.T) {
 					}}},
 				},
 			}, {
+				// This is the run we want
 				Version: "base",
 				Date:    time.Now().Unix(),
 				Suites: []bench.Suite{
 					{Pkg: "P", Benchmarks: []bench.Benchmark{{
 						Name:    "B",
 						NsPerOp: 1,
+					}}},
+				},
+			}, {
+				Version: "base-older",
+				Date:    time.Now().Add(-10 * time.Minute).Unix(),
+				Suites: []bench.Suite{
+					{Pkg: "P", Benchmarks: []bench.Benchmark{{
+						Name:    "B",
+						NsPerOp: 999,
 					}}},
 				},
 			}},
