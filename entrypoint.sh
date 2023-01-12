@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e pipefail
 
 # core configuration
 export GO_BINARY="${GO_BINARY:-"go"}"
@@ -71,7 +71,7 @@ if [[ "${INPUT_PUBLISH}" == "true" || "${INPUT_CHECKS}" == "true" ]]; then
       --json ${CHECKS_OUTPUT} \
       --flat
     RESULTS=$(cat ${CHECKS_OUTPUT})
-    echo "checks-results=$RESULTS" >> ${GITHUB_OUTPUT}
+    echo "checks-results=$RESULTS" >>${GITHUB_OUTPUT}
 
     # output results
     echo
