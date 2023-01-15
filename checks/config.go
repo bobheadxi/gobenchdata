@@ -2,7 +2,7 @@ package checks
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 	"regexp"
 
 	"gopkg.in/yaml.v2"
@@ -15,7 +15,7 @@ type Config struct {
 
 // LoadConfig reads configuration from the given path
 func LoadConfig(path string) (*Config, error) {
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checks config: %w", err)
 	}

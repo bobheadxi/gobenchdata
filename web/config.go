@@ -3,7 +3,7 @@ package web
 import (
 	"fmt"
 	"html/template"
-	"io/ioutil"
+	"os"
 
 	"go.bobheadxi.dev/gobenchdata/internal"
 	"gopkg.in/yaml.v2"
@@ -54,7 +54,7 @@ type ChartDisplay struct {
 
 // LoadConfig loads up gobenchdata-web configuration
 func LoadConfig(path string) (*Config, error) {
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 	"sort"
 
@@ -67,7 +66,7 @@ func output(results []bench.Run) {
 		}
 	}
 	if *jsonOut != "" {
-		if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+		if err := os.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
 			panic(err)
 		}
 		fmt.Printf("successfully output results as json to '%s'\n", *jsonOut)
@@ -134,7 +133,7 @@ func outputChecksReport(r *checks.Report) {
 func load(files ...string) []bench.RunHistory {
 	hist := []bench.RunHistory{}
 	for _, f := range files {
-		b, err := ioutil.ReadFile(f)
+		b, err := os.ReadFile(f)
 		if err != nil {
 			panic(err)
 		}

@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"time"
 
@@ -196,7 +195,7 @@ func main() {
 						os.Exit(1)
 					}
 
-					if err := ioutil.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
+					if err := os.WriteFile(*jsonOut, b, os.ModePerm); err != nil {
 						println(err.Error())
 						os.Exit(1)
 					}
@@ -272,7 +271,7 @@ func main() {
 			fmt.Println("file output needs to be set (try '--json')")
 			os.Exit(1)
 		}
-		b, err := ioutil.ReadFile(*jsonOut)
+		b, err := os.ReadFile(*jsonOut)
 		if err != nil && !os.IsNotExist(err) {
 			println(err.Error())
 			os.Exit(1)

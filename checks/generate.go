@@ -1,7 +1,6 @@
 package checks
 
 import (
-	"io/ioutil"
 	"os"
 
 	"go.bobheadxi.dev/gobenchdata/internal"
@@ -22,5 +21,5 @@ should return a negative value for an improvement and a positive value for a reg
 			Thresholds: Thresholds{Max: internal.Float64P(10)},
 		}},
 	})
-	return ioutil.WriteFile(path, b, os.ModePerm)
+	return os.WriteFile(path, b, os.ModePerm)
 }

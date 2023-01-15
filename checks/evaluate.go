@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/antonmedv/expr"
 	"github.com/antonmedv/expr/vm"
@@ -224,7 +224,7 @@ func Evaluate(checks []Check, base bench.RunHistory, current bench.RunHistory, o
 
 // LoadReport loads checks results from the given path
 func LoadReport(path string) (*Report, error) {
-	b, err := ioutil.ReadFile(path)
+	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open checks result: %w", err)
 	}

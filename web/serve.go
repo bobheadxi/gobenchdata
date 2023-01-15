@@ -2,7 +2,6 @@ package web
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 
@@ -33,7 +32,7 @@ func ListenAndServe(addr string, config Config, it TemplateIndexHTML) error {
 	if err != nil {
 		return fmt.Errorf("failed to load benchmarks: %w", err)
 	}
-	b, err = ioutil.ReadFile("./benchmarks.json")
+	b, err = os.ReadFile("./benchmarks.json")
 	if err != nil {
 		return fmt.Errorf("failed to load benchmarks: %w", err)
 	}
