@@ -2,11 +2,10 @@ package web
 
 import (
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // ListenAndServe serves the web app on the given address
@@ -33,7 +32,7 @@ func ListenAndServe(addr string, config Config, it TemplateIndexHTML) error {
 	if err != nil {
 		return fmt.Errorf("failed to load benchmarks: %w", err)
 	}
-	b, err = ioutil.ReadFile("./benchmarks.json")
+	b, err = os.ReadFile("./benchmarks.json")
 	if err != nil {
 		return fmt.Errorf("failed to load benchmarks: %w", err)
 	}

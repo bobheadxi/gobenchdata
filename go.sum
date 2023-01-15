@@ -105,8 +105,6 @@ github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyC
 github.com/valyala/fasttemplate v0.0.0-20170224212429-dcecefd839c4/go.mod h1:50wTf68f99/Zt14pr046Tgt3Lp2vLyFZKzbFXTOabXw=
 github.com/valyala/fasttemplate v1.2.1 h1:TVEnxayobAdVkhQfrfes2IzOB6o+z4roRkPF52WA1u4=
 github.com/valyala/fasttemplate v1.2.1/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
-go.bobheadxi.dev/streamline v0.3.0 h1:z7PhLHe6UJVuUDe5HkNQFZZoCyO0RNYjhNhHwEWIeQM=
-go.bobheadxi.dev/streamline v0.3.0/go.mod h1:5mfjqvIekU9e0oG0EzVJcRVRo54WV2DJGnItsCGRwho=
 go.bobheadxi.dev/streamline v0.4.0 h1:tXWO++r9jGHEFBH73QOcMb8jGJsEg+WyAdf8GrxxuRE=
 go.bobheadxi.dev/streamline v0.4.0/go.mod h1:yJsVXOSBFLgAKvsnf6WmIzmB2A65nWqkR/sRNxJPa74=
 golang.org/x/crypto v0.0.0-20180910181607-0e37d006457b/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=

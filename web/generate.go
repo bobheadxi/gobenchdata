@@ -2,11 +2,10 @@ package web
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 //go:generate npm run build
@@ -18,7 +17,7 @@ func DefaultConfigPath(dir string) string { return path.Join(dir, "gobenchdata-w
 // GenerateApp dumps the web app template into the provided directory
 func GenerateApp(dir string, it TemplateIndexHTML) error {
 	// clear directory of build stuff
-	dirs, err := ioutil.ReadDir(dir)
+	dirs, err := os.ReadDir(dir)
 	if err != nil {
 		return fmt.Errorf("cannot access target directory: %w", err)
 	}
@@ -44,7 +43,7 @@ func GenerateApp(dir string, it TemplateIndexHTML) error {
 		b, _ := ReadFile(f)
 		target := path.Join(dir, f)
 		os.MkdirAll(path.Dir(target), os.ModePerm)
-		if err := ioutil.WriteFile(target, b, os.ModePerm); err != nil {
+		if err := os.WriteFile(target, b, os.ModePerm); err != nil {
 			return fmt.Errorf("failed to generate '%s': %w", f, err)
 		}
 	}
@@ -62,13 +61,16 @@ func GenerateConfig(dir string, defaultConfig Config, override bool) error {
 			return fmt.Errorf("found existing configuration: %w", os.ErrExist)
 		}
 	} else {
-		os.Remove(appConfigPath)
+		_ = os.Remove(appConfigPath)
 	}
 
 	// generate configuration
-	b, _ := yaml.Marshal(&defaultConfig)
-	if err := ioutil.WriteFile(appConfigPath, b, os.ModePerm); err != nil {
+	b, err := yaml.Marshal(&defaultConfig)
+	if err != nil {
 		return fmt.Errorf("failed to generate configuration: %w", err)
+	}
+	if err := os.WriteFile(appConfigPath, b, os.ModePerm); err != nil {
+		return fmt.Errorf("failed to write generated configuration: %w", err)
 	}
 
 	return nil
