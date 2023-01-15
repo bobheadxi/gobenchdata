@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"go.bobheadxi.dev/gobenchdata/internal"
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // Config is the configuration template for the web app.

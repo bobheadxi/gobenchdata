@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v3"
 )
 
 // ListenAndServe serves the web app on the given address
