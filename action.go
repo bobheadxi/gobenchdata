@@ -16,7 +16,7 @@ var entrypointScript string
 
 // runEmbeddedAction executes an embedded version of entrypoint.sh
 func runEmbeddedAction(ctx context.Context) error {
-	cmd := exec.CommandContext(ctx, "bash", "-c")
+	cmd := exec.CommandContext(ctx, "bash")
 	cmd.Stdin = strings.NewReader(entrypointScript)
 	cmd.Env = os.Environ()
 	if executable, err := os.Executable(); err == nil {
