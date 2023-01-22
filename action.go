@@ -23,7 +23,7 @@ func runEmbeddedAction(ctx context.Context) error {
 		cmd.Env = append(cmd.Env, fmt.Sprintf("GOBENCHDATA_BINARY=%s", executable))
 	}
 
-	stream, err := streamexec.Attach(cmd, streamexec.Stdout|streamexec.ErrorWithStderr).Start()
+	stream, err := streamexec.Start(cmd, streamexec.Stdout|streamexec.ErrWithStderr)
 	if err != nil {
 		return err
 	}
