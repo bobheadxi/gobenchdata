@@ -1,6 +1,6 @@
 module go.bobheadxi.dev/gobenchdata
 
-go 1.18
+go 1.22
 
 require (
 	github.com/OneOfOne/struct2ts v1.0.6
