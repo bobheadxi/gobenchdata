@@ -42,6 +42,7 @@ PASS`,
 			Goos:   "darwin",
 			Goarch: "amd64",
 			Pkg:    "go.bobheadxi.dev/gobenchdata/demo",
+			CPU:    "Intel AMD Xeon Phenom",
 			Benchmarks: []Benchmark{
 				{
 					Name: "BenchmarkFib10/Fib()-12", Runs: 3293298, NsPerOp: 330,
