@@ -1,5 +1,4 @@
 /*
-
 Gobenchdata is a tool for inspecting golang benchmark outputs. To install it,
 you must have Go installed:
 

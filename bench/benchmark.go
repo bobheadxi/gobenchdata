@@ -48,6 +48,7 @@ func (r *Run) FindBenchmark(pkg, bench string) (*Benchmark, bool) {
 type Suite struct {
 	Goos       string
 	Goarch     string
+	CPU        string
 	Pkg        string
 	Benchmarks []Benchmark
 }

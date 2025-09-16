@@ -71,6 +71,9 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 		} else if strings.HasPrefix(line, "pkg:") {
 			split = strings.Split(line, ": ")
 			suite.Pkg = split[1]
+		} else if strings.HasPrefix(line, "cpu:") {
+			split = strings.Split(line, ": ")
+			suite.CPU = split[1]
 		} else if strings.HasPrefix(line, "Benchmark") {
 			bench, err := p.readBenchmark(line)
 			if err != nil {
@@ -86,7 +89,8 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 // readBenchmark parses a single line from a benchmark.
 //
 // Benchmarks take the following format:
-//     BenchmarkRegex            300000              5160 ns/op            5408 B/op         69 allocs/op
+//
+//	BenchmarkRegex            300000              5160 ns/op            5408 B/op         69 allocs/op
 func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 	var (
 		bench Benchmark
