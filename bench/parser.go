@@ -89,7 +89,8 @@ func (p *Parser) readBenchmarkSuite(first string) (*Suite, error) {
 // readBenchmark parses a single line from a benchmark.
 //
 // Benchmarks take the following format:
-//     BenchmarkRegex            300000              5160 ns/op            5408 B/op         69 allocs/op
+//
+//	BenchmarkRegex            300000              5160 ns/op            5408 B/op         69 allocs/op
 func (p *Parser) readBenchmark(line string) (*Benchmark, error) {
 	var (
 		bench Benchmark
