@@ -165,6 +165,55 @@ export default defineComponent({
                     enabled: true,
                     position: "topLeft",
                   },
+                  ...(this.config.display?.desc
+                    ? {
+                        custom({
+                          series,
+                          dataPointIndex,
+                          w,
+                        }: {
+                          series: (number | undefined)[][];
+                          dataPointIndex: number;
+                          w: {
+                            config: { series: { name: string }[] };
+                            globals: { colors: string[]; categoryLabels: string[] };
+                          };
+                        }) {
+                          const items = w.config.series
+                            .map((s, i) => ({
+                              name: s.name,
+                              value: series[i][dataPointIndex],
+                              color: w.globals.colors[i],
+                            }))
+                            .filter(
+                              (item) =>
+                                item.value !== undefined && item.value !== null
+                            );
+
+                          items.sort(
+                            (a, b) => (b.value as number) - (a.value as number)
+                          );
+
+                          const rows = items
+                            .map(
+                              (item) =>
+                                `<div class="apexcharts-tooltip-series-group apexcharts-active" style="display:flex;">` +
+                                `<span class="apexcharts-tooltip-marker" style="background-color:${item.color}"></span>` +
+                                `<div class="apexcharts-tooltip-text">` +
+                                `<div class="apexcharts-tooltip-y-group">` +
+                                `<span class="apexcharts-tooltip-text-y-label">${item.name}: </span>` +
+                                `<span class="apexcharts-tooltip-text-y-value">${item.value}</span>` +
+                                `</div></div></div>`
+                            )
+                            .join("");
+
+                          return (
+                            `<div class="apexcharts-tooltip-title">${w.globals.categoryLabels[dataPointIndex] || ""}</div>` +
+                            rows
+                          );
+                        },
+                      }
+                    : {}),
                 },
                 // flatten since we are using categories
                 series: series.charts[m].map((s) => {

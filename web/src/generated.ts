@@ -58,10 +58,12 @@ function ToObject(o: any, typeOrCfg: any = {}, child = false): any {
 // struct2ts:go.bobheadxi.dev/gobenchdata/web.ChartDisplay
 class ChartDisplay {
   fullWidth: boolean;
+  desc: boolean;
 
   constructor(data?: any) {
     const d: any = (data && typeof data === 'object') ? ToObject(data) : {};
     this.fullWidth = ('fullWidth' in d) ? d.fullWidth as boolean : false;
+    this.desc = ('desc' in d) ? d.desc as boolean : false;
   }
 
   toObject(): any {

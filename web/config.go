@@ -50,6 +50,7 @@ type Chart struct {
 // ChartDisplay configures how the charts are rendered
 type ChartDisplay struct {
 	FullWidth bool `json:"fullWidth" yaml:"fullWidth"`
+	Desc      bool `json:"desc"      yaml:"desc"`
 }
 
 // LoadConfig loads up gobenchdata-web configuration
